@@ -1,0 +1,97 @@
+<?php
+
+return [
+    'navbar' => [
+        'title' => 'Mezquita Al‑Quds',
+        'subtitle' => 'Comunitat musulmana del Vendrell',
+
+        'home' => 'Inicio',
+        'prayers' => 'Horarios',
+        'location' => 'Cómo llegar',
+        'contact' => 'Contacto',
+
+        'language' => 'Idioma',
+    ],
+
+    'footer' => [
+    'title' => 'Mezquita Al‑Quds',
+    'subtitle' => 'Comunitat musulmana del Vendrell',
+    'description' => 'Un espacio de espiritualidad, comunidad y conocimiento para todos.',
+
+    'links_title' => 'Enlaces',
+    'contact_title' => 'Contacto',
+
+    'address' => 'El Vendrell, Tarragona',
+    'email' => 'info@mezquita-alquds.cat',
+
+    'google_maps' => 'Ver en Google Maps',
+    'rights' => 'Todos los derechos reservados',
+],
+
+'prayers' => [
+    'Fajr' => 'Fajr',
+    'Sunrise' => 'Amanecer',
+    'Dhuhr' => 'Dhuhr',
+    'Asr' => 'Asr',
+    'Maghrib' => 'Maghrib',
+    'Isha' => 'Isha',
+
+    'remaining' => 'Falta',
+],
+
+'numbers' => [
+    '12' => '12',
+    '6'  => '6',
+    '18' => '18',
+    '24' => '24',
+    '00'=> '00',
+],
+
+'home' => [
+    'hero_title_1' => 'Mezquita',
+    'hero_title_2' => 'Al‑Quds',
+    'hero_title_3' => 'El Vendrell',
+
+    'hero_subtitle' => 'Un lugar de espiritualidad, comunidad y conocimiento para todos.',
+
+    'btn_prayer_times' => 'Ver horarios de oración',
+    'btn_contact' => 'Contáctanos',
+
+    'card_subtitle' => 'La comunidad musulmana de El Vendrell',
+
+    'next_prayer'   => 'Próxima oración',
+    'waiting_time'  => 'Tiempo de espera',
+    'remaining'     => 'restante',
+    'iqama'         => 'Iqama',
+
+    'info_community_title' => 'Nuestra comunidad',
+    'info_community_text'  => 'La Mezquita Al‑Quds es un espacio abierto para todos, dedicado a la oración, el aprendizaje y el apoyo comunitario.',
+
+    'info_activities_title' => 'Actividades',
+    'info_activities_text'  => 'Clases de árabe, clases de Corán, conferencias, eventos y actividades para jóvenes y familias.',
+
+    'info_visit_title' => 'Visítanos',
+    'info_visit_text'  => 'Estamos en El Vendrell. Consulta cómo llegar.',
+
+    'cta_title'    => '¿Quieres ponerte en contacto?',
+    'cta_subtitle' => 'Estamos aquí para ayudarte.',
+    'cta_button'   => 'Ir a la página de contacto',
+],
+
+'time' => [
+    'ago'       => 'hace',
+    'in'        => 'en',
+    'wait'      => 'Tiempo de espera',
+    'mins'      => 'min',
+    'remaining' => 'restante',
+    'iqama'     => 'Iqama',
+
+    'days'   => ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'],
+    'months' => ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+],
+
+
+
+
+
+];
