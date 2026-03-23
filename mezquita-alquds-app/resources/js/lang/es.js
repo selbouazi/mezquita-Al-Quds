@@ -22,7 +22,8 @@ const es = {
         Fajr: 'Fajr', Sunrise: 'Amanecer', Dhuhr: 'Dhuhr',
         Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
     },
-    numbers: { '12': '12', '6': '6', '18': '18', '00': '00' },
+    // Dígitos 0-9 en español (occidentales, igual que árabe en este caso)
+    numbers: ['0','1','2','3','4','5','6','7','8','9'],
     home: {
         hero_title_1: 'Mezquita',
         hero_title_2: 'Al‑Quds',
@@ -40,6 +41,30 @@ const es = {
         cta_title: '¿Quieres ponerte en contacto?',
         cta_subtitle: 'Estamos aquí para ayudarte.',
         cta_button: 'Ir a la página de contacto',
+    },
+    horarios: {
+        today: 'Hoy',
+        no_data: 'No hay horarios para este día.',
+        months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        days: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+    },
+    contacto: {
+        title: 'Contacto',
+        subtitle: 'Envía un mensaje a la comunidad de la mezquita.',
+        name: 'Nombre completo',
+        email: 'Correo electrónico',
+        message: 'Mensaje',
+        send: 'Enviar mensaje',
+    },
+    noticias: {
+        title: 'Noticias de la mezquita',
+        subtitle: 'Aquí aparecerán las noticias y comunicados publicados por el imam.',
+        wip: 'Módulo de noticias en construcción.',
+    },
+    ubicacion: {
+        title: 'Cómo llegar',
+        subtitle: 'Consulta la ubicación de la mezquita en el mapa.',
+        btn: 'Abrir en Google Maps',
     },
     time: {
         ago: 'hace', in: 'en', wait: 'Tiempo de espera',
