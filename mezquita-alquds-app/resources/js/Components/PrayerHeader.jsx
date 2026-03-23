@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
 
-const WAITING_TIME_MINUTES = 10;
 const IQAMA_WINDOW = 30;
 
 export default function PrayerHeader({ prayerTimes }) {
     const { t } = useTranslation();
+    const { tiemposEspera } = usePage().props;
     const [display, setDisplay] = useState({ title: '', waiting: '' });
 
     function toMinutes(str) {
         const [h, m] = str.split(':').map(Number);
         return h * 60 + m;
+    }
+
+    function getWaitingTime(prayerName) {
+        // prayerName viene como 'fajr', 'sunrise', etc.
+        return tiemposEspera?.[prayerName.toLowerCase()] ?? 10;
     }
 
     useEffect(() => {
@@ -36,6 +42,7 @@ export default function PrayerHeader({ prayerTimes }) {
             if (!nextName) { nextName = entries[0][0]; nextTime = toMinutes(entries[0][1]) + 1440; }
             if (!lastName) { lastName = entries[entries.length - 1][0]; lastTime = toMinutes(entries[entries.length - 1][1]) - 1440; }
 
+            const waitingMinutes = getWaitingTime(lastName);
             const diffFuture = nextTime * 60 - (nowMin * 60 + nowSec);
             const diffPast   = nowMin * 60 + nowSec - lastTime * 60;
 
@@ -47,21 +54,21 @@ export default function PrayerHeader({ prayerTimes }) {
             const iqama     = t('time', 'iqama');
 
             // ESTADO 2 — entre adhan e iqama
-            if (diffPast < WAITING_TIME_MINUTES * 60) {
+            if (diffPast < waitingMinutes * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
                 setDisplay({
                     title:   `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`,
-                    waiting: `${wait} ${remaining}: ${WAITING_TIME_MINUTES - m} ${mins}`,
+                    waiting: `${wait} ${remaining}: ${waitingMinutes - m} ${mins}`,
                 });
                 return;
             }
 
             // ESTADO 3 — iqama
-            if (diffPast < (WAITING_TIME_MINUTES + IQAMA_WINDOW) * 60) {
+            if (diffPast < (waitingMinutes + IQAMA_WINDOW) * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
-                const iqamaM = m - WAITING_TIME_MINUTES;
+                const iqamaM = m - waitingMinutes;
                 setDisplay({
                     title:   `${lastName} · ${ago} ${m} ${mins}`,
                     waiting: `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`,
@@ -75,14 +82,14 @@ export default function PrayerHeader({ prayerTimes }) {
             const s = diffFuture % 60;
             setDisplay({
                 title:   `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
-                waiting: `${wait}: ${WAITING_TIME_MINUTES} ${mins}`,
+                waiting: `${wait}: ${waitingMinutes} ${mins}`,
             });
         }
 
         update();
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [tiemposEspera]);
 
     return (
         <section className="flex justify-center mt-0 fade">

@@ -8,6 +8,21 @@ export default function PrayerClock({ prayerTimes }) {
     const secondRef = useRef(null);
     const arcRef    = useRef(null);
 
+    // Convierte un número como 18 → '18' en es/ca, '١٨' en ar
+    const digits = t('numbers', null); // devuelve el array ['0'..'9'] o ['٠'..'٩']
+    function localizeNumber(n) {
+        if (!Array.isArray(digits)) return String(n);
+        return String(n).split('').map(d => /\d/.test(d) ? digits[parseInt(d)] : d).join('');
+    }
+
+    // Los 4 números del reloj de 24h
+    const CLOCK_NUMBERS = [
+        { hour: 12, label: localizeNumber(12) },
+        { hour: 18, label: localizeNumber(18) },
+        { hour: 0,  label: localizeNumber(0)  },
+        { hour: 6,  label: localizeNumber(6)  },
+    ];
+
     function toMinutes(str) {
         const [h, m] = str.split(':').map(Number);
         return h * 60 + m;
@@ -15,7 +30,7 @@ export default function PrayerClock({ prayerTimes }) {
 
     function formatRemaining(diff) {
         if (diff < 0) diff += 1440;
-        return `${Math.floor(diff / 60)}h ${diff % 60}m`;
+        return `${localizeNumber(Math.floor(diff / 60))}h ${localizeNumber(diff % 60)}m`;
     }
 
     useEffect(() => {
@@ -47,13 +62,6 @@ export default function PrayerClock({ prayerTimes }) {
         return () => clearInterval(interval);
     }, []);
 
-    const CLOCK_NUMBERS = [
-        { hour: 12, label: t('numbers', '12') },
-        { hour: 18, label: t('numbers', '18') },
-        { hour: 0,  label: t('numbers', '00') },
-        { hour: 6,  label: t('numbers', '6') },
-    ];
-
     return (
         <div className="relative reloj-container
                         w-[340px] h-[340px] sm:w-[380px] sm:h-[380px]
@@ -66,7 +74,7 @@ export default function PrayerClock({ prayerTimes }) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff,#f3f3f3)] rounded-3xl" />
             <div className="absolute -inset-10 bg-[radial-gradient(circle_at_top,#C9A22722,transparent_70%)] pointer-events-none" />
 
-            {/* Números */}
+            {/* Números del reloj */}
             {CLOCK_NUMBERS.map(({ hour, label }) => {
                 const angle = (hour / 24) * 360;
                 return (
@@ -128,10 +136,20 @@ export default function PrayerClock({ prayerTimes }) {
 
             {/* Rezos */}
             {Object.entries(prayerTimes).map(([key, time]) => {
-                const label = t('prayers', key);
+                const label = t('prayers', key.charAt(0).toUpperCase() + key.slice(1));
                 const [h, m] = time.split(':').map(Number);
                 const angle  = ((h * 60 + m) / 1440) * 360;
-                return <PrayerItem key={key} label={label} time={time} angle={angle} remainingLabel={t('prayers', 'remaining')} />;
+                return (
+                    <PrayerItem
+                        key={key}
+                        label={label}
+                        time={time}
+                        localTime={`${localizeNumber(h)}:${localizeNumber(String(m).padStart(2,'0'))}`}
+                        angle={angle}
+                        remainingLabel={t('prayers', 'remaining')}
+                        localizeNumber={localizeNumber}
+                    />
+                );
             })}
 
             <style>{`
@@ -149,7 +167,7 @@ export default function PrayerClock({ prayerTimes }) {
     );
 }
 
-function PrayerItem({ label, time, angle, remainingLabel }) {
+function PrayerItem({ label, time, localTime, angle, remainingLabel }) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -170,7 +188,7 @@ function PrayerItem({ label, time, angle, remainingLabel }) {
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 px-3 py-2 rounded-lg
                                 bg-[#0F5132] text-white text-[10px] shadow-xl border border-[#C9A227]/40"
                      style={{ zIndex: 999 }}>
-                    <span>{time}</span><br />
+                    <span>{localTime}</span><br />
                     <span className="text-[9px] opacity-80">
                         {remainingLabel}: <span className="tooltip-remaining">--h --m</span>
                     </span>
