@@ -1,0 +1,77 @@
+const es = {
+    navbar: {
+        title: 'Mezquita Al‑Quds',
+        subtitle: 'Comunitat musulmana del Vendrell',
+        home: 'Inicio',
+        prayers: 'Horarios',
+        location: 'Cómo llegar',
+        contact: 'Contacto',
+    },
+    footer: {
+        title: 'Mezquita Al‑Quds',
+        subtitle: 'Comunitat musulmana del Vendrell',
+        description: 'Un espacio de espiritualidad, comunidad y conocimiento para todos.',
+        links_title: 'Enlaces',
+        contact_title: 'Contacto',
+        address: 'El Vendrell, Tarragona',
+        email: 'info@mezquita-alquds.cat',
+        google_maps: 'Ver en Google Maps',
+        rights: 'Todos los derechos reservados',
+    },
+    prayers: {
+        Fajr: 'Fajr', Sunrise: 'Amanecer', Dhuhr: 'Dhuhr',
+        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
+    },
+    // Dígitos 0-9 en español (occidentales, igual que árabe en este caso)
+    numbers: ['0','1','2','3','4','5','6','7','8','9'],
+    home: {
+        hero_title_1: 'Mezquita',
+        hero_title_2: 'Al‑Quds',
+        hero_title_3: 'El Vendrell',
+        hero_subtitle: 'Un lugar de espiritualidad, comunidad y conocimiento para todos.',
+        btn_prayer_times: 'Ver horarios de oración',
+        btn_contact: 'Contáctanos',
+        card_subtitle: 'La comunidad musulmana de El Vendrell',
+        info_community_title: 'Nuestra comunidad',
+        info_community_text: 'La Mezquita Al‑Quds es un espacio abierto para todos, dedicado a la oración, el aprendizaje y el apoyo comunitario.',
+        info_activities_title: 'Actividades',
+        info_activities_text: 'Clases de árabe, clases de Corán, conferencias, eventos y actividades para jóvenes y familias.',
+        info_visit_title: 'Visítanos',
+        info_visit_text: 'Estamos en El Vendrell. Consulta cómo llegar.',
+        cta_title: '¿Quieres ponerte en contacto?',
+        cta_subtitle: 'Estamos aquí para ayudarte.',
+        cta_button: 'Ir a la página de contacto',
+    },
+    horarios: {
+        today: 'Hoy',
+        no_data: 'No hay horarios para este día.',
+        months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        days: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+    },
+    contacto: {
+        title: 'Contacto',
+        subtitle: 'Envía un mensaje a la comunidad de la mezquita.',
+        name: 'Nombre completo',
+        email: 'Correo electrónico',
+        message: 'Mensaje',
+        send: 'Enviar mensaje',
+    },
+    noticias: {
+        title: 'Noticias de la mezquita',
+        subtitle: 'Aquí aparecerán las noticias y comunicados publicados por el imam.',
+        wip: 'Módulo de noticias en construcción.',
+    },
+    ubicacion: {
+        title: 'Cómo llegar',
+        subtitle: 'Consulta la ubicación de la mezquita en el mapa.',
+        btn: 'Abrir en Google Maps',
+    },
+    time: {
+        ago: 'hace', in: 'en', wait: 'Tiempo de espera',
+        mins: 'min', remaining: 'restante', iqama: 'Iqama',
+        days: ['dom','lun','mar','mie','jue','vie','sab'],
+        months: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+    },
+};
+
+export default es;

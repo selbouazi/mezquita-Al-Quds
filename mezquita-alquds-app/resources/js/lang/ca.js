@@ -1,0 +1,77 @@
+const ca = {
+    navbar: {
+        title: 'Mesquita Al‑Quds',
+        subtitle: 'Comunitat musulmana del Vendrell',
+        home: 'Inici',
+        prayers: 'Horaris',
+        location: 'Com arribar',
+        contact: 'Contacte',
+    },
+    footer: {
+        title: 'Mesquita Al‑Quds',
+        subtitle: 'Comunitat musulmana del Vendrell',
+        description: "Un espai d'espiritualitat, comunitat i coneixement per a tothom.",
+        links_title: 'Enllaços',
+        contact_title: 'Contacte',
+        address: 'El Vendrell, Tarragona',
+        email: 'info@mezquita-alquds.cat',
+        google_maps: 'Veure a Google Maps',
+        rights: 'Tots els drets reservats',
+    },
+    prayers: {
+        Fajr: 'Fajr', Sunrise: 'Sortida del sol', Dhuhr: 'Dhuhr',
+        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
+    },
+    // Dígitos 0-9 en catalán (occidentales, igual que español)
+    numbers: ['0','1','2','3','4','5','6','7','8','9'],
+    home: {
+        hero_title_1: 'Mesquita',
+        hero_title_2: 'Al‑Quds',
+        hero_title_3: 'El Vendrell',
+        hero_subtitle: "Un espai d'espiritualitat, comunitat i coneixement per a tothom.",
+        btn_prayer_times: "Veure horaris de pregària",
+        btn_contact: "Contacta amb nosaltres",
+        card_subtitle: 'La comunitat musulmana del Vendrell',
+        info_community_title: 'La nostra comunitat',
+        info_community_text: "La Mesquita Al‑Quds és un espai obert per a tothom, dedicat a la pregària, l'aprenentatge i el suport comunitari.",
+        info_activities_title: 'Activitats',
+        info_activities_text: "Classes d'àrab, classes d'Alcorà, conferències, esdeveniments i activitats per a joves i famílies.",
+        info_visit_title: "Visita'ns",
+        info_visit_text: "Ens trobaràs al Vendrell. Consulta com arribar-hi.",
+        cta_title: 'Vols contactar amb nosaltres?',
+        cta_subtitle: "Som aquí per ajudar-te.",
+        cta_button: 'Vés a la pàgina de contacte',
+    },
+    horarios: {
+        today: 'Avui',
+        no_data: "No hi ha horaris per a aquest dia.",
+        months: ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
+        days: ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'],
+    },
+    contacto: {
+        title: 'Contacte',
+        subtitle: 'Envia un missatge a la comunitat de la mesquita.',
+        name: 'Nom complet',
+        email: 'Correu electrònic',
+        message: 'Missatge',
+        send: 'Enviar missatge',
+    },
+    noticias: {
+        title: 'Notícies de la mesquita',
+        subtitle: "Aquí apareixeran les notícies i comunicats publicats per l'imam.",
+        wip: 'Mòdul de notícies en construcció.',
+    },
+    ubicacion: {
+        title: 'Com arribar',
+        subtitle: 'Consulta la ubicació de la mesquita al mapa.',
+        btn: 'Obrir a Google Maps',
+    },
+    time: {
+        ago: 'fa', in: 'en', wait: "Temps d'espera",
+        mins: 'min', remaining: 'restant', iqama: 'Iqama',
+        days: ['dg','dl','dt','dc','dj','dv','ds'],
+        months: ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'],
+    },
+};
+
+export default ca;
