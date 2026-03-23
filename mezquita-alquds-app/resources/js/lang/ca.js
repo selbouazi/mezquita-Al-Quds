@@ -22,7 +22,8 @@ const ca = {
         Fajr: 'Fajr', Sunrise: 'Sortida del sol', Dhuhr: 'Dhuhr',
         Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
     },
-    numbers: { '12': '12', '6': '6', '18': '18', '00': '00' },
+    // Dígitos 0-9 en catalán (occidentales, igual que español)
+    numbers: ['0','1','2','3','4','5','6','7','8','9'],
     home: {
         hero_title_1: 'Mesquita',
         hero_title_2: 'Al‑Quds',
@@ -40,6 +41,30 @@ const ca = {
         cta_title: 'Vols contactar amb nosaltres?',
         cta_subtitle: "Som aquí per ajudar-te.",
         cta_button: 'Vés a la pàgina de contacte',
+    },
+    horarios: {
+        today: 'Avui',
+        no_data: "No hi ha horaris per a aquest dia.",
+        months: ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
+        days: ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'],
+    },
+    contacto: {
+        title: 'Contacte',
+        subtitle: 'Envia un missatge a la comunitat de la mesquita.',
+        name: 'Nom complet',
+        email: 'Correu electrònic',
+        message: 'Missatge',
+        send: 'Enviar missatge',
+    },
+    noticias: {
+        title: 'Notícies de la mesquita',
+        subtitle: "Aquí apareixeran les notícies i comunicats publicats per l'imam.",
+        wip: 'Mòdul de notícies en construcció.',
+    },
+    ubicacion: {
+        title: 'Com arribar',
+        subtitle: 'Consulta la ubicació de la mesquita al mapa.',
+        btn: 'Obrir a Google Maps',
     },
     time: {
         ago: 'fa', in: 'en', wait: "Temps d'espera",
