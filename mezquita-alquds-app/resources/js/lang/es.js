@@ -72,6 +72,22 @@ const es = {
         days: ['dom','lun','mar','mie','jue','vie','sab'],
         months: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
     },
+    auth: {
+        login: 'Acceder',
+        register: 'Registrarse',
+        logout: 'Cerrar sesión',
+        email: 'Correo electrónico',
+        password: 'Contraseña',
+        remember: 'Recordarme',
+        forgot: '¿Olvidaste tu contraseña?',
+        no_account: '¿No tienes cuenta?',
+        has_account: '¿Ya tienes cuenta?',
+        name: 'Nombre completo',
+        confirm_password: 'Confirmar contraseña',
+        create_account: 'Crear Cuenta',
+        processing_login: 'Iniciando sesión...',
+        processing_register: 'Creando cuenta...',
+    },
 };
 
 export default es;
