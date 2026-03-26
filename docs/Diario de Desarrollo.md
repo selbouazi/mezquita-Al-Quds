@@ -2,7 +2,7 @@
 
 ## Mezquita Al-Quds — Web de gestión comunitaria
 
-**Período:** 13 de marzo – 25 de marzo de 2026 · **Autor:** Suli
+**Período:** 13 de marzo – 26 de marzo de 2026 · **Autor:** Suli
 
 ---
 
@@ -240,3 +240,47 @@ Se implementó el formulario de contacto conectado a base de datos. Hasta ahora 
 - Se añadió selector de tipo de contacto: formulario web o contacto telefónico directo con el imán
 
 **Estado:** El formulario guarda los mensajes correctamente en la base de datos. El imam podrá consultarlos desde el panel de administración (por implementar).
+
+---
+
+#### 26 de marzo de 2026
+
+**Desarrollo**
+
+**Sistema de autenticación con Laravel Fortify**
+
+Se implementó el sistema completo de autenticación usando Laravel Fortify. Hasta ahora no había forma de que usuarios se registraran o iniciaran sesión. El objetivo fue añadir login, registro y cierre de sesión de forma segura y profesional.
+
+**Cambios realizados:**
+
+- Se creó el directorio `app/Actions/Fortify/` con las acciones de Fortify:
+  - `CreateNewUser` — creación de usuarios con validación
+  - `UpdateUserProfileInformation` — actualización de perfil
+  - `UpdateUserPassword` — cambio de contraseña
+  - `ResetUserPassword` — recuperación de contraseña
+  - `PasswordValidationRules` — reglas de contraseña configurables
+- Se creó `FortifyServiceProvider` para registrar las acciones
+- Se creó el archivo de configuración `config/fortify.php` con opciones de autenticación
+- Se creó el middleware `RedirectIfAuthenticated` para redirigir usuarios ya autenticados
+- Se actualizó `bootstrap/app.php` para registrar el provider y el middleware con alias `guest`
+- Se crearon las páginas `Login.jsx` y `Register.jsx` con formularios completos y validación
+- Se añadieron traducciones de autenticación en los tres idiomas (ES, CA, AR)
+- Se actualizaron las dependencias de Composer
+
+**Estado:** El sistema de autenticación funciona correctamente. Los usuarios pueden registrarse, iniciar sesión y cerrar sesión. El panel de administración queda protegido y solo accesible para usuarios autenticados.
+
+---
+
+#### 26 de marzo de 2026
+
+**Integración**
+
+**Merge de funcionalidades en main**
+
+Se fusionaron las ramas de desarrollo en la rama principal `main`:
+
+- `feature/contact-form` — formulario de contacto con backend (25 mar)
+- `feature/authentication` — sistema de autenticación Fortify (26 mar)
+- `feature/docs` — diario de desarrollo en Markdown (25 mar)
+
+Las funcionalidades quedan integradas y desplegadas en producción.
