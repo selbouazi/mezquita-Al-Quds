@@ -72,6 +72,22 @@ const ca = {
         days: ['dg','dl','dt','dc','dj','dv','ds'],
         months: ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'],
     },
+    auth: {
+        login: 'Accedir',
+        register: 'Registrar-se',
+        logout: 'Tancar sessió',
+        email: 'Correu electrònic',
+        password: 'Contrasenya',
+        remember: 'Recordar-me',
+        forgot: 'Has oblidat la contrasenya?',
+        no_account: 'No tens compte?',
+        has_account: 'Ja tens compte?',
+        name: 'Nom complet',
+        confirm_password: 'Confirmar contrasenya',
+        create_account: 'Crear Compte',
+        processing_login: 'Iniciant sessió...',
+        processing_register: 'Creant compte...',
+    },
 };
 
 export default ca;
