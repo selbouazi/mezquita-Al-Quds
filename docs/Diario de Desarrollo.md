@@ -2,7 +2,7 @@
 
 ## Mezquita Al-Quds — Web de gestión comunitaria
 
-**Período:** 13 de marzo – 26 de marzo de 2026 · **Autor:** Suli
+**Período:** 13 de marzo – 27 de marzo de 2026 · **Autor:** Suli
 
 ---
 
@@ -284,3 +284,23 @@ Se fusionaron las ramas de desarrollo en la rama principal `main`:
 - `feature/docs` — diario de desarrollo en Markdown (25 mar)
 
 Las funcionalidades quedan integradas y desplegadas en producción.
+
+---
+
+#### 27 de marzo de 2026
+
+**Desarrollo**
+
+**Panel de administración básico**
+
+Se implementó la estructura básica del panel de administración. El objetivo fue crear un punto de partida para que el imam pueda gestionar los contenidos de la mezquita.
+
+**Cambios realizados:**
+
+- Se creó `Admin\DashboardController` con método `index` que devuelve una vista placeholder
+- Se creó `routes/admin.php` con las rutas del panel bajo `/admin`
+- Se creó la página `Admin/Dashboard.jsx` con estructura básica y menú de navegación
+- Se creó `AdminUserSeeder` para crear un usuario administrador inicial
+- Se registraron las rutas admin en `bootstrap/app.php` mediante el callback `then`
+
+**Estado:** El panel de administración existe en su versión básica. Muestra un dashboard placeholder.Queda por implementar la funcionalidad real de gestión de horarios, donativos, noticias y otros módulos.
