@@ -304,3 +304,36 @@ Se implementó la estructura básica del panel de administración. El objetivo f
 - Se registraron las rutas admin en `bootstrap/app.php` mediante el callback `then`
 
 **Estado:** El panel de administración existe en su versión básica. Muestra un dashboard placeholder.Queda por implementar la funcionalidad real de gestión de horarios, donativos, noticias y otros módulos.
+
+---
+
+#### 28 de marzo de 2026
+
+**Desarrollo**
+
+**Rediseño completo del panel de administración**
+
+Se rediseñó completamente el panel de administración con una estructura profesional y navegación completa. El objetivo fue preparar la base para gestionar todos los módulos de la aplicación.
+
+**Cambios realizados:**
+
+- Se creó `AdminLayout.jsx` con sidebar de navegación que incluye todos los módulos
+- Se rediseñó `Dashboard.jsx` con grid de tarjetas clicables para cada módulo
+- Se crearon 10 páginas placeholder para cada sección del admin:
+  - Horarios, Donativos, Facturas, Noticias, Notificaciones, Imam, Clases, Ubicación, Contactos, Códigos
+- Se actualizó `routes/admin.php` con todas las rutas de los módulos
+- Cada página muestra un mensaje de "Módulo en construcción" con el icono de 🚧
+
+**Módulos incluidos (según documento de requerimientos):**
+1. Horarios de rezo (RF-1 a RF-4)
+2. Donativos (RF-5 a RF-11)
+3. Facturas (RF-12 a RF-17)
+4. Notificaciones (RF-18 a RF-21)
+5. Noticias (RF-21 a RF-23)
+6. Información del Imán (RF-24 a RF-25)
+7. Clases de Árabe/Corán (RF-26 a RF-27)
+8. Ubicación/Dirección (RF-28 a RF-30)
+9. Mensajes de contacto (RF-31 a RF-34)
+10. Códigos de activación (RF-35 a RF-39)
+
+**Estado:** El panel de administración tiene ahora una interfaz profesional con navegación completa. Cada módulo es accesible aunque el contenido es placeholder (por implementar).
