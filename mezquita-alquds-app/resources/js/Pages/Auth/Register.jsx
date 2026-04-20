@@ -10,6 +10,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        codigo_activacion: '',
     });
 
     const submit = (e) => {
@@ -88,6 +89,23 @@ export default function Register() {
                                 required
                             />
                             {errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{errors.password_confirmation}</p>}
+                        </div>
+
+                        <div className="mb-6">
+                            <label htmlFor="codigo_activacion" className="block text-sm font-medium text-gray-700 mb-1">
+                                {t('auth', 'activation_code')}
+                            </label>
+                            <input
+                                id="codigo_activacion"
+                                type="text"
+                                name="codigo_activacion"
+                                value={data.codigo_activacion}
+                                onChange={(e) => setData('codigo_activacion', e.target.value.toUpperCase())}
+                                className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227]/40 transition"
+                                placeholder="XXXXXXXX"
+                                required
+                            />
+                            {errors.codigo_activacion && <p className="mt-1 text-sm text-red-600">{errors.codigo_activacion}</p>}
                         </div>
 
                         <button
