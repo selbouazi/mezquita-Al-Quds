@@ -88,6 +88,25 @@ const ar = {
         processing_login: 'جاري تسجيل الدخول...',
         processing_register: 'جاري إنشاء الحساب...',
     },
+    admin: {
+        panel: 'لوحة الإدارة',
+        selectModule: 'اختر وحدة للإدارة',
+        back: 'رجوع',
+        goToWebsite: 'الذهاب إلى الموقع',
+        welcome: 'مرحباً',
+        manage: 'إدارة',
+    },
+    adminModules: {
+        notifications: 'الإشعارات',
+        news: 'الأخبار',
+        activation: 'رمز الوصول',
+        schedules: 'المواقيت',
+        donations: 'التبرعات',
+        invoices: 'الفواتير',
+        classes: 'الدروس',
+        location: 'الموقع',
+        contacts: 'جهات الاتصال',
+    },
 };
 
 export default ar;
