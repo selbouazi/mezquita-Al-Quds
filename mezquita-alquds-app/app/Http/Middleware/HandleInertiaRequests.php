@@ -12,7 +12,6 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request): array
     {
-        // Carga los tiempos de espera como { fajr: 20, dhuhr: 10, ... }
         $tiemposEspera = TiempoEspera::all()
             ->pluck('minutos', 'rezo')
             ->toArray();
@@ -20,6 +19,14 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'locale'        => app()->getLocale(),
             'tiemposEspera' => $tiemposEspera,
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'is_admin' => $request->user()->isAdmin(),
+                ] : null,
+            ],
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
