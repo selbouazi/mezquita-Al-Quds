@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
+import NotificationBell from './NotificationBell';
 
 const LANGUAGES = [
     { code: 'es', label: 'Español' },
@@ -10,9 +11,11 @@ const LANGUAGES = [
 
 export default function Navbar() {
     const { t, locale, isRTL } = useTranslation();
+    const { auth } = usePage().props;
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [langOpen, setLangOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 50);
@@ -26,12 +29,29 @@ export default function Navbar() {
         return () => document.removeEventListener('click', close);
     }, []);
 
+    useEffect(() => {
+        fetch('/api/notificaciones')
+            .then(res => res.json())
+            .then(data => setNotifications(data))
+            .catch(() => {});
+    }, []);
+
     const navLinks = [
-        { href: '/',          label: t('navbar', 'home') },
-        { href: '/horarios',  label: t('navbar', 'prayers') },
+        { href: '/', label: t('navbar', 'home') },
+        { href: '/horarios', label: t('navbar', 'prayers') },
+        { href: '/imam', label: t('navbar', 'imam') },
         { href: '/ubicacion', label: t('navbar', 'location') },
-        { href: '/contacto',  label: t('navbar', 'contact') },
+        { href: '/contacto', label: t('navbar', 'contact') },
     ];
+    
+    const isLoggedIn = auth?.user !== null;
+    const isAdmin = auth?.user?.is_admin === true;
+    const isRegularUser = isLoggedIn && !isAdmin;
+    
+    const userLinks = isRegularUser ? [
+        { href: '/facturas', label: 'Facturas' },
+        { href: '/donativos', label: 'Donativos' },
+    ] : [];
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 border-b border-[#C9A227]/20 transition-all duration-300
@@ -57,13 +77,24 @@ export default function Navbar() {
                 </div>
 
                 {/* MENÚ DESKTOP */}
-                <div className="hidden md:flex items-center space-x-10 text-sm font-medium">
+                <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
                     {navLinks.map(link => (
                         <Link key={link.href} href={link.href}
                               className="hover:text-[#C9A227] transition">
                             {link.label}
                         </Link>
                     ))}
+                    
+                    {/* LINKS PARA USUARIOS NO ADMIN */}
+                    {userLinks.map(link => (
+                        <Link key={link.href} href={link.href}
+                              className="hover:text-[#C9A227] transition">
+                            {link.label}
+                        </Link>
+                    ))}
+
+                    {/* NOTIFICATION BELL */}
+                    <NotificationBell notifications={notifications} />
 
                     {/* SELECTOR IDIOMA */}
                     <div className="relative">
@@ -86,6 +117,28 @@ export default function Navbar() {
                             </div>
                         )}
                     </div>
+
+                    {/* BOTÓN LOGIN/REGISTRO */}
+                    {isLoggedIn ? (
+                        <div className="flex items-center gap-3">
+                            {isAdmin ? (
+                                <Link href="/admin"
+                                      className="px-4 py-2 bg-[#C9A227] text-white rounded-lg text-sm hover:bg-[#9a7b1c] transition">
+                                    {t('admin', 'manage')}
+                                </Link>
+                            ) : (
+                                <Link href="/logout" method="post" as="button"
+                                      className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition">
+                                    {t('auth', 'logout')}
+                                </Link>
+                            )}
+                        </div>
+                    ) : (
+                        <Link href="/login"
+                              className="px-4 py-2 bg-[#0F5132] text-white rounded-lg text-sm hover:bg-[#0c3f27] transition">
+                            {t('auth', 'login')}
+                        </Link>
+                    )}
                 </div>
             </div>
 
@@ -99,14 +152,52 @@ export default function Navbar() {
                             {link.label}
                         </Link>
                     ))}
+                    
+                    {/* LINKS PARA USUARIOS NO ADMIN EN MÓVIL */}
+                    {userLinks.map(link => (
+                        <Link key={link.href} href={link.href}
+                              className="block text-gray-700 hover:text-[#C9A227] transition"
+                              onClick={() => setMobileOpen(false)}>
+                            {link.label}
+                        </Link>
+                    ))}
+                    
+                    {/* NOTIFICATIONS BELL MÓVIL */}
+                    <div className="flex items-center">
+                        <NotificationBell notifications={notifications} />
+                    </div>
+
                     <div className="flex gap-3 pt-2">
                         {LANGUAGES.map(l => (
                             <a key={l.code} href={`/lang/${l.code}`}
                                className="flex items-center gap-1 px-2 py-1 border rounded-lg text-xs hover:bg-gray-100">
                                 <img src={`/img/lang/${l.code}.png`} className="h-4 w-4" alt={l.code} />
-                                {l.label}
                             </a>
                         ))}
+                    </div>
+
+                    {/* BOTÓN LOGIN MÓVIL */}
+                    <div className="pt-2 border-t border-gray-100">
+                        {isLoggedIn ? (
+                            <div className="flex flex-col gap-2">
+                                {isAdmin ? (
+                                    <Link href="/admin"
+                                          className="px-4 py-2 bg-[#C9A227] text-white rounded-lg text-sm text-center hover:bg-[#9a7b1c] transition">
+                                        {t('admin', 'manage')}
+                                    </Link>
+                                ) : (
+                                    <Link href="/logout" method="post" as="button"
+                                          className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm text-center hover:bg-red-600 transition">
+                                        {t('auth', 'logout')}
+                                    </Link>
+                                )}
+                            </div>
+                        ) : (
+                            <Link href="/login"
+                                  className="block px-4 py-2 bg-[#0F5132] text-white rounded-lg text-sm text-center hover:bg-[#0c3f27] transition">
+                                {t('auth', 'login')}
+                            </Link>
+                        )}
                     </div>
                 </div>
             )}
