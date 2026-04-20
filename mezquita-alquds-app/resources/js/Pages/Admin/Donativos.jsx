@@ -1,13 +1,14 @@
 import AdminLayout from '../../Layouts/AdminLayout';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Donativos() {
+    const { t } = useTranslation();
+
     return (
-        <AdminLayout title="Admin - Donativos">
-            <h1 className="text-2xl font-bold text-[#0F5132] mb-6">Gestión de Donativos</h1>
-            <div className="bg-white rounded-2xl shadow-sm border border-[#C9A227]/20 p-8 text-center">
-                <p className="text-6xl mb-4">🚧</p>
-                <p className="text-xl text-gray-600">Módulo en construcción</p>
-                <p className="text-sm text-gray-500 mt-2">Aquí podrás gestionar los donativos</p>
+        <AdminLayout title={t('adminModules', 'donations')}>
+            <div className="text-center py-12">
+                <h2 className="text-2xl font-bold text-[#0F5132] mb-4">Módulo en construcción</h2>
+                <p className="text-gray-600">Esta sección estará disponible pronto.</p>
             </div>
         </AdminLayout>
     );
