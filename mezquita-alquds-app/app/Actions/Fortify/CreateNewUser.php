@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Models\ActivationCode;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -32,6 +33,11 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+            'activation_code' => ['required', 'string', function ($attribute, $value, $fail) {
+                if (!ActivationCode::validar($value)) {
+                    $fail('El código de activación no es válido o está inactivo.');
+                }
+            }],
         ])->validate();
 
         return User::create([
