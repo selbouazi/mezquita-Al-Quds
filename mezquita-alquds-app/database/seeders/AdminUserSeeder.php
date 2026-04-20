@@ -14,14 +14,15 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'admin@mezquita-alquds.com'],
+            ['email' => 'suli@gmail.com'],
             [
-                'name' => 'Administrador',
-                'password' => Hash::make('password'),
+                'name' => 'Suli',
+                'password' => Hash::make('11111111'),
                 'email_verified_at' => now(),
+                'rol' => 'admin',
             ]
         );
 
-        $this->command->info('✔ Usuario administrador creado: admin@mezquita-alquds.com / password');
+        $this->command->info('✔ Usuario administrador creado: suli@gmail.com / 11111111');
     }
 }

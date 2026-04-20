@@ -11,9 +11,11 @@ return new class extends Migration
         Schema::create('horarios_modificados', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->string('rezo'); // fajr, sunrise, dhuhr, asr, maghrib, isha
+            $table->string('rezo'); 
             $table->time('hora');
             $table->timestamps();
+            $table->STRING('duracion');
+
 
             $table->unique(['fecha', 'rezo']);
         });
