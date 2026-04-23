@@ -5,12 +5,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
-<<<<<<< HEAD
 use App\Http\Controllers\NoticiasController;
 use App\Models\Donativo;
 use App\Models\Factura;
-=======
->>>>>>> fix/route-loading
 use App\Models\Horario;
 use App\Models\ImamSetting;
 use App\Models\Notification;
@@ -30,24 +27,16 @@ Fortify::registerView(function () {
 Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::post('/register', [RegisterController::class, 'register']);
 
-// Rutas de Admin (protegidas por auth y rol admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-    // Notificaciones
     Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notificaciones.index');
     Route::post('/notificaciones', [NotificationController::class, 'store']);
     Route::put('/notificaciones/{notification}', [NotificationController::class, 'update']);
     Route::delete('/notificaciones/{notification}', [NotificationController::class, 'destroy']);
     Route::post('/notificaciones/{notification}/toggle', [NotificationController::class, 'toggle']);
-
-    // Codigos de activación
     Route::get('/codigos', [ActivationCodeController::class, 'index'])->name('codigos.index');
     Route::post('/codigos/generar', [ActivationCodeController::class, 'generar']);
     Route::post('/codigos/actualizar', [ActivationCodeController::class, 'actualizar']);
-
-    // Imam
     Route::get('/imam', [ImamController::class, 'index'])->name('imam.index');
     Route::post('/imam/guardar', [ImamController::class, 'guardar']);
 });
@@ -101,11 +90,7 @@ Route::get('/horarios', function () {
     ]);
 });
 
-<<<<<<< HEAD
 Route::get('/noticias', [NoticiasController::class, 'index']);
-=======
-Route::get('/noticias', fn () => Inertia::render('Noticias'));
->>>>>>> fix/route-loading
 Route::get('/contacto', fn () => Inertia::render('Contacto'));
 Route::get('/ubicacion', fn () => Inertia::render('Ubicacion'));
 Route::get('/facturas', function () {
@@ -125,17 +110,15 @@ Route::get('/donativos', function () {
     ]);
 });
 
-// Imam público
 Route::get('/imam', function () {
     $imam = ImamSetting::first();
     if ($imam) {
-        $imam->foto = $imam->foto; // Trigger accessor
+        $imam->foto = $imam->foto;
     }
 
     return Inertia::render('Imam', ['imam' => $imam]);
 });
 
-// Notificaciones públicas
 Route::get('/notifications', function () {
     $notificaciones = Notification::activas()
         ->ordenadas()
@@ -144,7 +127,6 @@ Route::get('/notifications', function () {
     return Inertia::render('Public/Notifications', ['notificaciones' => $notificaciones]);
 });
 
-// API: Imam
 Route::get('/api/imam', function () {
     $imam = ImamSetting::first();
     if ($imam && $imam->foto) {
@@ -154,7 +136,6 @@ Route::get('/api/imam', function () {
     return response()->json($imam);
 });
 
-// API: Notificaciones
 Route::get('/api/notificaciones', function () {
     $notificaciones = Notification::activas()->ordenadas()->take(10)->get();
 
