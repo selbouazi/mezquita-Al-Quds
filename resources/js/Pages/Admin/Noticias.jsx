@@ -67,8 +67,9 @@ export default function Noticias() {
         }
     };
 
-    const publishedNews = noticias.filter(n => n.publicado);
-    const draftNews = noticias.filter(n => !n.publicado);
+    const noticiasList = noticias?.data || noticias || [];
+    const publishedNews = noticiasList.filter(n => n.publicado);
+    const draftNews = noticiasList.filter(n => !n.publicado);
 
     return (
         <AdminLayout title={t('adminModules', 'news')}>
@@ -88,7 +89,7 @@ export default function Noticias() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
-                        <p className="text-2xl font-bold text-[#0F5132]">{noticias.length}</p>
+                        <p className="text-2xl font-bold text-[#0F5132]">{noticiasList.length}</p>
                         <p className="text-sm text-gray-600">Total noticias</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
@@ -114,14 +115,14 @@ export default function Noticias() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {noticias.length === 0 ? (
+                                {noticiasList.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
                                             No hay noticias para mostrar
                                         </td>
                                     </tr>
                                 ) : (
-                                    noticias.map((noticia) => (
+                                    noticiasList.map((noticia) => (
                                         <tr key={noticia.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
                                                 {noticia.imagen ? (
