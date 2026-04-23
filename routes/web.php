@@ -5,9 +5,12 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
+<<<<<<< HEAD
 use App\Http\Controllers\NoticiasController;
 use App\Models\Donativo;
 use App\Models\Factura;
+=======
+>>>>>>> fix/route-loading
 use App\Models\Horario;
 use App\Models\ImamSetting;
 use App\Models\Notification;
@@ -98,7 +101,11 @@ Route::get('/horarios', function () {
     ]);
 });
 
+<<<<<<< HEAD
 Route::get('/noticias', [NoticiasController::class, 'index']);
+=======
+Route::get('/noticias', fn () => Inertia::render('Noticias'));
+>>>>>>> fix/route-loading
 Route::get('/contacto', fn () => Inertia::render('Contacto'));
 Route::get('/ubicacion', fn () => Inertia::render('Ubicacion'));
 Route::get('/facturas', function () {
