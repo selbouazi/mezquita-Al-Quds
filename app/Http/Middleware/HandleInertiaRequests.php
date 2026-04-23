@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\TiempoEspera;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use App\Models\TiempoEspera;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -17,19 +17,19 @@ class HandleInertiaRequests extends Middleware
             ->toArray();
 
         return array_merge(parent::share($request), [
-            'locale'        => app()->getLocale(),
+            'locale' => app()->getLocale(),
             'tiemposEspera' => $tiemposEspera,
             'auth' => [
                 'user' => $request->user() ? [
                     'id' => $request->user()->id,
                     'name' => $request->user()->name,
                     'email' => $request->user()->email,
-                    'is_admin' => $request->user()->isAdmin(),
+                    'is_admin' => $request->user()->rol === 'admin',
                 ] : null,
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),
-                'error'   => $request->session()->get('error'),
+                'error' => $request->session()->get('error'),
             ],
         ]);
     }

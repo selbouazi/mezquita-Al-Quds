@@ -22,8 +22,12 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            
-            return redirect()->intended('admin');
+
+            if (Auth::user()->rol === 'admin') {
+                return redirect('/admin');
+            }
+
+            return redirect('/');
         }
 
         return back()->withErrors([
@@ -36,7 +40,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/');
     }
 }
