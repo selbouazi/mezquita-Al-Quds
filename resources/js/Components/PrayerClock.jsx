@@ -167,8 +167,24 @@ export default function PrayerClock({ prayerTimes }) {
     );
 }
 
-function PrayerItem({ label, time, localTime, angle, remainingLabel }) {
+function PrayerItem({ label, time, localTime, angle, remainingLabel, localizeNumber }) {
     const [open, setOpen] = useState(false);
+    const [remaining, setRemaining] = useState('');
+
+    useEffect(() => {
+        function updateRemaining() {
+            const now = new Date();
+            const nowMin = now.getHours() * 60 + now.getMinutes();
+            const [h, m] = time.split(':').map(Number);
+            const prayerMin = h * 60 + m;
+            let diff = prayerMin - nowMin;
+            if (diff < 0) diff += 1440;
+            setRemaining(`${localizeNumber(Math.floor(diff / 60))}h ${localizeNumber(diff % 60)}m`);
+        }
+        updateRemaining();
+        const interval = setInterval(updateRemaining, 60000);
+        return () => clearInterval(interval);
+    }, [time, localizeNumber]);
 
     return (
         <div className="absolute text-[11px] font-semibold text-[#0F5132]
@@ -179,7 +195,6 @@ function PrayerItem({ label, time, localTime, angle, remainingLabel }) {
                  zIndex: open ? 999 : 10,
                  transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(calc(var(--size) * -0.39)) rotate(-${angle}deg)`,
              }}
-             data-prayer-time={time}
              onMouseEnter={() => setOpen(true)}
              onMouseLeave={() => setOpen(false)}
              onClick={e => { e.stopPropagation(); setOpen(v => !v); }}>
@@ -190,7 +205,7 @@ function PrayerItem({ label, time, localTime, angle, remainingLabel }) {
                      style={{ zIndex: 999 }}>
                     <span>{localTime}</span><br />
                     <span className="text-[9px] opacity-80">
-                        {remainingLabel}: <span className="tooltip-remaining">--h --m</span>
+                        {remainingLabel}: <span className="tooltip-remaining">{remaining}</span>
                     </span>
                 </div>
             )}

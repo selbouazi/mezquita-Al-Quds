@@ -39,6 +39,7 @@ export default function Navbar() {
     const navLinks = [
         { href: '/', label: t('navbar', 'home') },
         { href: '/horarios', label: t('navbar', 'prayers') },
+        { href: '/noticias', label: t('adminModules', 'news') },
         { href: '/imam', label: t('navbar', 'imam') },
         { href: '/ubicacion', label: t('navbar', 'location') },
         { href: '/contacto', label: t('navbar', 'contact') },
@@ -46,11 +47,10 @@ export default function Navbar() {
     
     const isLoggedIn = auth?.user !== null;
     const isAdmin = auth?.user?.is_admin === true;
-    const isRegularUser = isLoggedIn && !isAdmin;
     
-    const userLinks = isRegularUser ? [
-        { href: '/facturas', label: 'Facturas' },
-        { href: '/donativos', label: 'Donativos' },
+    const userLinks = isLoggedIn ? [
+        { href: '/facturas', label: t('adminModules', 'invoices') },
+        { href: '/donativos', label: t('adminModules', 'donations') },
     ] : [];
 
     return (

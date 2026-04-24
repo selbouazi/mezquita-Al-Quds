@@ -41,6 +41,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/imam/guardar', [ImamController::class, 'guardar']);
 });
 
+use App\Models\TiempoEspera;
+
 function getHorarioHoy(): array
 {
     $horario = Horario::where('fecha', today()->toDateString())->first();
@@ -61,6 +63,7 @@ function getHorarioHoy(): array
 
 Route::get('/', fn () => Inertia::render('Home', [
     'prayerTimes' => getHorarioHoy(),
+    'tiemposEspera' => TiempoEspera::all()->pluck('minutos', 'rezo')->toArray(),
 ]));
 
 Route::get('/horarios', function () {
@@ -87,34 +90,42 @@ Route::get('/horarios', function () {
         'year' => (int) $year,
         'month' => (int) $month,
         'prayerTimes' => getHorarioHoy(),
+        'tiemposEspera' => TiempoEspera::all()->pluck('minutos', 'rezo')->toArray(),
     ]);
 });
 
 Route::get('/noticias', [NoticiasController::class, 'index']);
 Route::get('/contacto', fn () => Inertia::render('Contacto'));
 Route::get('/ubicacion', fn () => Inertia::render('Ubicacion'));
-Route::get('/facturas', function () {
-    $facturas = Factura::orderBy('fecha', 'desc')->get();
 
-    return Inertia::render('Facturas', ['facturas' => $facturas]);
-});
-Route::get('/donativos', function () {
-    $año = request('año', date('Y'));
-    $donativos = Donativo::where('año', $año)
-        ->orderBy('created_at', 'desc')
-        ->get();
+Route::middleware(['auth'])->group(function () {
+    Route::get('/facturas', function () {
+        $facturas = Factura::orderBy('fecha', 'desc')->get();
 
-    return Inertia::render('Donativos', [
-        'donativos' => $donativos,
-        'añoActual' => (int) $año,
-    ]);
+        return Inertia::render('Facturas', ['facturas' => $facturas]);
+    });
+    Route::get('/facturas/{factura}/download', function (Factura $factura) {
+        if (! $factura->archivo_pdf) {
+            abort(404);
+        }
+
+        return Storage::disk('public')->download($factura->archivo_pdf);
+    });
+    Route::get('/donativos', function () {
+        $año = request('año', date('Y'));
+        $donativos = Donativo::where('año', $año)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Donativos', [
+            'donativos' => $donativos,
+            'añoActual' => (int) $año,
+        ]);
+    });
 });
 
 Route::get('/imam', function () {
     $imam = ImamSetting::first();
-    if ($imam) {
-        $imam->foto = $imam->foto;
-    }
 
     return Inertia::render('Imam', ['imam' => $imam]);
 });

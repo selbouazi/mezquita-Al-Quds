@@ -51,7 +51,7 @@ export default function Facturas() {
                                             <td className="px-6 py-4 text-center">
                                                 {factura.archivo_pdf ? (
                                                     <a
-                                                        href={`/admin/facturas/${factura.id}/download`}
+                                                        href={`/facturas/${factura.id}/download`}
                                                         className="inline-flex items-center gap-2 px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"
                                                     >
                                                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
