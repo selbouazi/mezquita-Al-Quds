@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ImamSetting;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class ImamController extends Controller
 {
     public function index()
     {
         $imam = ImamSetting::first();
-        
+
         return Inertia::render('Admin/Imam', [
             'imam' => $imam,
         ]);
@@ -28,12 +28,10 @@ class ImamController extends Controller
         ]);
 
         $imam = ImamSetting::firstOrNew([]);
-        
-        $oldFoto = $imam->getOriginal('foto');
-        
+
         if ($request->hasFile('foto')) {
-            if ($oldFoto) {
-                Storage::delete($oldFoto);
+            if ($imam->foto) {
+                Storage::disk('public')->delete($imam->foto);
             }
             $validated['foto'] = $request->file('foto')->store('imam', 'public');
         } else {
