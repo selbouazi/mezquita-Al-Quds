@@ -3,10 +3,10 @@ import MainLayout from '../../Layouts/MainLayout';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Notifications({ notificaciones }) {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
 
     const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('es', {
+        return new Date(date).toLocaleDateString(locale === 'ar' ? 'ar-EG' : locale === 'ca' ? 'ca-ES' : locale === 'en' ? 'en-US' : 'es-ES', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -92,7 +92,7 @@ export default function Notifications({ notificaciones }) {
                                     href={notificaciones.prev_page_url}
                                     className="px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition"
                                 >
-                                    ← Anterior
+                                    ← {t('common', 'previous')}
                                 </Link>
                             )}
                             <span className="px-4 py-2 text-gray-600">
@@ -103,7 +103,7 @@ export default function Notifications({ notificaciones }) {
                                     href={notificaciones.next_page_url}
                                     className="px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition"
                                 >
-                                    Siguiente →
+                                    {t('common', 'next')} →
                                 </Link>
                             )}
                         </div>

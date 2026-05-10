@@ -5,7 +5,6 @@ import { useTranslation } from '../../hooks/useTranslation';
 export default function Contactos() {
     const { t } = useTranslation();
     const { props } = usePage();
-    const { contactos, sinLeer } = props;
 
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
@@ -20,15 +19,17 @@ export default function Contactos() {
         return date.toLocaleDateString('es');
     };
 
+    const { contactos, sinLeer } = props;
+    
     const getTipoLabel = (tipo) => {
         const tipos = {
-            'general': 'General',
-            'donativo': 'Donativo',
-            'clase': 'Clase',
-            'voluntario': 'Voluntario',
-            'otro': 'Otro',
+            'general': t('adminContactos', 'general') || 'General',
+            'donativo': t('adminContactos', 'donation') || 'Donativo',
+            'clase': t('adminContactos', 'class') || 'Clase',
+            'voluntario': t('adminContactos', 'volunteer') || 'Voluntario',
+            'otro': t('adminContactos', 'other') || 'Otro',
         };
-        return tipos[tipo] || 'General';
+        return tipos[tipo] || t('adminContactos', 'general') || 'General';
     };
 
     return (
@@ -37,25 +38,25 @@ export default function Contactos() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'messages')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">Mensajes recibidos del formulario de contacto</p>
+                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminContactos', 'subtitle')}</p>
                     </div>
                     <div className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
-                        {sinLeer} sin leer
+                        {sinLeer} {t('adminContactos', 'unread').toLowerCase()}
                     </div>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{contactos.total}</p>
-                        <p className="text-sm text-gray-600">Total mensajes</p>
+                        <p className="text-sm text-gray-600">{t('adminContactos', 'total')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-yellow-600">{sinLeer}</p>
-                        <p className="text-sm text-gray-600">Sin leer</p>
+                        <p className="text-sm text-gray-600">{t('adminContactos', 'unread')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border col-span-2 md:col-span-1">
                         <p className="text-2xl font-bold text-green-600">{contactos.total - sinLeer}</p>
-                        <p className="text-sm text-gray-600">Leídos</p>
+                        <p className="text-sm text-gray-600">{t('adminContactos', 'read')}</p>
                     </div>
                 </div>
 
@@ -64,18 +65,18 @@ export default function Contactos() {
                         <table className="w-full">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Estado</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'name')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'tipo')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'date')}</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'status')}</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {contactos.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                            No hay mensajes para mostrar
+                                            {t('adminContactos', 'noMessages')}
                                         </td>
                                     </tr>
                                 ) : (
@@ -101,7 +102,7 @@ export default function Contactos() {
                                                         ? 'bg-green-100 text-green-800' 
                                                         : 'bg-yellow-100 text-yellow-800'
                                                 }`}>
-                                                    {contacto.leido ? 'Leído' : 'Nuevo'}
+                                                    {contacto.leido ? t('adminContactos', 'read') : t('adminContactos', 'new')}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
@@ -112,7 +113,7 @@ export default function Contactos() {
                                                             method="post"
                                                             className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
                                                         >
-                                                            Marcar leído
+                                                            {t('adminContactos', 'markRead')}
                                                         </Link>
                                                     )}
                                                     <Link
@@ -120,7 +121,7 @@ export default function Contactos() {
                                                         method="delete"
                                                         className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
                                                     >
-                                                        Eliminar
+                                                        {t('common', 'delete')}
                                                     </Link>
                                                 </div>
                                             </td>
@@ -135,7 +136,7 @@ export default function Contactos() {
                         <div className="flex justify-center gap-2 py-4 border-t">
                             {contactos.prev_page_url && (
                                 <Link href={contactos.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← Anterior
+                                    ← {t('common', 'previous')}
                                 </Link>
                             )}
                             <span className="px-3 py-2 text-gray-600 text-sm">
@@ -143,7 +144,7 @@ export default function Contactos() {
                             </span>
                             {contactos.next_page_url && (
                                 <Link href={contactos.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    Siguiente →
+                                    {t('common', 'next')} →
                                 </Link>
                             )}
                         </div>

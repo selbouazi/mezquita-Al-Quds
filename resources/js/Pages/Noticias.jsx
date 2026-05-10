@@ -3,7 +3,7 @@ import MainLayout from '../Layouts/MainLayout';
 import { useTranslation } from '../hooks/useTranslation';
 
 export default function Noticias({ noticias }) {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
 
     return (
         <MainLayout title={t('noticias', 'title')}>
@@ -13,7 +13,7 @@ export default function Noticias({ noticias }) {
 
                 {noticias.data.length === 0 ? (
                     <div className="p-6 bg-[#F5F5F5] border border-[#C9A227]/20 rounded-2xl text-gray-500 text-sm">
-                        No hay noticias publicadas actualmente.
+                        {t('noticias', 'noNoticias')}
                     </div>
                 ) : (
                     <div className="space-y-6">
@@ -29,7 +29,7 @@ export default function Noticias({ noticias }) {
                                 <div className="p-6">
                                     <div className="flex items-center gap-3 mb-3">
                                         <span className="text-sm text-gray-500">
-                                            {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                                            {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString(locale === 'ar' ? 'ar-EG' : locale === 'ca' ? 'ca-ES' : locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
                                         </span>
                                     </div>
                                     <h2 className="text-xl sm:text-2xl font-bold text-[#0F5132] mb-3">
@@ -48,7 +48,7 @@ export default function Noticias({ noticias }) {
                     <div className="flex justify-center gap-2 mt-8">
                         {noticias.prev_page_url && (
                             <Link href={noticias.prev_page_url} className="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                ← Anterior
+                                ← {t('common', 'previous')}
                             </Link>
                         )}
                         <span className="px-4 py-2 text-gray-600 text-sm">
@@ -56,7 +56,7 @@ export default function Noticias({ noticias }) {
                         </span>
                         {noticias.next_page_url && (
                             <Link href={noticias.next_page_url} className="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                Siguiente →
+                                {t('common', 'next')} →
                             </Link>
                         )}
                     </div>

@@ -5,6 +5,7 @@ import { useTranslation } from '../hooks/useTranslation';
 const LANGUAGES = [
     { code: 'es', label: 'Español', flag: '🇪🇸' },
     { code: 'ca', label: 'Català', flag: '🇪🇸' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
     { code: 'ar', label: 'العربية', flag: '🇸🇦' },
 ];
 

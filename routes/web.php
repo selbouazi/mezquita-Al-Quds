@@ -154,7 +154,7 @@ Route::get('/api/notificaciones', function () {
 });
 
 Route::get('/lang/{lang}', function ($lang) {
-    if (in_array($lang, ['es', 'ca', 'ar', 'ur'])) {
+    if (in_array($lang, ['es', 'ca', 'ar', 'en'])) {
         session(['locale' => $lang]);
     }
 

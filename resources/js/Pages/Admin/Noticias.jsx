@@ -77,7 +77,7 @@ export default function Noticias() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'news')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">Gestionar noticias y anuncios</p>
+                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminNoticias', 'manageNews')}</p>
                     </div>
                     <button
                         onClick={openCreate}
@@ -90,15 +90,15 @@ export default function Noticias() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{noticiasList.length}</p>
-                        <p className="text-sm text-gray-600">Total noticias</p>
+                        <p className="text-sm text-gray-600">{t('adminNoticias', 'totalNews')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-green-600">{publishedNews.length}</p>
-                        <p className="text-sm text-gray-600">Publicadas</p>
+                        <p className="text-sm text-gray-600">{t('adminNoticias', 'published')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border col-span-2 md:col-span-1">
                         <p className="text-2xl font-bold text-gray-400">{draftNews.length}</p>
-                        <p className="text-sm text-gray-600">Borradores</p>
+                        <p className="text-sm text-gray-600">{t('adminNoticias', 'drafts')}</p>
                     </div>
                 </div>
 
@@ -107,18 +107,18 @@ export default function Noticias() {
                         <table className="w-full">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imagen</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Título</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Estado</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'imagen')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'titulo')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'fecha')}</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'estado')}</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'acciones')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {noticiasList.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                            No hay noticias para mostrar
+                                            {t('adminNoticias', 'noNewsAdmin')}
                                         </td>
                                     </tr>
                                 ) : (
@@ -133,7 +133,7 @@ export default function Noticias() {
                                                     />
                                                 ) : (
                                                     <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                        <span className="text-gray-400 text-xs">Sin img</span>
+                                                        <span className="text-gray-400 text-xs">{t('adminNoticias', 'noImage')}</span>
                                                     </div>
                                                 )}
                                             </td>
@@ -150,7 +150,7 @@ export default function Noticias() {
                                                         ? 'bg-green-100 text-green-800' 
                                                         : 'bg-gray-100 text-gray-600'
                                                 }`}>
-                                                    {noticia.publicado ? 'Publicada' : 'Borrador'}
+                                                    {t('noticias', noticia.publicado ? 'published' : 'draft')}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
@@ -159,14 +159,14 @@ export default function Noticias() {
                                                         onClick={() => openEdit(noticia)}
                                                         className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
                                                     >
-                                                        Editar
+                                                        {t('common', 'edit')}
                                                     </button>
                                                     <Link
                                                         href={`/admin/noticias/${noticia.id}`}
                                                         method="delete"
                                                         className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
                                                     >
-                                                        Eliminar
+                                                        {t('common', 'delete')}
                                                     </Link>
                                                 </div>
                                             </td>
@@ -181,7 +181,7 @@ export default function Noticias() {
                         <div className="flex justify-center gap-2 py-4 border-t">
                             {noticias.prev_page_url && (
                                 <Link href={noticias.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← Anterior
+                                    ← {t('common', 'previous')}
                                 </Link>
                             )}
                             <span className="px-3 py-2 text-gray-600 text-sm">
@@ -189,7 +189,7 @@ export default function Noticias() {
                             </span>
                             {noticias.next_page_url && (
                                 <Link href={noticias.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    Siguiente →
+                                    {t('common', 'next')} →
                                 </Link>
                             )}
                         </div>
@@ -201,12 +201,12 @@ export default function Noticias() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                            {editando ? 'Editar Noticia' : t('noticias', 'addNew')}
+                            {editando ? t('adminNoticias', 'editTitle') : t('noticias', 'addNew')}
                         </h2>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'tituloLabel')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.titulo}
@@ -216,7 +216,7 @@ export default function Noticias() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Contenido *</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'contenidoLabel')}</label>
                                 <textarea
                                     value={formData.data.contenido}
                                     onChange={(e) => formData.setData('contenido', e.target.value)}
@@ -226,7 +226,7 @@ export default function Noticias() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Imagen</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'imagenLabel')}</label>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -250,7 +250,7 @@ export default function Noticias() {
                                 )}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de publicación</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'fechaLabel')}</label>
                                 <input
                                     type="date"
                                     value={formData.data.fecha_publicacion}
@@ -266,7 +266,7 @@ export default function Noticias() {
                                     onChange={(e) => formData.setData('publicado', e.target.checked)}
                                     className="rounded"
                                 />
-                                <label htmlFor="publicado" className="text-sm text-gray-700">Publicar inmediatamente</label>
+                                <label htmlFor="publicado" className="text-sm text-gray-700">{t('adminNoticias', 'publishLabel')}</label>
                             </div>
                         </div>
 
@@ -276,7 +276,7 @@ export default function Noticias() {
                                 onClick={() => setShowModal(false)}
                                 className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
                             >
-                                Cancelar
+                                {t('common', 'cancel')}
                             </button>
                             <button
                                 type="button"
@@ -284,7 +284,7 @@ export default function Noticias() {
                                 disabled={formData.processing}
                                 className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
                             >
-                                {editando ? 'Actualizar' : 'Crear'}
+                                {editando ? t('adminNoticias', 'update') : t('adminNoticias', 'create')}
                             </button>
                         </div>
                     </div>

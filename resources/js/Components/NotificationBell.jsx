@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
 
 export default function NotificationBell({ notifications = [] }) {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -20,7 +20,7 @@ export default function NotificationBell({ notifications = [] }) {
     }, []);
 
     const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('es', {
+        return new Date(date).toLocaleDateString(locale === 'ar' ? 'ar-EG' : locale === 'ca' ? 'ca-ES' : locale === 'en' ? 'en-US' : 'es-ES', {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
