@@ -2,8 +2,9 @@ import { usePage } from '@inertiajs/react';
 import es from '../lang/es';
 import ca from '../lang/ca';
 import ar from '../lang/ar';
+import en from '../lang/en';
 
-const langs = { es, ca, ar };
+const langs = { es, ca, ar, en };
 
 export function useTranslation() {
     const { locale = 'es' } = usePage().props;

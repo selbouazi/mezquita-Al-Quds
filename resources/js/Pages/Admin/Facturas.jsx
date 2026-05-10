@@ -68,13 +68,13 @@ export default function Facturas() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'invoices')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">Gestionar facturas y documentos PDF</p>
+                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminFacturas', 'description')}</p>
                     </div>
                     <button
                         onClick={openCreate}
                         className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"
                     >
-                        + Subir Factura
+                        + {t('facturas', 'addNew')}
                     </button>
                 </div>
 
@@ -83,17 +83,17 @@ export default function Facturas() {
                         <table className="w-full">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Título</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Archivo</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminFacturas', 'tituloLabel')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminFacturas', 'fechaLabel')}</th>
+                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{t('adminFacturas', 'archivoLabel')}</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminFacturas', 'actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {facturas.data.length === 0 ? (
                                     <tr>
                                         <td colSpan="4" className="px-4 py-8 text-center text-gray-500">
-                                            No hay facturas para mostrar
+                                             {t('facturas', 'noData')}
                                         </td>
                                     </tr>
                                 ) : (
@@ -110,11 +110,11 @@ export default function Facturas() {
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 {factura.archivo_pdf ? (
-                                                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">
-                                                        PDF ✓
+                                                     <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">
+                                                        {t('facturas', 'pdfAvailable')}
                                                     </span>
                                                 ) : (
-                                                    <span className="text-gray-400 text-sm">Sin archivo</span>
+                                                    <span className="text-gray-400 text-sm">{t('facturas', 'noFile')}</span>
                                                 )}
                                             </td>
                                             <td className="px-4 py-3 text-right">
@@ -124,21 +124,21 @@ export default function Facturas() {
                                                             href={`/admin/facturas/${factura.id}/download`}
                                                             className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
                                                         >
-                                                            Descargar
+                                                                {t('facturas', 'download')}
                                                         </a>
                                                     )}
                                                     <button
                                                         onClick={() => openEdit(factura)}
                                                         className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
                                                     >
-                                                        Editar
+                                                        {t('common', 'edit')}
                                                     </button>
                                                     <Link
                                                         href={`/admin/facturas/${factura.id}`}
                                                         method="delete"
                                                         className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
                                                     >
-                                                        Eliminar
+                                                        {t('common', 'delete')}
                                                     </Link>
                                                 </div>
                                             </td>
@@ -153,7 +153,7 @@ export default function Facturas() {
                         <div className="flex justify-center gap-2 py-4 border-t">
                             {facturas.prev_page_url && (
                                 <Link href={facturas.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← Anterior
+                                    ← {t('common', 'previous')}
                                 </Link>
                             )}
                             <span className="px-3 py-2 text-gray-600 text-sm">
@@ -161,7 +161,7 @@ export default function Facturas() {
                             </span>
                             {facturas.next_page_url && (
                                 <Link href={facturas.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    Siguiente →
+                                    {t('common', 'next')} →
                                 </Link>
                             )}
                         </div>
@@ -173,13 +173,13 @@ export default function Facturas() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg">
                         <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                            {editando ? 'Editar Factura' : 'Subir Factura'}
+                            {editando ? t('adminFacturas', 'editTitle') : t('facturas', 'addNew')}
                         </h2>
 
                         <form onSubmit={handleSubmit}>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'tituloLabel')}</label>
                                     <input
                                         type="text"
                                         name="titulo"
@@ -190,7 +190,7 @@ export default function Facturas() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'fechaLabel')}</label>
                                     <input
                                         type="date"
                                         name="fecha"
@@ -202,7 +202,7 @@ export default function Facturas() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Archivo PDF {editando ? '(opcional)' : '*'}
+                                        {t('adminFacturas', 'archivoLabel')} {editando ? t('facturas', 'optional') : '*'}
                                     </label>
                                     <input
                                         type="file"
@@ -212,10 +212,10 @@ export default function Facturas() {
                                         className="w-full px-3 py-2 border rounded-lg text-sm"
                                         required={!editando}
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Máximo 10MB</p>
+                                    <p className="text-xs text-gray-500 mt-1">{t('facturas', 'maxSize')}</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'notasLabel')}</label>
                                     <textarea
                                         name="notas"
                                         value={formData.notas}
@@ -228,17 +228,17 @@ export default function Facturas() {
 
                             <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
                                 <button
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                    className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
-                                >
-                                    Cancelar
-                                </button>
+                                     type="button"
+                                     onClick={() => setShowModal(false)}
+                                     className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
+                                 >
+                                     {t('common', 'cancel')}
+                                 </button>
                                 <button
                                     type="submit"
                                     className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] text-sm"
                                 >
-                                    {editando ? 'Actualizar' : 'Subir'}
+                                    {editando ? t('adminFacturas', 'update') : t('adminFacturas', 'create')}
                                 </button>
                             </div>
                         </form>

@@ -70,20 +70,6 @@ export default function Notificaciones({ notificaciones, filtros }) {
         }
     };
 
-    const getPriorityText = (prioridad) => {
-        switch (prioridad) {
-            case 'muy_alta': return 'Muy alta';
-            case 'alta': return 'Alta';
-            case 'normal': return 'Normal';
-            case 'baja': return 'Baja';
-            default: return 'Normal';
-        }
-    };
-
-    const getStatusText = (activa) => {
-        return activa ? 'Activa' : 'Inactiva';
-    };
-
     return (
         <AdminLayout title={t('notifications', 'title')}>
             <div className="px-2 sm:px-0">
@@ -108,7 +94,7 @@ export default function Notificaciones({ notificaciones, filtros }) {
                             type="text"
                             name="busqueda"
                             defaultValue={filtros?.busqueda}
-                            placeholder="Buscar..."
+                            placeholder={t('notifications', 'search')}
                             className="w-full px-3 py-2 border rounded-lg text-sm"
                         />
                         <div className="flex flex-wrap gap-2">
@@ -117,26 +103,26 @@ export default function Notificaciones({ notificaciones, filtros }) {
                                 defaultValue={filtros?.estado}
                                 className="flex-1 min-w-[120px] px-3 py-2 border rounded-lg text-sm"
                             >
-                                <option value="">Todas</option>
-                                <option value="activas">Activas</option>
-                                <option value="inactivas">Inactivas</option>
+                                <option value="">{t('notifications', 'all')}</option>
+                                <option value="activas">{t('notifications', 'activas')}</option>
+                                <option value="inactivas">{t('notifications', 'inactivas')}</option>
                             </select>
                             <select
                                 name="prioridad"
                                 defaultValue={filtros?.prioridad}
                                 className="flex-1 min-w-[120px] px-3 py-2 border rounded-lg text-sm"
                             >
-                                <option value="">Prioridad</option>
+                                <option value="">{t('notifications', 'priority')}</option>
                                 {prioridades.map(p => (
                                     <option key={p.value} value={p.value}>{p.label}</option>
                                 ))}
                             </select>
-                            <button
-                                type="submit"
-                                className="flex-1 min-w-[80px] px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#9a7b1c] text-sm"
-                            >
-                                Filtrar
-                            </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 min-w-[80px] px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#9a7b1c] text-sm"
+                                >
+                                    {t('notifications', 'filter')}
+                                </button>
                         </div>
                     </form>
                 </div>
@@ -145,7 +131,7 @@ export default function Notificaciones({ notificaciones, filtros }) {
                 <div className="space-y-3">
                     {notificaciones.data.length === 0 ? (
                         <div className="bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">
-                            No hay notificaciones
+                            {t('notifications', 'noNotifications')}
                         </div>
                     ) : (
                         notificaciones.data.map((notif) => (
@@ -153,10 +139,10 @@ export default function Notificaciones({ notificaciones, filtros }) {
                                 <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                                     <div className="flex flex-wrap gap-2">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityClass(notif.prioridad)}`}>
-                                            {getPriorityText(notif.prioridad)}
+                                            {prioridades.find(p => p.value === notif.prioridad)?.label || t('notifications', 'normal')}
                                         </span>
                                         <span className={`px-2 py-1 rounded-full text-xs ${notif.activa ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-                                            {getStatusText(notif.activa)}
+                                            {t('notifications', notif.activa ? 'active' : 'inactive')}
                                         </span>
                                     </div>
                                     <span className="text-xs text-gray-500">
@@ -197,7 +183,7 @@ export default function Notificaciones({ notificaciones, filtros }) {
                     <div className="flex justify-center gap-2 mt-6 flex-wrap">
                         {notificaciones.prev_page_url && (
                             <Link href={notificaciones.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                ← Anterior
+                                ← {t('common', 'previous')}
                             </Link>
                         )}
                         <span className="px-3 py-2 text-gray-600 text-sm">
@@ -205,7 +191,7 @@ export default function Notificaciones({ notificaciones, filtros }) {
                         </span>
                         {notificaciones.next_page_url && (
                             <Link href={notificaciones.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                Siguiente →
+                                {t('common', 'next')} →
                             </Link>
                         )}
                     </div>

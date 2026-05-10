@@ -21,7 +21,7 @@ export default function Codigos({ codigo }) {
                 // Success - page will reload automatically
             },
             onError: (errors) => {
-                setError('Error al generar código');
+                setError(t('activation', 'errorGenerate'));
                 console.error(errors);
             },
         });
@@ -42,7 +42,7 @@ export default function Codigos({ codigo }) {
                 setNuevoCodigo('');
             },
             onError: (errors) => {
-                setError('Error al actualizar código');
+                setError(t('activation', 'errorUpdate'));
                 console.error(errors);
             },
         });

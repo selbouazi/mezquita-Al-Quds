@@ -30,14 +30,14 @@ export default function Ubicacion() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'location')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">Configurar información de contacto y ubicación</p>
+                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminUbicacion', 'description')}</p>
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-6">
                     <div className="space-y-4 max-w-2xl">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Dirección *</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminUbicacion', 'address')} *</label>
                             <textarea
                                 value={formData.data.direccion}
                                 onChange={(e) => formData.setData('direccion', e.target.value)}
@@ -50,7 +50,7 @@ export default function Ubicacion() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Latitud</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'latitude')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.latitud}
@@ -58,10 +58,10 @@ export default function Ubicacion() {
                                     className="w-full px-3 py-2 border rounded-lg text-sm"
                                     placeholder="40.416775"
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Coordenada para el mapa</p>
+                                <p className="text-xs text-gray-500 mt-1">{t('adminUbicacion', 'coordHint')}</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Longitud</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'longitude')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.longitud}
@@ -74,7 +74,7 @@ export default function Ubicacion() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'phone')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.telefono}
@@ -84,7 +84,7 @@ export default function Ubicacion() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'whatsapp')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.whatsapp}
@@ -96,7 +96,7 @@ export default function Ubicacion() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'email')}</label>
                             <input
                                 type="email"
                                 value={formData.data.email}
@@ -114,19 +114,19 @@ export default function Ubicacion() {
                             disabled={formData.processing}
                             className="w-full sm:w-auto px-6 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
                         >
-                            {formData.processing ? 'Guardando...' : 'Guardar cambios'}
+                            {formData.processing ? t('common', 'saving') : t('adminUbicacion', 'save')}
                         </button>
                     </div>
                 </div>
 
                 <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
-                    <h3 className="font-medium text-blue-900 mb-2">Vista previa del mapa</h3>
+                    <h3 className="font-medium text-blue-900 mb-2">{t('adminUbicacion', 'map')}</h3>
                     <p className="text-sm text-blue-700">
-                        Las coordenadas configuradas se usarán para mostrar la ubicación en la página pública.
+                        {t('adminUbicacion', 'coordDescription')}
                     </p>
                     {ubicacion?.latitud && ubicacion?.longitud && (
                         <p className="text-xs text-blue-600 mt-2">
-                            Coordenadas: {ubicacion.latitud}, {ubicacion.longitud}
+                            {t('adminUbicacion', 'coordinates')} {ubicacion.latitud}, {ubicacion.longitud}
                         </p>
                     )}
                 </div>

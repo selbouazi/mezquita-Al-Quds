@@ -7,7 +7,11 @@ const IQAMA_WINDOW = 30;
 export default function PrayerHeader({ prayerTimes }) {
     const { t } = useTranslation();
     const { tiemposEspera } = usePage().props;
-    const [display, setDisplay] = useState({ title: '', waiting: '' });
+
+    const [display, setDisplay] = useState({
+        title: '',
+        waiting: ''
+    });
 
     function toMinutes(str) {
         const [h, m] = str.split(':').map(Number);
@@ -15,81 +19,105 @@ export default function PrayerHeader({ prayerTimes }) {
     }
 
     function getWaitingTime(prayerName) {
-        // prayerName viene como 'fajr', 'sunrise', etc.
-        return tiemposEspera?.[prayerName.toLowerCase()] ?? 10;
+        return Number(tiemposEspera?.[prayerName?.toLowerCase()]) || 10;
     }
 
     useEffect(() => {
         function update() {
-            const now    = new Date();
+            const now = new Date();
             const nowMin = now.getHours() * 60 + now.getMinutes();
             const nowSec = now.getSeconds();
 
             const entries = Object.entries(prayerTimes);
+
             let nextName = null, nextTime = null;
             let lastName = null, lastTime = null;
 
             for (const [name, time] of entries) {
                 const tMin = toMinutes(time);
+
                 if (tMin <= nowMin) {
-                    if (lastTime === null || tMin > lastTime) { lastName = name; lastTime = tMin; }
+                    if (lastTime === null || tMin > lastTime) {
+                        lastName = name;
+                        lastTime = tMin;
+                    }
                 }
+
                 if (tMin > nowMin) {
-                    if (nextTime === null || tMin < nextTime) { nextName = name; nextTime = tMin; }
+                    if (nextTime === null || tMin < nextTime) {
+                        nextName = name;
+                        nextTime = tMin;
+                    }
                 }
             }
 
-            if (!nextName) { nextName = entries[0][0]; nextTime = toMinutes(entries[0][1]) + 1440; }
-            if (!lastName) { lastName = entries[entries.length - 1][0]; lastTime = toMinutes(entries[entries.length - 1][1]) - 1440; }
+            if (!nextName) {
+                nextName = entries[0][0];
+                nextTime = toMinutes(entries[0][1]) + 1440;
+            }
 
-            const waitingMinutes = getWaitingTime(lastName);
+            if (!lastName) {
+                lastName = entries[entries.length - 1][0];
+                lastTime = toMinutes(entries[entries.length - 1][1]) - 1440;
+            }
+
+            const lastWaiting = getWaitingTime(lastName);
+            const nextWaiting = getWaitingTime(nextName);
+
             const diffFuture = nextTime * 60 - (nowMin * 60 + nowSec);
-            const diffPast   = nowMin * 60 + nowSec - lastTime * 60;
+            const diffPast = (nowMin * 60 + nowSec) - (lastTime * 60);
 
-            const ago       = t('time', 'ago');
-            const inWord    = t('time', 'in');
-            const wait      = t('time', 'wait');
-            const mins      = t('time', 'mins');
+            const ago = t('time', 'ago');
+            const inWord = t('time', 'in');
+            const wait = t('time', 'wait');
+            const mins = t('time', 'mins');
             const remaining = t('time', 'remaining');
-            const iqama     = t('time', 'iqama');
+            const iqama = t('time', 'iqama');
 
-            // ESTADO 2 — entre adhan e iqama
-            if (diffPast < waitingMinutes * 60) {
+            if (diffPast < lastWaiting * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
+
                 setDisplay({
-                    title:   `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`,
-                    waiting: `${wait} ${remaining}: ${waitingMinutes - m} ${mins}`,
+                    title: locale === 'en'
+                        ? `${lastName} · ${m}:${String(s).padStart(2,'0')} ${mins} ${ago}`
+                        : `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`,
+                    waiting: `${wait} ${remaining}: ${lastWaiting - m} ${mins}`,
                 });
                 return;
             }
 
-            // ESTADO 3 — iqama
-            if (diffPast < (waitingMinutes + IQAMA_WINDOW) * 60) {
+            if (diffPast < (lastWaiting + IQAMA_WINDOW) * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
-                const iqamaM = m - waitingMinutes;
+
+                const iqamaM = m - lastWaiting;
+
                 setDisplay({
-                    title:   `${lastName} · ${ago} ${m} ${mins}`,
-                    waiting: `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`,
+                    title: locale === 'en'
+                        ? `${lastName} · ${m} ${mins} ${ago}`
+                        : `${lastName} · ${ago} ${m} ${mins}`,
+                    waiting: locale === 'en'
+                        ? `${iqama} · ${iqamaM}:${String(s).padStart(2,'0')} ${mins} ${ago}`
+                        : `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`,
                 });
                 return;
             }
 
-            // ESTADO 1 — antes del adhan
             const h = Math.floor(diffFuture / 3600);
             const m = Math.floor((diffFuture % 3600) / 60);
             const s = diffFuture % 60;
+
             setDisplay({
-                title:   `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
-                waiting: `${wait}: ${waitingMinutes} ${mins}`,
+                title: `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
+                waiting: `${wait}: ${nextWaiting} ${mins}`,
             });
         }
 
         update();
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
-    }, [tiemposEspera]);
+    }, [tiemposEspera, prayerTimes]);
 
     return (
         <section className="flex justify-center mt-0 fade">
@@ -97,8 +125,7 @@ export default function PrayerHeader({ prayerTimes }) {
                 <div className="text-4xl font-semibold text-[#0F5132] tracking-tight mb-3 drop-shadow-sm">
                     {display.title}
                 </div>
-                <div className="inline-block px-7 py-3 bg-white border border-[#E5C76B] rounded-xl
-                                text-[#8A6D00] font-semibold text-base shadow-[0_2px_8px_rgba(0,0,0,0.08)] tracking-wide">
+                <div className="inline-block px-7 py-3 bg-white border border-[#E5C76B] rounded-xl text-[#8A6D00] font-semibold text-base shadow-[0_2px_8px_rgba(0,0,0,0.08)] tracking-wide">
                     {display.waiting}
                 </div>
             </div>

@@ -70,7 +70,7 @@ export default function Donativos() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'donations')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">Gestionar donativos de la comunidad</p>
+                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminDonativos', 'description')}</p>
                     </div>
                     <button
                         onClick={openCreate}
@@ -83,19 +83,19 @@ export default function Donativos() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{stats?.total || 0}</p>
-                        <p className="text-sm text-gray-600">Total donativos</p>
+                        <p className="text-sm text-gray-600">{t('adminDonativos', 'total')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-green-600">{stats?.pagados || 0}</p>
-                        <p className="text-sm text-gray-600">Pagados</p>
+                        <p className="text-sm text-gray-600">{t('adminDonativos', 'paidStats')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-yellow-600">{stats?.pendientes || 0}</p>
-                        <p className="text-sm text-gray-600">Pendientes</p>
+                        <p className="text-sm text-gray-600">{t('adminDonativos', 'pendingStats')}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#C9A227]">{stats?.totalCantidad || 0} €</p>
-                        <p className="text-sm text-gray-600">Total cobrado</p>
+                        <p className="text-sm text-gray-600">{t('adminDonativos', 'collectedStats')}</p>
                     </div>
                 </div>
 
@@ -106,14 +106,14 @@ export default function Donativos() {
                             onChange={(e) => router.get('/admin/donativos', { año: e.target.value })}
                             className="flex-1 px-3 py-2 border rounded-lg text-sm"
                         >
-                            <option value="">Todos los años</option>
+                            <option value="">{t('donativos', 'allYears')}</option>
                             {años.map(año => (
                                 <option key={año} value={año}>{año}</option>
                             ))}
                         </select>
                         <input
                             type="text"
-                            placeholder="Buscar por nombre..."
+                            placeholder={t('donativos', 'searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="flex-1 px-3 py-2 border rounded-lg text-sm"
@@ -126,19 +126,19 @@ export default function Donativos() {
                         <table className="w-full">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cantidad</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'nombreLabel')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'amount')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'state')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'date')}</th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {filteredDonativos.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                            No hay donativos para mostrar
-                                        </td>
+                                             <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                                             {t('donativos', 'noDonations')}
+                                         </td>
                                     </tr>
                                 ) : (
                                     filteredDonativos.map((donativo) => (
@@ -160,7 +160,7 @@ export default function Donativos() {
                                                         ? 'bg-green-100 text-green-800' 
                                                         : 'bg-yellow-100 text-yellow-800'
                                                 }`}>
-                                                    {donativo.pagado ? 'Pagado' : 'Pendiente'}
+                                                     {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500">
@@ -169,25 +169,25 @@ export default function Donativos() {
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
                                                     <Link
-                                                        href={`/admin/donativos/${donativo.id}/toggle`}
-                                                        method="post"
-                                                        className="px-2 py-1 text-xs rounded hover:bg-gray-100"
-                                                    >
-                                                        {donativo.pagado ? '⟲' : '✓'}
-                                                    </Link>
+                                                         href={`/admin/donativos/${donativo.id}/toggle`}
+                                                         method="post"
+                                                         className="px-2 py-1 text-xs rounded hover:bg-gray-100"
+                                                     >
+                                                         {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
+                                                     </Link>
                                                     <button
-                                                        onClick={() => openEdit(donativo)}
-                                                        className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                    >
-                                                        Editar
-                                                    </button>
-                                                    <Link
-                                                        href={`/admin/donativos/${donativo.id}`}
-                                                        method="delete"
-                                                        className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
-                                                    >
-                                                        Eliminar
-                                                    </Link>
+                                                         onClick={() => openEdit(donativo)}
+                                                         className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
+                                                     >
+                                                         {t('common', 'edit')}
+                                                     </button>
+                                                     <Link
+                                                         href={`/admin/donativos/${donativo.id}`}
+                                                         method="delete"
+                                                         className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
+                                                     >
+                                                         {t('common', 'delete')}
+                                                     </Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -200,17 +200,17 @@ export default function Donativos() {
                     {donativos.last_page > 1 && (
                         <div className="flex justify-center gap-2 py-4 border-t">
                             {donativos.prev_page_url && (
-                                <Link href={donativos.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← Anterior
-                                </Link>
+                                 <Link href={donativos.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
+                                     ← {t('common', 'previous')}
+                                 </Link>
                             )}
                             <span className="px-3 py-2 text-gray-600 text-sm">
                                 {donativos.current_page} / {donativos.last_page}
                             </span>
                             {donativos.next_page_url && (
-                                <Link href={donativos.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    Siguiente →
-                                </Link>
+                                 <Link href={donativos.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
+                                     {t('common', 'next')} →
+                                 </Link>
                             )}
                         </div>
                     )}
@@ -221,12 +221,12 @@ export default function Donativos() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg">
                         <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                            {editando ? 'Editar Donativo' : t('donativos', 'addNew')}
+                             {editando ? t('adminDonativos', 'editTitle') : t('donativos', 'addNew')}
                         </h2>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'nombreLabel')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.nombre}
@@ -236,7 +236,7 @@ export default function Donativos() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre en árabe</label>
+                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'nombreArLabel')}</label>
                                 <input
                                     type="text"
                                     value={formData.data.nombre_arabe}
@@ -247,7 +247,7 @@ export default function Donativos() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Cantidad (€) *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'cantidadLabel')}</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -258,7 +258,7 @@ export default function Donativos() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Año *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'yearLabel')}</label>
                                     <input
                                         type="number"
                                         value={formData.data.año}
@@ -276,10 +276,10 @@ export default function Donativos() {
                                     onChange={(e) => formData.setData('pagado', e.target.checked)}
                                     className="rounded"
                                 />
-                                <label htmlFor="pagado" className="text-sm text-gray-700">Pagado</label>
+                                 <label htmlFor="pagado" className="text-sm text-gray-700">{t('adminDonativos', 'paidLabel')}</label>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'notasLabel')}</label>
                                 <textarea
                                     value={formData.data.notas}
                                     onChange={(e) => formData.setData('notas', e.target.value)}
@@ -290,20 +290,20 @@ export default function Donativos() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
-                            <button
-                                type="button"
-                                onClick={() => setShowModal(false)}
-                                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
-                            >
-                                Cancelar
-                            </button>
+                                 <button
+                                 type="button"
+                                 onClick={() => setShowModal(false)}
+                                 className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
+                             >
+                                 {t('common', 'cancel')}
+                             </button>
                             <button
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={formData.processing}
                                 className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
                             >
-                                {editando ? 'Actualizar' : 'Crear'}
+                                 {editando ? t('adminDonativos', 'update') : t('adminDonativos', 'create')}
                             </button>
                         </div>
                     </div>

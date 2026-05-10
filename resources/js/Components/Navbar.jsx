@@ -6,6 +6,7 @@ import NotificationBell from './NotificationBell';
 const LANGUAGES = [
     { code: 'es', label: 'Español' },
     { code: 'ca', label: 'Català' },
+    { code: 'en', label: 'English' },
     { code: 'ar', label: 'العربية' },
 ];
 

@@ -34,19 +34,19 @@ export default function Contacto() {
                         onClick={() => { setContactType('web'); setData('type', 'web'); }}
                         className={`px-4 py-2 rounded-lg font-semibold transition ${contactType === 'web' ? 'bg-[#0F5132] text-white' : 'bg-white text-gray-600 border border-gray-200'}`}
                     >
-                        Contacto Web
+                        {t('contacto', 'webForm')}
                     </button>
                     <button
                         onClick={() => { setContactType('phone'); setData('type', 'phone'); }}
                         className={`px-4 py-2 rounded-lg font-semibold transition ${contactType === 'phone' ? 'bg-[#0F5132] text-white' : 'bg-white text-gray-600 border border-gray-200'}`}
                     >
-                        Contacto Teléfono
+                        {t('contacto', 'phoneForm')}
                     </button>
                 </div>
 
                 {contactType === 'phone' ? (
                     <div className="bg-white rounded-2xl shadow-sm border border-[#C9A227]/20 p-6 sm:p-8">
-                        <p className="text-gray-600 mb-4">Contacta directamente con el imán:</p>
+                        <p className="text-gray-600 mb-4">{t('contacto', 'contactImam')}</p>
                         <a href="tel:+34644428283" className="text-3xl font-bold text-[#0F5132]">
                             +34 644 428 283
                         </a>
@@ -79,7 +79,7 @@ export default function Contacto() {
                                 disabled={processing}
                                 className="bg-[#0F5132] text-white px-7 py-3 rounded-full font-semibold hover:bg-[#0c3f27] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 disabled:opacity-50"
                             >
-                                {processing ? 'Enviando...' : t('contacto', 'send')}
+                                {processing ? t('common', 'saving') : t('contacto', 'send')}
                             </button>
                         </div>
                     </form>
