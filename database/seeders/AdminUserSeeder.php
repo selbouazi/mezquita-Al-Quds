@@ -17,12 +17,12 @@ class AdminUserSeeder extends Seeder
             ['email' => 'suli@gmail.com'],
             [
                 'name' => 'Suli',
-                'password' => Hash::make('11111111'),
+                'password' => Hash::make(env('ADMIN_PASSWORD', '12345678')),
                 'email_verified_at' => now(),
                 'rol' => 'admin',
             ]
         );
 
-        $this->command->info('✔ Usuario administrador creado: suli@gmail.com / 11111111');
+        $this->command->info('✔ Usuario administrador creado: suli@gmail.com');
     }
 }

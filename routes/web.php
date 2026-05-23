@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NoticiasController;
 use App\Models\Donativo;
 use App\Models\Factura;
@@ -25,7 +26,8 @@ Fortify::registerView(function () {
 });
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [RegisterController::class, 'register'])
+    ->middleware('throttle:5,1');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -43,6 +45,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 use App\Models\TiempoEspera;
 
+if (!function_exists('getHorarioHoy')) {
 function getHorarioHoy(): array
 {
     $horario = Horario::where('fecha', today()->toDateString())->first();
@@ -59,6 +62,7 @@ function getHorarioHoy(): array
         'maghrib' => substr($horario->maghrib, 0, 5),
         'isha' => substr($horario->isha, 0, 5),
     ];
+}
 }
 
 Route::get('/', fn () => Inertia::render('Home', [
@@ -96,6 +100,8 @@ Route::get('/horarios', function () {
 
 Route::get('/noticias', [NoticiasController::class, 'index']);
 Route::get('/contacto', fn () => Inertia::render('Contacto'));
+Route::post('/contacto', [ContactController::class, 'store'])
+    ->middleware('throttle:5,1');
 Route::get('/ubicacion', fn () => Inertia::render('Ubicacion'));
 
 Route::middleware(['auth'])->group(function () {

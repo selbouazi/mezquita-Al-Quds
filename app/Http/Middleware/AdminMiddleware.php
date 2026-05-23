@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
@@ -16,10 +15,7 @@ class AdminMiddleware
         }
 
         if (auth()->user()->rol !== 'admin') {
-            return Inertia::render('Auth/AccessDenied', [
-                'title' => 'Acceso denegado',
-                'message' => 'No tienes suficientes privilegios para acceder a esta sección.',
-            ])->toResponse($request);
+            return redirect('/')->with('error', 'No tienes permisos para acceder a esta sección.');
         }
 
         return $next($request);

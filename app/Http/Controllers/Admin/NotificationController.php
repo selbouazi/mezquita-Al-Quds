@@ -65,7 +65,7 @@ class NotificationController extends Controller
             'prioridad' => 'nullable|in:muy_alta,alta,normal,baja',
             'activa' => 'nullable|boolean',
             'fecha_publicacion' => 'nullable|date',
-            'fecha_expiracion' => 'nullable|date',
+            'fecha_expiracion' => 'nullable|date|after:fecha_publicacion',
         ]);
 
         $notification->update($validated);
