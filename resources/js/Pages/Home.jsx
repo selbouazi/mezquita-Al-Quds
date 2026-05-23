@@ -33,7 +33,7 @@ export default function Home({ prayerTimes }) {
                     </div>
                     <div className="flex justify-center">
                         <div className="bg-white border border-[#C9A227]/40 shadow-xl rounded-3xl p-10 w-full max-w-sm text-center hover:shadow-2xl hover:-translate-y-1 transition">
-                            <img src="/img/mezquitaAlquds_logo.png" className="h-32 mx-auto mb-4" alt="Logo" />
+                            <img src="/img/mezquitaAlquds_logo.png" className="h-32 mx-auto mb-4" alt="Logo" loading="lazy" />
                             <p className="text-2xl text-[#0F5132] font-semibold mb-1">مسجد القدس</p>
                             <p className="text-xs text-gray-500">{t('home', 'card_subtitle')}</p>
                         </div>

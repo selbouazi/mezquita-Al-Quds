@@ -3,7 +3,7 @@ import MainLayout from '../Layouts/MainLayout';
 import { useTranslation } from '../hooks/useTranslation';
 
 export default function Facturas() {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
     const { props } = usePage();
     const { facturas } = props;
 
@@ -46,7 +46,7 @@ export default function Facturas() {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-center text-gray-600">
-                                                {new Date(factura.fecha).toLocaleDateString('es')}
+                                                {new Date(factura.fecha).toLocaleDateString(locale)}
                                             </td>
                                             <td className="px-6 py-4 text-center">
                                                 {factura.archivo_pdf ? (

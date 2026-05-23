@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Contactos() {
-    const { t } = useTranslation();
+    const { t, locale } = useTranslation();
     const { props } = usePage();
+    const [selected, setSelected] = useState(null);
 
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
@@ -16,7 +18,7 @@ export default function Contactos() {
         if (diffHours < 1) return 'Hace un momento';
         if (diffHours < 24) return `Hace ${diffHours}h`;
         if (diffDays < 7) return `Hace ${diffDays}d`;
-        return date.toLocaleDateString('es');
+        return date.toLocaleDateString(locale);
     };
 
     const { contactos, sinLeer } = props;
@@ -81,7 +83,10 @@ export default function Contactos() {
                                     </tr>
                                 ) : (
                                     contactos.data.map((contacto) => (
-                                        <tr key={contacto.id} className={`hover:bg-gray-50 ${!contacto.leido ? 'bg-yellow-50/50' : ''}`}>
+                                        <tr key={contacto.id}
+                                            className={`hover:bg-gray-50 cursor-pointer ${!contacto.leido ? 'bg-yellow-50/50' : ''}`}
+                                            onClick={() => setSelected(contacto)}
+                                        >
                                             <td className="px-4 py-3">
                                                 <div>
                                                     <p className="font-medium text-gray-900">{contacto.nombre}</p>
@@ -106,7 +111,7 @@ export default function Contactos() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
-                                                <div className="flex justify-end gap-2">
+                                                <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                                                     {!contacto.leido && (
                                                         <Link
                                                             href={`/admin/contactos/${contacto.id}/leido`}
@@ -151,6 +156,42 @@ export default function Contactos() {
                     )}
                 </div>
             </div>
+
+            {selected && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelected(null)}>
+                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-start justify-between mb-4">
+                            <h2 className="text-lg sm:text-xl font-bold text-[#0F5132]">{selected.nombre}</h2>
+                            <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+                        </div>
+
+                        <div className="space-y-3 text-sm">
+                            <div className="flex gap-2">
+                                <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'email')}:</span>
+                                <a href={`mailto:${selected.email}`} className="text-blue-600 hover:underline">{selected.email}</a>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'tipo')}:</span>
+                                <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(selected.tipo)}</span>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'date')}:</span>
+                                <span className="text-gray-700">{formatFecha(selected.created_at)}</span>
+                            </div>
+                            {selected.telefono && (
+                                <div className="flex gap-2">
+                                    <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'telefono') || 'Teléfono'}:</span>
+                                    <a href={`tel:${selected.telefono}`} className="text-blue-600 hover:underline">{selected.telefono}</a>
+                                </div>
+                            )}
+                            <div className="pt-3 border-t">
+                                <p className="font-medium text-gray-700 mb-2">{t('adminContactos', 'mensaje')}:</p>
+                                <p className="text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3">{selected.mensaje}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AdminLayout>
     );
 }

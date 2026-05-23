@@ -24,6 +24,7 @@ export default function Noticias({ noticias }) {
                                         src={`/storage/${noticia.imagen}`} 
                                         alt={noticia.titulo}
                                         className="w-full h-48 sm:h-64 object-cover"
+                                        loading="lazy"
                                     />
                                 )}
                                 <div className="p-6">

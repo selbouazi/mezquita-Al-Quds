@@ -41,30 +41,6 @@ class HorarioController extends Controller
     }
 
     /**
-     * Página de noticias (placeholder).
-     */
-    public function noticias()
-    {
-        return Inertia::render('Noticias');
-    }
-
-    /**
-     * Página de contacto (placeholder).
-     */
-    public function contacto()
-    {
-        return Inertia::render('Contacto');
-    }
-
-    /**
-     * Página de ubicación (placeholder).
-     */
-    public function ubicacion()
-    {
-        return Inertia::render('Ubicacion');
-    }
-
-    /**
      * Cambiar idioma.
      */
     public function switchLang(Request $request, $lang)

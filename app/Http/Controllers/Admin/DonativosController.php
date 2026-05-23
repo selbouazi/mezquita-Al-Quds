@@ -11,8 +11,15 @@ class DonativosController extends Controller
     public function index(Request $request)
     {
         $year = $request->get('año', date('Y'));
+        $search = $request->get('search', '');
 
         $donativos = Donativo::where('año', $year)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('nombre', 'like', "%{$search}%")
+                      ->orWhere('nombre_arabe', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -21,11 +28,19 @@ class DonativosController extends Controller
             ->orderBy('año', 'desc')
             ->pluck('año');
 
+        $queryStats = Donativo::where('año', $year);
+        if ($search) {
+            $queryStats->where(function ($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('nombre_arabe', 'like', "%{$search}%");
+            });
+        }
+
         $stats = [
-            'total' => Donativo::where('año', $year)->count(),
-            'pagados' => Donativo::where('año', $year)->where('pagado', true)->count(),
-            'pendientes' => Donativo::where('año', $year)->where('pagado', false)->count(),
-            'totalCantidad' => Donativo::where('año', $year)->where('pagado', true)->sum('cantidad'),
+            'total' => (clone $queryStats)->count(),
+            'pagados' => (clone $queryStats)->where('pagado', true)->count(),
+            'pendientes' => (clone $queryStats)->where('pagado', false)->count(),
+            'totalCantidad' => (clone $queryStats)->where('pagado', true)->sum('cantidad'),
         ];
 
         return inertia('Admin/Donativos', [
@@ -33,6 +48,7 @@ class DonativosController extends Controller
             'años' => $años,
             'filtros' => [
                 'año' => $year,
+                'search' => $search,
             ],
             'stats' => $stats,
         ]);

@@ -1,4 +1,7 @@
 const es = {
+    meta: {
+        description: 'Mezquita Al-Quds — Comunidad musulmana de El Vendrell. Horarios de oración, noticias y actividades.',
+    },
     navbar: {
         title: 'Mezquita Al‑Quds',
         subtitle: 'Comunitat musulmana del Vendrell',

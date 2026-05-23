@@ -23,7 +23,7 @@ export default function Horarios() {
     const handleSave = (rezo) => {
         form.post(`/admin/horarios/${rezo}`, {
             data: { minutos: values[rezo] },
-            onSuccess: () => window.location.reload(),
+            onSuccess: () => form.setError(null),
         });
     };
 

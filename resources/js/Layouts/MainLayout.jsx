@@ -5,7 +5,7 @@ import Footer from '../Components/Footer';
 import { useTranslation } from '../hooks/useTranslation';
 
 export default function MainLayout({ title, children }) {
-    const { locale, isRTL } = useTranslation();
+    const { t, locale, isRTL } = useTranslation();
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -20,7 +20,9 @@ export default function MainLayout({ title, children }) {
 
     return (
         <>
-            <Head title={title ?? 'Mezquita Al‑Quds'} />
+            <Head title={title ?? 'Mezquita Al‑Quds'}>
+                <meta name="description" content={t('meta', 'description')} />
+            </Head>
             <div
                 lang={locale}
                 dir={isRTL ? 'rtl' : 'ltr'}

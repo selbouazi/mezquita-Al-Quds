@@ -51,7 +51,7 @@ export default function Noticias() {
 
     const handleSubmit = () => {
         if (editando) {
-            formData.post(`/admin/noticias/${editando}`, {
+            formData.put(`/admin/noticias/${editando}`, {
                 onSuccess: () => {
                     setShowModal(false);
                     formData.reset();
@@ -130,6 +130,7 @@ export default function Noticias() {
                                                         src={`/storage/${noticia.imagen}`} 
                                                         alt={noticia.titulo}
                                                         className="w-16 h-12 object-cover rounded-lg"
+                                                        loading="lazy"
                                                     />
                                                 ) : (
                                                     <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">

@@ -44,14 +44,14 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     // Facturas
     Route::get('/facturas', [FacturasController::class, 'index']);
     Route::post('/facturas', [FacturasController::class, 'store']);
-    Route::post('/facturas/{factura}', [FacturasController::class, 'update']);
+    Route::put('/facturas/{factura}', [FacturasController::class, 'update']);
     Route::delete('/facturas/{factura}', [FacturasController::class, 'destroy']);
     Route::get('/facturas/{factura}/download', [FacturasController::class, 'download']);
 
     // Clases
     Route::get('/clases', [ClasesController::class, 'index']);
     Route::post('/clases', [ClasesController::class, 'store']);
-    Route::post('/clases/{clase}', [ClasesController::class, 'update']);
+    Route::put('/clases/{clase}', [ClasesController::class, 'update']);
     Route::delete('/clases/{clase}', [ClasesController::class, 'destroy']);
 
     // Contactos
@@ -62,7 +62,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     // Noticias
     Route::get('/noticias', [NoticiasController::class, 'index']);
     Route::post('/noticias', [NoticiasController::class, 'store']);
-    Route::post('/noticias/{noticia}', [NoticiasController::class, 'update']);
+    Route::put('/noticias/{noticia}', [NoticiasController::class, 'update']);
     Route::delete('/noticias/{noticia}', [NoticiasController::class, 'destroy']);
 
     // Ubicación

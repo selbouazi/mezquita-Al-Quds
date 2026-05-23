@@ -49,7 +49,7 @@ export default function AdminLayout({ title, children }) {
                     {/* Logo */}
                     <div className="p-6 border-b border-white/10">
                         <Link href="/" className="flex items-center gap-3">
-                            <img src="/img/mezquitaAlquds_logo2.png" className="h-10" alt="Logo" />
+                            <img src="/img/mezquitaAlquds_logo2.png" className="h-10" alt="Logo" loading="lazy" />
                             <div>
                                 <p className="text-xs text-white/70">{t('navbar', 'subtitle')}</p>
                                 <p className="font-bold text-lg">Al‑Quds</p>
@@ -117,7 +117,7 @@ export default function AdminLayout({ title, children }) {
                                     className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50 transition"
                                     onClick={() => setLangOpen(v => !v)}
                                 >
-                                    <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} />
+                                    <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} loading="lazy" />
                                     <span className="text-sm font-medium uppercase">{locale}</span>
                                 </button>
                                 {langOpen && (
@@ -125,7 +125,7 @@ export default function AdminLayout({ title, children }) {
                                         {LANGUAGES.map(l => (
                                             <a key={l.code} href={`/lang/${l.code}`}
                                                className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
-                                                <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.code} />
+                                                <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.code} loading="lazy" />
                                                 {l.label}
                                             </a>
                                         ))}

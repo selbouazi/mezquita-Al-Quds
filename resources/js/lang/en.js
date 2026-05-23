@@ -1,4 +1,7 @@
 const en = {
+    meta: {
+        description: 'Al-Quds Mosque — Muslim community of El Vendrell. Prayer times, news and activities.',
+    },
     navbar: {
         title: 'Al‑Quds Mosque',
         subtitle: 'Muslim Community of El Vendrell',

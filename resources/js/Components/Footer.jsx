@@ -11,7 +11,7 @@ export default function Footer() {
 
                 {/* LOGO + IDENTIDAD */}
                 <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-4">
-                    <img src="/img/mezquitaAlquds_logo3.png" className="h-20 brightness-0 invert" alt="Logo" />
+                    <img src="/img/mezquitaAlquds_logo3.png" className="h-20 brightness-0 invert" alt="Logo" loading="lazy" />
                     <div>
                         <p className="text-lg font-semibold tracking-wide">{t('footer', 'title')}</p>
                         <p className="text-sm text-[#C9A227]">{t('footer', 'subtitle')}</p>

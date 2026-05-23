@@ -10,7 +10,7 @@ export default function Donativos() {
     
     const [showModal, setShowModal] = useState(false);
     const [editando, setEditando] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(filtros?.search || '');
 
     const formData = useForm({
         nombre_arabe: '',
@@ -59,10 +59,13 @@ export default function Donativos() {
         }
     };
 
-    const filteredDonativos = donativos.data.filter(d => 
-        d.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (d.nombre_arabe && d.nombre_arabe.includes(searchTerm))
-    );
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+        router.get('/admin/donativos', {
+            año: filtros?.año,
+            search: value,
+        }, { preserveState: true, replace: true });
+    };
 
     return (
         <AdminLayout title={t('adminModules', 'donations')}>
@@ -115,7 +118,7 @@ export default function Donativos() {
                             type="text"
                             placeholder={t('donativos', 'searchPlaceholder')}
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => handleSearch(e.target.value)}
                             className="flex-1 px-3 py-2 border rounded-lg text-sm"
                         />
                     </div>
@@ -134,14 +137,14 @@ export default function Donativos() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {filteredDonativos.length === 0 ? (
+                                {donativos.data.length === 0 ? (
                                     <tr>
                                              <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
                                              {t('donativos', 'noDonations')}
                                          </td>
                                     </tr>
                                 ) : (
-                                    filteredDonativos.map((donativo) => (
+                                    donativos.data.map((donativo) => (
                                         <tr key={donativo.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
                                                 <div>

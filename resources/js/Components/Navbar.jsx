@@ -63,7 +63,7 @@ export default function Navbar() {
                 {/* LOGO + HAMBURGUESA */}
                 <div className="flex items-center w-full md:w-auto">
                     <Link href="/" className="flex items-center gap-3 flex-grow">
-                        <img src="/img/mezquitaAlquds_logo2.png" className="h-12" alt="Logo" />
+                        <img src="/img/mezquitaAlquds_logo2.png" className="h-12" alt="Logo" loading="lazy" />
                         <div className={isRTL ? 'text-right' : ''}>
                             <p className="text-xs text-gray-500">{t('navbar', 'subtitle')}</p>
                             <p className="text-xl font-bold text-[#0F5132] tracking-wide">{t('navbar', 'title')}</p>
@@ -103,7 +103,7 @@ export default function Navbar() {
                             className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50 transition"
                             onClick={e => { e.stopPropagation(); setLangOpen(v => !v); }}
                         >
-                            <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} />
+                            <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} loading="lazy" />
                             <span className="text-sm font-medium uppercase">{locale}</span>
                         </button>
                         {langOpen && (
@@ -111,7 +111,7 @@ export default function Navbar() {
                                 {LANGUAGES.map(l => (
                                     <a key={l.code} href={`/lang/${l.code}`}
                                        className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
-                                        <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.code} />
+                                        <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.code} loading="lazy" />
                                         {l.label}
                                     </a>
                                 ))}
@@ -172,7 +172,7 @@ export default function Navbar() {
                         {LANGUAGES.map(l => (
                             <a key={l.code} href={`/lang/${l.code}`}
                                className="flex items-center gap-1 px-2 py-1 border rounded-lg text-xs hover:bg-gray-100">
-                                <img src={`/img/lang/${l.code}.png`} className="h-4 w-4" alt={l.code} />
+                                <img src={`/img/lang/${l.code}.png`} className="h-4 w-4" alt={l.code} loading="lazy" />
                             </a>
                         ))}
                     </div>

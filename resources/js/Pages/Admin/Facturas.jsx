@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { usePage, router, Link } from '@inertiajs/react';
+import { usePage, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -10,7 +10,8 @@ export default function Facturas() {
 
     const [showModal, setShowModal] = useState(false);
     const [editando, setEditando] = useState(null);
-    const [formData, setFormData] = useState({
+
+    const formData = useForm({
         titulo: '',
         fecha: '',
         archivo_pdf: null,
@@ -18,18 +19,14 @@ export default function Facturas() {
     });
 
     const openCreate = () => {
-        setFormData({
-            titulo: '',
-            fecha: new Date().toISOString().split('T')[0],
-            archivo_pdf: null,
-            notas: '',
-        });
+        formData.reset();
+        formData.clearErrors();
         setEditando(null);
         setShowModal(true);
     };
 
     const openEdit = (factura) => {
-        setFormData({
+        formData.setData({
             titulo: factura.titulo || '',
             fecha: factura.fecha || '',
             archivo_pdf: null,
@@ -39,27 +36,20 @@ export default function Facturas() {
         setShowModal(true);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        const form = e.target;
-        const data = new FormData(form);
-        
-        if (editando) {
-            router.post(`/admin/facturas/${editando}`, data, {
-                forceFormData: true,
-                onSuccess: () => setShowModal(false),
-            });
-        } else {
-            router.post('/admin/facturas', data, {
-                forceFormData: true,
-                onSuccess: () => setShowModal(false),
-            });
-        }
-    };
+    const handleSubmit = () => {
+        const options = {
+            forceFormData: true,
+            onSuccess: () => {
+                setShowModal(false);
+                formData.reset();
+            },
+        };
 
-    const handleFileChange = (e) => {
-        setFormData({ ...formData, archivo_pdf: e.target.files[0] });
+        if (editando) {
+            formData.put(`/admin/facturas/${editando}`, options);
+        } else {
+            formData.post('/admin/facturas', options);
+        }
     };
 
     return (
@@ -176,72 +166,78 @@ export default function Facturas() {
                             {editando ? t('adminFacturas', 'editTitle') : t('facturas', 'addNew')}
                         </h2>
 
-                        <form onSubmit={handleSubmit}>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'tituloLabel')}</label>
-                                    <input
-                                        type="text"
-                                        name="titulo"
-                                        value={formData.titulo}
-                                        onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'fechaLabel')}</label>
-                                    <input
-                                        type="date"
-                                        name="fecha"
-                                        value={formData.fecha}
-                                        onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        {t('adminFacturas', 'archivoLabel')} {editando ? t('facturas', 'optional') : '*'}
-                                    </label>
-                                    <input
-                                        type="file"
-                                        name="archivo_pdf"
-                                        accept=".pdf"
-                                        onChange={handleFileChange}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        required={!editando}
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">{t('facturas', 'maxSize')}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'notasLabel')}</label>
-                                    <textarea
-                                        name="notas"
-                                        value={formData.notas}
-                                        onChange={(e) => setFormData({ ...formData, notas: e.target.value })}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        rows="2"
-                                    />
-                                </div>
-                            </div>
+                        <div className="space-y-4">
+                            {formData.errors.titulo && (
+                                <p className="text-red-600 text-sm">{formData.errors.titulo}</p>
+                            )}
+                            {formData.errors.fecha && (
+                                <p className="text-red-600 text-sm">{formData.errors.fecha}</p>
+                            )}
+                            {formData.errors.archivo_pdf && (
+                                <p className="text-red-600 text-sm">{formData.errors.archivo_pdf}</p>
+                            )}
 
-                            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
-                                <button
-                                     type="button"
-                                     onClick={() => setShowModal(false)}
-                                     className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
-                                 >
-                                     {t('common', 'cancel')}
-                                 </button>
-                                <button
-                                    type="submit"
-                                    className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] text-sm"
-                                >
-                                    {editando ? t('adminFacturas', 'update') : t('adminFacturas', 'create')}
-                                </button>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'tituloLabel')}</label>
+                                <input
+                                    type="text"
+                                    value={formData.data.titulo}
+                                    onChange={(e) => formData.setData('titulo', e.target.value)}
+                                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                                    required
+                                />
                             </div>
-                        </form>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'fechaLabel')}</label>
+                                <input
+                                    type="date"
+                                    value={formData.data.fecha}
+                                    onChange={(e) => formData.setData('fecha', e.target.value)}
+                                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    {t('adminFacturas', 'archivoLabel')} {editando ? t('facturas', 'optional') : '*'}
+                                </label>
+                                <input
+                                    type="file"
+                                    accept=".pdf"
+                                    onChange={(e) => formData.setData('archivo_pdf', e.target.files[0])}
+                                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                                    required={!editando}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">{t('facturas', 'maxSize')}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminFacturas', 'notasLabel')}</label>
+                                <textarea
+                                    value={formData.data.notas}
+                                    onChange={(e) => formData.setData('notas', e.target.value)}
+                                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                                    rows="2"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
+                            <button
+                                type="button"
+                                onClick={() => setShowModal(false)}
+                                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
+                            >
+                                {t('common', 'cancel')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                disabled={formData.processing}
+                                className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
+                            >
+                                {formData.processing ? t('common', 'saving') : (editando ? t('adminFacturas', 'update') : t('adminFacturas', 'create'))}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
