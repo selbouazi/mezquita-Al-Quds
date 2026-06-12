@@ -14,4 +14,15 @@ class ActivationCode extends Model
         'expira_en' => 'datetime',
         'activo' => 'boolean',
     ];
+
+    public static function validar(string $codigo): bool
+    {
+        return static::where('codigo', strtoupper($codigo))
+            ->where('activo', true)
+            ->where(function ($query) {
+                $query->whereNull('expira_en')
+                    ->orWhere('expira_en', '>', now());
+            })
+            ->exists();
+    }
 }

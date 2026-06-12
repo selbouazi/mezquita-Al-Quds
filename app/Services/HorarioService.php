@@ -15,7 +15,7 @@ class HorarioService
         $key = 'horario_hoy_' . now()->toDateString();
         
         return Cache::remember($key, now()->endOfDay(), function () {
-            $horario = Horario::where('fecha', today()->toDateString())->first();
+            $horario = Horario::whereDate('fecha', today())->first();
             
             if (!$horario) {
                 return self::emptyTimes();
@@ -48,7 +48,9 @@ class HorarioService
     public static function clearCache(): void
     {
         Cache::forget('horario_hoy_' . now()->toDateString());
-        // Podemos limpiar más claves si es necesario
+        Cache::forget('horarios_mes_' . now()->year . '_' . now()->month);
+        Cache::forget('horarios_mes_' . now()->subMonth()->year . '_' . now()->subMonth()->month);
+        Cache::forget('horarios_mes_' . now()->addMonth()->year . '_' . now()->addMonth()->month);
     }
     
     /**

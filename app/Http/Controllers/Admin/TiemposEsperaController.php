@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TiempoEspera;
+use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
 
 class TiemposEsperaController extends Controller
@@ -36,6 +37,8 @@ class TiemposEsperaController extends Controller
             ['rezo' => $rezo],
             ['minutos' => $validated['minutos']]
         );
+
+        TiempoEsperaService::clearCache();
 
         return redirect()->back()->with('success', 'Tiempo actualizado');
     }
