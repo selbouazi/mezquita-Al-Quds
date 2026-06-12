@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ImamSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -30,10 +31,15 @@ class ImamController extends Controller
         $imam = ImamSetting::firstOrNew([]);
 
         if ($request->hasFile('foto')) {
-            if ($imam->foto) {
-                Storage::disk('public')->delete($imam->foto);
+            try {
+                if ($imam->foto) {
+                    Storage::disk('public')->delete($imam->foto);
+                }
+                $validated['foto'] = $request->file('foto')->store('imam', 'public');
+            } catch (\Exception $e) {
+                Log::error('Error al subir foto del imam: ' . $e->getMessage());
+                return back()->with('error', 'Error al subir la foto. Inténtalo de nuevo.');
             }
-            $validated['foto'] = $request->file('foto')->store('imam', 'public');
         } else {
             unset($validated['foto']);
         }

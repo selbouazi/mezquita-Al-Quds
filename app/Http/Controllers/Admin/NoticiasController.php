@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Noticia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class NoticiasController extends Controller
@@ -29,8 +30,13 @@ class NoticiasController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('noticias', 'public');
-            $validated['imagen'] = $path;
+            try {
+                $path = $request->file('imagen')->store('noticias', 'public');
+                $validated['imagen'] = $path;
+            } catch (\Exception $e) {
+                Log::error('Error al subir imagen de noticia: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Error al subir la imagen. Inténtalo de nuevo.')->withInput();
+            }
         }
 
         Noticia::create($validated);
@@ -49,11 +55,16 @@ class NoticiasController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-            if ($noticia->imagen) {
-                Storage::disk('public')->delete($noticia->imagen);
+            try {
+                if ($noticia->imagen) {
+                    Storage::disk('public')->delete($noticia->imagen);
+                }
+                $path = $request->file('imagen')->store('noticias', 'public');
+                $validated['imagen'] = $path;
+            } catch (\Exception $e) {
+                Log::error('Error al subir imagen de noticia: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Error al subir la imagen. Inténtalo de nuevo.')->withInput();
             }
-            $path = $request->file('imagen')->store('noticias', 'public');
-            $validated['imagen'] = $path;
         }
 
         $noticia->update($validated);
@@ -63,8 +74,12 @@ class NoticiasController extends Controller
 
     public function destroy(Noticia $noticia)
     {
-        if ($noticia->imagen) {
-            Storage::disk('public')->delete($noticia->imagen);
+        try {
+            if ($noticia->imagen) {
+                Storage::disk('public')->delete($noticia->imagen);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar imagen de noticia: ' . $e->getMessage());
         }
 
         $noticia->delete();
