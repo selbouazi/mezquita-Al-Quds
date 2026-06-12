@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TiempoEspera;
 use App\Services\TiempoEsperaService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class TiemposEsperaController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $tiemposDb = TiempoEspera::all()->keyBy('rezo');
 
@@ -27,7 +29,7 @@ class TiemposEsperaController extends Controller
         ]);
     }
 
-    public function update(Request $request, $rezo)
+    public function update(Request $request, string $rezo): RedirectResponse
     {
         $validated = $request->validate([
             'minutos' => 'required|integer|min:0',

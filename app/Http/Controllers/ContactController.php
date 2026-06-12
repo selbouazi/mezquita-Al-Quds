@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class ContactController extends Controller
 {
-    /**
-     * Store a newly created contact message.
-     */
-    public function store(Request $request)
+    public function create(): Response
+    {
+        return inertia('Contacto');
+    }
+
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name'    => 'required|string|max:255',

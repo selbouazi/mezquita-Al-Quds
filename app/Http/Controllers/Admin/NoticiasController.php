@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Noticia;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Response;
 
 class NoticiasController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $noticias = Noticia::orderBy('fecha_publicacion', 'desc')->paginate(20);
 
@@ -19,7 +21,7 @@ class NoticiasController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -44,7 +46,7 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia creada correctamente');
     }
 
-    public function update(Request $request, Noticia $noticia)
+    public function update(Request $request, Noticia $noticia): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -72,7 +74,7 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia actualizada');
     }
 
-    public function destroy(Noticia $noticia)
+    public function destroy(Noticia $noticia): RedirectResponse
     {
         try {
             if ($noticia->imagen) {

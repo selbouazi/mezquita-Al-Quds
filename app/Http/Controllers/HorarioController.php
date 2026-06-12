@@ -6,13 +6,11 @@ use App\Services\HorarioService;
 use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HorarioController extends Controller
 {
-    /**
-     * Página de inicio con horario de hoy.
-     */
-    public function home()
+    public function home(): Response
     {
         $tiemposEspera = TiempoEsperaService::getTiemposEspera();
 
@@ -22,10 +20,7 @@ class HorarioController extends Controller
         ]);
     }
 
-    /**
-     * Página de horarios mensual con parámetros de año y mes.
-     */
-    public function horarios(Request $request)
+    public function horarios(Request $request): Response
     {
         $year = $request->input('year', now()->year);
         $month = $request->input('month', now()->month);
@@ -38,41 +33,5 @@ class HorarioController extends Controller
             'month' => (int) $month,
             'prayerTimes' => HorarioService::getHorarioHoy(),
         ]);
-    }
-
-    /**
-     * Página de noticias (placeholder).
-     */
-    public function noticias()
-    {
-        return Inertia::render('Noticias');
-    }
-
-    /**
-     * Página de contacto (placeholder).
-     */
-    public function contacto()
-    {
-        return Inertia::render('Contacto');
-    }
-
-    /**
-     * Página de ubicación (placeholder).
-     */
-    public function ubicacion()
-    {
-        return Inertia::render('Ubicacion');
-    }
-
-    /**
-     * Cambiar idioma.
-     */
-    public function switchLang(Request $request, $lang)
-    {
-        if (in_array($lang, ['es', 'ca', 'ar', 'en'])) {
-            $request->session()->put('locale', $lang);
-        }
-
-        return back();
     }
 }

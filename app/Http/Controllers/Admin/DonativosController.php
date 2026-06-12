@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donativo;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class DonativosController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $year = $request->get('año', date('Y'));
 
@@ -21,11 +23,17 @@ class DonativosController extends Controller
             ->orderBy('año', 'desc')
             ->pluck('año');
 
+        $agg = Donativo::where('año', $year)
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN pagado = 1 THEN 1 ELSE 0 END) as pagados')
+            ->selectRaw('SUM(CASE WHEN pagado = 1 THEN cantidad ELSE 0 END) as totalCantidad')
+            ->first();
+
         $stats = [
-            'total' => Donativo::where('año', $year)->count(),
-            'pagados' => Donativo::where('año', $year)->where('pagado', true)->count(),
-            'pendientes' => Donativo::where('año', $year)->where('pagado', false)->count(),
-            'totalCantidad' => Donativo::where('año', $year)->where('pagado', true)->sum('cantidad'),
+            'total' => (int) $agg->total,
+            'pagados' => (int) $agg->pagados,
+            'pendientes' => (int) $agg->total - (int) $agg->pagados,
+            'totalCantidad' => (float) $agg->totalCantidad,
         ];
 
         return inertia('Admin/Donativos', [
@@ -38,7 +46,7 @@ class DonativosController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'nombre_arabe' => 'nullable|string|max:255',
@@ -54,7 +62,7 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo creado correctamente');
     }
 
-    public function update(Request $request, Donativo $donativo)
+    public function update(Request $request, Donativo $donativo): RedirectResponse
     {
         $validated = $request->validate([
             'nombre_arabe' => 'nullable|string|max:255',
@@ -70,14 +78,14 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo actualizado');
     }
 
-    public function destroy(Donativo $donativo)
+    public function destroy(Donativo $donativo): RedirectResponse
     {
         $donativo->delete();
 
         return redirect()->back()->with('success', 'Donativo eliminado');
     }
 
-    public function togglePagado(Donativo $donativo)
+    public function togglePagado(Donativo $donativo): RedirectResponse
     {
         $donativo->update(['pagado' => ! $donativo->pagado]);
 

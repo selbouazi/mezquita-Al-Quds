@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ubicacion;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class UbicacionController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $ubicacion = Ubicacion::first();
 
@@ -17,7 +19,7 @@ class UbicacionController extends Controller
         ]);
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'direccion' => 'required|string|max:500',

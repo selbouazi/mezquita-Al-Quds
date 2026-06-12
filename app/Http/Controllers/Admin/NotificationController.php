@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Notification::query()->orderBy('created_at', 'desc');
 
@@ -36,7 +38,7 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'nullable|string|max:255',
@@ -53,11 +55,11 @@ class NotificationController extends Controller
 
         Notification::create($validated);
 
-        return redirect()->route('notificaciones.index')
+        return redirect()->route('admin.notificaciones.index')
             ->with('success', 'Notificación creada correctamente');
     }
 
-    public function update(Request $request, Notification $notification)
+    public function update(Request $request, Notification $notification): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'nullable|string|max:255',
@@ -70,19 +72,19 @@ class NotificationController extends Controller
 
         $notification->update($validated);
 
-        return redirect()->route('notificaciones.index')
+        return redirect()->route('admin.notificaciones.index')
             ->with('success', 'Notificación actualizada correctamente');
     }
 
-    public function destroy(Notification $notification)
+    public function destroy(Notification $notification): RedirectResponse
     {
         $notification->delete();
 
-        return redirect()->route('notificaciones.index')
+        return redirect()->route('admin.notificaciones.index')
             ->with('success', 'Notificación eliminada correctamente');
     }
 
-    public function toggle(Notification $notification)
+    public function toggle(Notification $notification): RedirectResponse
     {
         $notification->update(['activa' => !$notification->activa]);
 

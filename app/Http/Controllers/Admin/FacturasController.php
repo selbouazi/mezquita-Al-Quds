@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Factura;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FacturasController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $facturas = Factura::orderBy('fecha', 'desc')
             ->paginate(20);
@@ -20,7 +23,7 @@ class FacturasController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -44,7 +47,7 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura creada correctamente');
     }
 
-    public function update(Request $request, Factura $factura)
+    public function update(Request $request, Factura $factura): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -71,7 +74,7 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura actualizada');
     }
 
-    public function destroy(Factura $factura)
+    public function destroy(Factura $factura): RedirectResponse
     {
         try {
             if ($factura->archivo_pdf) {
@@ -86,7 +89,7 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura eliminada');
     }
 
-    public function download(Factura $factura)
+    public function download(Factura $factura): StreamedResponse|RedirectResponse
     {
         if (! $factura->archivo_pdf) {
             abort(404);

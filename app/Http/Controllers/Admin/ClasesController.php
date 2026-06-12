@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clase;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class ClasesController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $clases = Clase::orderBy('created_at', 'desc')->get();
 
@@ -17,7 +19,7 @@ class ClasesController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -34,7 +36,7 @@ class ClasesController extends Controller
         return redirect()->back()->with('success', 'Clase creada correctamente');
     }
 
-    public function update(Request $request, Clase $clase)
+    public function update(Request $request, Clase $clase): RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -51,7 +53,7 @@ class ClasesController extends Controller
         return redirect()->back()->with('success', 'Clase actualizada');
     }
 
-    public function destroy(Clase $clase)
+    public function destroy(Clase $clase): RedirectResponse
     {
         $clase->delete();
 

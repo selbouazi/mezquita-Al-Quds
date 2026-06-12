@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ImamSetting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ImamController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $imam = ImamSetting::first();
 
@@ -20,7 +22,7 @@ class ImamController extends Controller
         ]);
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'nombre' => 'nullable|string|max:255',
