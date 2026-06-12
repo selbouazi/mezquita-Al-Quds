@@ -8,6 +8,7 @@ const ar = {
         location: 'كيفية الوصول',
         contact: 'اتصل بنا',
         selectLang: 'اختر اللغة',
+        menu: 'القائمة',
     },
     footer: {
         title: 'مسجد القدس',
@@ -108,6 +109,8 @@ const ar = {
         normal: 'عادية',
         low: 'منخفضة',
         all: 'الكل',
+        activas: 'نشطة',
+        inactivas: 'غير نشطة',
         search: 'بحث...',
         filter: 'تصفية',
         create: 'جديد',
@@ -263,6 +266,7 @@ const ar = {
         selectModule: 'اختر وحدة للإدارة',
         back: 'رجوع',
         goToWebsite: 'الذهاب إلى الموقع',
+        toggleSidebar: 'فتح القائمة الجانبية',
         welcome: 'مرحباً',
         manage: 'إدارة',
         title: 'لوحة الإدارة',
@@ -328,6 +332,7 @@ const ar = {
         save: 'حفظ',
         cancel: 'إلغاء',
         saveSuccess: 'تم حفظ الخبر بنجاح',
+        removeImage: 'حذف الصورة',
     },
     adminDonativos: {
         title: 'التبرعات',
