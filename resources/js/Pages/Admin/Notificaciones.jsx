@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import FormModal from '../../Components/FormModal';
+import FormField from '../../Components/FormField';
 
 export default function Notificaciones({ notificaciones, filtros }) {
     const { t } = useTranslation();
@@ -70,10 +72,17 @@ export default function Notificaciones({ notificaciones, filtros }) {
         }
     };
 
+    const handleSubmit = () => {
+        if (editando) {
+            submitEdit();
+        } else {
+            submitCreate();
+        }
+    };
+
     return (
         <AdminLayout title={t('notifications', 'title')}>
             <div className="px-2 sm:px-0">
-                {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('notifications', 'title')}</h1>
@@ -87,7 +96,6 @@ export default function Notificaciones({ notificaciones, filtros }) {
                     </button>
                 </div>
 
-                {/* Filters - Mobile friendly */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4 mb-6">
                     <form method="get" className="space-y-3">
                         <input
@@ -117,17 +125,16 @@ export default function Notificaciones({ notificaciones, filtros }) {
                                     <option key={p.value} value={p.value}>{p.label}</option>
                                 ))}
                             </select>
-                                <button
-                                    type="submit"
-                                    className="flex-1 min-w-[80px] px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#9a7b1c] text-sm"
-                                >
-                                    {t('notifications', 'filter')}
-                                </button>
+                            <button
+                                type="submit"
+                                className="flex-1 min-w-[80px] px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#9a7b1c] text-sm"
+                            >
+                                {t('notifications', 'filter')}
+                            </button>
                         </div>
                     </form>
                 </div>
 
-                {/* Cards instead of table - much better for mobile */}
                 <div className="space-y-3">
                     {notificaciones.data.length === 0 ? (
                         <div className="bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">
@@ -178,7 +185,6 @@ export default function Notificaciones({ notificaciones, filtros }) {
                     )}
                 </div>
 
-                {/* Pagination */}
                 {notificaciones.last_page > 1 && (
                     <div className="flex justify-center gap-2 mt-6 flex-wrap">
                         {notificaciones.prev_page_url && (
@@ -198,77 +204,56 @@ export default function Notificaciones({ notificaciones, filtros }) {
                 )}
             </div>
 
-            {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-                        <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                            {editando ? t('notifications', 'edit') : t('notifications', 'createNew')}
-                        </h2>
-                        
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('notifications', 'titleField')}</label>
-                                <input
-                                    type="text"
-                                    value={form.data.titulo}
-                                    onChange={(e) => form.setData('titulo', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    placeholder={t('notifications', 'titlePlaceholder')}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('notifications', 'message')} *</label>
-                                <textarea
-                                    value={form.data.mensaje}
-                                    onChange={(e) => form.setData('mensaje', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    rows={3}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('notifications', 'priority')}</label>
-                                <select
-                                    value={form.data.prioridad}
-                                    onChange={(e) => form.setData('prioridad', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                >
-                                    {prioridades.map(p => (
-                                        <option key={p.value} value={p.value}>{p.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('notifications', 'expirationDate')}</label>
-                                <input
-                                    type="date"
-                                    value={form.data.fecha_expiracion}
-                                    onChange={(e) => form.setData('fecha_expiracion', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
-                            <button
-                                type="button"
-                                onClick={() => setShowModal(false)}
-                                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
-                            >
-                                {t('notifications', 'cancel')}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={editando ? submitEdit : submitCreate}
-                                disabled={form.processing}
-                                className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
-                            >
-                                {editando ? t('notifications', 'update') : t('notifications', 'save')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <FormModal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title={editando ? t('notifications', 'edit') : t('notifications', 'createNew')}
+                onSubmit={handleSubmit}
+                submitText={editando ? t('notifications', 'update') : t('notifications', 'save')}
+                processing={form.processing}
+            >
+                <FormField label={t('notifications', 'titleField')} name="titulo">
+                    <input
+                        type="text"
+                        id="titulo"
+                        value={form.data.titulo}
+                        onChange={(e) => form.setData('titulo', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        placeholder={t('notifications', 'titlePlaceholder')}
+                    />
+                </FormField>
+                <FormField label={t('notifications', 'message')} name="mensaje" required>
+                    <textarea
+                        id="mensaje"
+                        value={form.data.mensaje}
+                        onChange={(e) => form.setData('mensaje', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        rows={3}
+                        required
+                    />
+                </FormField>
+                <FormField label={t('notifications', 'priority')} name="prioridad">
+                    <select
+                        id="prioridad"
+                        value={form.data.prioridad}
+                        onChange={(e) => form.setData('prioridad', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                    >
+                        {prioridades.map(p => (
+                            <option key={p.value} value={p.value}>{p.label}</option>
+                        ))}
+                    </select>
+                </FormField>
+                <FormField label={t('notifications', 'expirationDate')} name="fecha_expiracion">
+                    <input
+                        type="date"
+                        id="fecha_expiracion"
+                        value={form.data.fecha_expiracion}
+                        onChange={(e) => form.setData('fecha_expiracion', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
+                </FormField>
+            </FormModal>
         </AdminLayout>
     );
 }

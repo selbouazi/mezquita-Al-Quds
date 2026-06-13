@@ -1,6 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { usePage, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
+import AdminTable from '../../Components/AdminTable';
+import FormModal from '../../Components/FormModal';
+import FormField from '../../Components/FormField';
+import Pagination from '../../Components/Pagination';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Noticias() {
@@ -67,18 +71,79 @@ export default function Noticias() {
         }
     };
 
-    useEffect(() => {
-        if (!showModal) return;
-        const handler = (e) => {
-            if (e.key === 'Escape') setShowModal(false);
-        };
-        document.addEventListener('keydown', handler);
-        return () => document.removeEventListener('keydown', handler);
-    }, [showModal]);
-
     const noticiasList = noticias?.data || noticias || [];
     const publishedNews = noticiasList.filter(n => n.publicado);
     const draftNews = noticiasList.filter(n => !n.publicado);
+
+    const columns = [
+        { label: t('adminNoticias', 'imagen'), align: 'left' },
+        { label: t('adminNoticias', 'titulo'), align: 'left' },
+        { label: t('adminNoticias', 'fecha'), align: 'left' },
+        { label: t('adminNoticias', 'estado'), align: 'center' },
+        { label: t('adminNoticias', 'acciones'), align: 'right' },
+    ];
+
+    const renderRow = (noticia) => (
+        <>
+            <td className="px-4 py-3">
+                {noticia.imagen ? (
+                    <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-12 object-cover rounded-lg" />
+                ) : (
+                    <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <span className="text-gray-400 text-xs">{t('adminNoticias', 'noImage')}</span>
+                    </div>
+                )}
+            </td>
+            <td className="px-4 py-3">
+                <p className="font-medium text-gray-900">{noticia.titulo}</p>
+                <p className="text-xs text-gray-500 line-clamp-1">{noticia.contenido}</p>
+            </td>
+            <td className="px-4 py-3 text-sm text-gray-500">
+                {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : '-'}
+            </td>
+            <td className="px-4 py-3 text-center">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                    {t('noticias', noticia.publicado ? 'published' : 'draft')}
+                </span>
+            </td>
+            <td className="px-4 py-3 text-right">
+                <div className="flex justify-end gap-2">
+                    <button onClick={() => openEdit(noticia)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
+                </div>
+            </td>
+        </>
+    );
+
+    const renderMobileCard = (noticia) => (
+        <>
+            <div className="flex gap-3 mb-3">
+                {noticia.imagen && (
+                    <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-14 rounded-lg object-cover flex-shrink-0" />
+                )}
+                <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-gray-900 text-sm leading-tight">{noticia.titulo}</h3>
+                    <p className="text-xs text-gray-500 line-clamp-2 mt-1">{noticia.contenido}</p>
+                </div>
+            </div>
+            <div className="flex items-center justify-between mb-3">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                    {t('noticias', noticia.publicado ? 'published' : 'draft')}
+                </span>
+                <span className="text-xs text-gray-500">
+                    {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : ''}
+                </span>
+            </div>
+            <div className="flex gap-2 pt-3 border-t border-gray-100">
+                <button onClick={() => openEdit(noticia)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
+                    {t('common', 'edit')}
+                </button>
+                <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                    {t('common', 'delete')}
+                </Link>
+            </div>
+        </>
+    );
 
     return (
         <AdminLayout title={t('adminModules', 'news')}>
@@ -111,223 +176,93 @@ export default function Noticias() {
                     </div>
                 </div>
 
-                {/* Desktop table */}
-                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'imagen')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'titulo')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'fecha')}</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'estado')}</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminNoticias', 'acciones')}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {noticiasList.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
-                                            {t('adminNoticias', 'noNewsAdmin')}
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    noticiasList.map((noticia) => (
-                                        <tr key={noticia.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3">
-                                                {noticia.imagen ? (
-                                                    <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-12 object-cover rounded-lg" />
-                                                ) : (
-                                                    <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                        <span className="text-gray-400 text-xs">{t('adminNoticias', 'noImage')}</span>
-                                                    </div>
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <p className="font-medium text-gray-900">{noticia.titulo}</p>
-                                                <p className="text-xs text-gray-500 line-clamp-1">{noticia.contenido}</p>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-gray-500">
-                                                {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : '-'}
-                                            </td>
-                                            <td className="px-4 py-3 text-center">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-                                                    {t('noticias', noticia.publicado ? 'published' : 'draft')}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <button onClick={() => openEdit(noticia)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
-                                                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <AdminTable
+                    columns={columns}
+                    rows={noticiasList}
+                    renderRow={renderRow}
+                    renderMobileCard={renderMobileCard}
+                    emptyMessage={t('adminNoticias', 'noNewsAdmin')}
+                    emptyColspan={5}
+                />
 
-                {/* Mobile cards */}
-                {noticiasList.length === 0 ? (
-                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">
-                        {t('adminNoticias', 'noNewsAdmin')}
-                    </div>
-                ) : (
-                    <div className="md:hidden space-y-3">
-                        {noticiasList.map((noticia) => (
-                            <div key={noticia.id} className="bg-white rounded-xl shadow-sm border p-4">
-                                <div className="flex gap-3 mb-3">
-                                    {noticia.imagen && (
-                                        <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-14 rounded-lg object-cover flex-shrink-0" />
-                                    )}
-                                    <div className="min-w-0 flex-1">
-                                        <h3 className="font-semibold text-gray-900 text-sm leading-tight">{noticia.titulo}</h3>
-                                        <p className="text-xs text-gray-500 line-clamp-2 mt-1">{noticia.contenido}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-                                        {t('noticias', noticia.publicado ? 'published' : 'draft')}
-                                    </span>
-                                    <span className="text-xs text-gray-500">
-                                        {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : ''}
-                                    </span>
-                                </div>
-                                <div className="flex gap-2 pt-3 border-t border-gray-100">
-                                    <button onClick={() => openEdit(noticia)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
-                                        {t('common', 'edit')}
-                                    </button>
-                                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
-                                        {t('common', 'delete')}
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Pagination */}
-                {noticias.last_page > 1 && (
-                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                        {noticias.prev_page_url && (
-                            <Link href={noticias.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">
-                                ← {t('common', 'previous')}
-                            </Link>
-                        )}
-                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">
-                            {noticias.current_page} / {noticias.last_page}
-                        </span>
-                        {noticias.next_page_url && (
-                            <Link href={noticias.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">
-                                {t('common', 'next')} →
-                            </Link>
-                        )}
-                    </div>
-                )}
+                <Pagination meta={noticias} />
             </div>
 
-            {showModal && (
-                <div
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-                    onClick={() => setShowModal(false)}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="noticias-modal-title"
-                >
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-                        <h2 id="noticias-modal-title" className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                            {editando ? t('adminNoticias', 'editTitle') : t('noticias', 'addNew')}
-                        </h2>
+            <FormModal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title={editando ? t('adminNoticias', 'editTitle') : t('noticias', 'addNew')}
+                onSubmit={handleSubmit}
+                submitText={editando ? t('adminNoticias', 'update') : t('adminNoticias', 'create')}
+                processing={formData.processing}
+            >
+                <FormField label={t('adminNoticias', 'tituloLabel')} name="titulo" required>
+                    <input
+                        type="text"
+                        value={formData.data.titulo}
+                        onChange={(e) => formData.setData('titulo', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        required
+                    />
+                </FormField>
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'tituloLabel')}</label>
-                                <input
-                                    type="text"
-                                    value={formData.data.titulo}
-                                    onChange={(e) => formData.setData('titulo', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'contenidoLabel')}</label>
-                                <textarea
-                                    value={formData.data.contenido}
-                                    onChange={(e) => formData.setData('contenido', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    rows="5"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'imagenLabel')}</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImagenChange}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-[#0F5132] file:text-white file:cursor-pointer"
-                                />
-                                {imagenPreview && (
-                                    <div className="mt-2 relative inline-block">
-                                        <img src={imagenPreview} alt={t('adminNoticias', 'imagenLabel')} className="w-32 h-20 object-cover rounded-lg" />
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setImagenPreview(null);
-                                                formData.setData('imagen', null);
-                                            }}
-                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                                            aria-label={t('noticias', 'removeImage')}
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminNoticias', 'fechaLabel')}</label>
-                                <input
-                                    type="date"
-                                    value={formData.data.fecha_publicacion}
-                                    onChange={(e) => formData.setData('fecha_publicacion', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    id="publicado"
-                                    checked={formData.data.publicado}
-                                    onChange={(e) => formData.setData('publicado', e.target.checked)}
-                                    className="rounded"
-                                />
-                                <label htmlFor="publicado" className="text-sm text-gray-700">{t('adminNoticias', 'publishLabel')}</label>
-                            </div>
-                        </div>
+                <FormField label={t('adminNoticias', 'contenidoLabel')} name="contenido" required>
+                    <textarea
+                        value={formData.data.contenido}
+                        onChange={(e) => formData.setData('contenido', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        rows="5"
+                        required
+                    />
+                </FormField>
 
-                        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
+                <FormField label={t('adminNoticias', 'imagenLabel')} name="imagen">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImagenChange}
+                        className="w-full px-3 py-2 border rounded-lg text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-[#0F5132] file:text-white file:cursor-pointer"
+                    />
+                    {imagenPreview && (
+                        <div className="mt-2 relative inline-block">
+                            <img src={imagenPreview} alt={t('adminNoticias', 'imagenLabel')} className="w-32 h-20 object-cover rounded-lg" />
                             <button
                                 type="button"
-                                onClick={() => setShowModal(false)}
-                                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
+                                onClick={() => {
+                                    setImagenPreview(null);
+                                    formData.setData('imagen', null);
+                                }}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                aria-label={t('noticias', 'removeImage')}
                             >
-                                {t('common', 'cancel')}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleSubmit}
-                                disabled={formData.processing}
-                                className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
-                            >
-                                {editando ? t('adminNoticias', 'update') : t('adminNoticias', 'create')}
+                                ×
                             </button>
                         </div>
+                    )}
+                </FormField>
+
+                <FormField label={t('adminNoticias', 'fechaLabel')} name="fecha_publicacion">
+                    <input
+                        type="date"
+                        value={formData.data.fecha_publicacion}
+                        onChange={(e) => formData.setData('fecha_publicacion', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
+                </FormField>
+
+                <FormField name="publicado">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="publicado"
+                            checked={formData.data.publicado}
+                            onChange={(e) => formData.setData('publicado', e.target.checked)}
+                            className="rounded"
+                        />
+                        <label htmlFor="publicado" className="text-sm text-gray-700">{t('adminNoticias', 'publishLabel')}</label>
                     </div>
-                </div>
-            )}
+                </FormField>
+            </FormModal>
         </AdminLayout>
     );
 }

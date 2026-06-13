@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { usePage, router, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
+import AdminTable from '../../Components/AdminTable';
+import FormModal from '../../Components/FormModal';
+import FormField from '../../Components/FormField';
+import SearchInput from '../../Components/SearchInput';
+import Pagination from '../../Components/Pagination';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Donativos() {
     const { t } = useTranslation();
     const { props } = usePage();
     const { donativos, años, filtros, stats } = props;
-    
+
     const [showModal, setShowModal] = useState(false);
     const [editando, setEditando] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -59,9 +64,71 @@ export default function Donativos() {
         }
     };
 
-    const filteredDonativos = donativos.data.filter(d => 
+    const filteredDonativos = donativos.data.filter(d =>
         d.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (d.nombre_arabe && d.nombre_arabe.includes(searchTerm))
+    );
+
+    const columns = [
+        { label: t('adminDonativos', 'nombreLabel'), align: 'left' },
+        { label: t('adminDonativos', 'amount'), align: 'left' },
+        { label: t('adminDonativos', 'state'), align: 'left' },
+        { label: t('adminDonativos', 'date'), align: 'left' },
+        { label: t('adminDonativos', 'actions'), align: 'right' },
+    ];
+
+    const renderRow = (donativo) => (
+        <>
+            <td className="px-4 py-3">
+                <p className="font-medium text-gray-900">{donativo.nombre}</p>
+                {donativo.nombre_arabe && <p className="text-xs text-gray-500">{donativo.nombre_arabe}</p>}
+            </td>
+            <td className="px-4 py-3 font-semibold text-[#0F5132]">{parseFloat(donativo.cantidad).toFixed(2)} €</td>
+            <td className="px-4 py-3">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
+                </span>
+            </td>
+            <td className="px-4 py-3 text-sm text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</td>
+            <td className="px-4 py-3 text-right">
+                <div className="flex justify-end gap-2">
+                    <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="px-2 py-1 text-xs rounded hover:bg-gray-100">
+                        {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
+                    </Link>
+                    <button onClick={() => openEdit(donativo)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                    <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
+                </div>
+            </td>
+        </>
+    );
+
+    const renderMobileCard = (donativo) => (
+        <>
+            <div className="flex items-start justify-between mb-2">
+                <div className="min-w-0 flex-1 mr-2">
+                    <p className="font-semibold text-gray-900 text-sm">{donativo.nombre}</p>
+                    {donativo.nombre_arabe && <p className="text-xs text-gray-500" dir="rtl">{donativo.nombre_arabe}</p>}
+                </div>
+                <span className="font-bold text-[#0F5132] whitespace-nowrap">{parseFloat(donativo.cantidad).toFixed(2)} €</span>
+            </div>
+            <div className="flex items-center justify-between mb-3">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
+                </span>
+                <span className="text-xs text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</span>
+            </div>
+            <div className="flex gap-2 pt-3 border-t border-gray-100">
+                <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="flex-1 px-3 py-3 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 min-h-[44px] text-center block">
+                    {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
+                </Link>
+                <button onClick={() => openEdit(donativo)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
+                    {t('common', 'edit')}
+                </button>
+                <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                    {t('common', 'delete')}
+                </Link>
+            </div>
+        </>
     );
 
     return (
@@ -111,205 +178,100 @@ export default function Donativos() {
                                 <option key={año} value={año}>{año}</option>
                             ))}
                         </select>
-                        <input
-                            type="text"
-                            placeholder={t('donativos', 'searchPlaceholder')}
+                        <SearchInput
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="flex-1 px-3 py-2 border rounded-lg text-sm"
+                            onChange={setSearchTerm}
+                            placeholder={t('donativos', 'searchPlaceholder')}
+                            className="flex-1"
                         />
                     </div>
                 </div>
 
-                {/* Desktop table */}
-                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'nombreLabel')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'amount')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'state')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'date')}</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminDonativos', 'actions')}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {filteredDonativos.length === 0 ? (
-                                    <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">{t('donativos', 'noDonations')}</td></tr>
-                                ) : (
-                                    filteredDonativos.map((donativo) => (
-                                        <tr key={donativo.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3">
-                                                <p className="font-medium text-gray-900">{donativo.nombre}</p>
-                                                {donativo.nombre_arabe && <p className="text-xs text-gray-500">{donativo.nombre_arabe}</p>}
-                                            </td>
-                                            <td className="px-4 py-3 font-semibold text-[#0F5132]">{parseFloat(donativo.cantidad).toFixed(2)} €</td>
-                                            <td className="px-4 py-3">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                                    {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</td>
-                                            <td className="px-4 py-3 text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="px-2 py-1 text-xs rounded hover:bg-gray-100">
-                                                        {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
-                                                    </Link>
-                                                    <button onClick={() => openEdit(donativo)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
-                                                    <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <AdminTable
+                    columns={columns}
+                    rows={filteredDonativos}
+                    renderRow={renderRow}
+                    renderMobileCard={renderMobileCard}
+                    emptyMessage={t('donativos', 'noDonations')}
+                    emptyColspan={5}
+                />
 
-                {/* Mobile cards */}
-                {filteredDonativos.length === 0 ? (
-                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">{t('donativos', 'noDonations')}</div>
-                ) : (
-                    <div className="md:hidden space-y-3">
-                        {filteredDonativos.map((donativo) => (
-                            <div key={donativo.id} className="bg-white rounded-xl shadow-sm border p-4">
-                                <div className="flex items-start justify-between mb-2">
-                                    <div className="min-w-0 flex-1 mr-2">
-                                        <p className="font-semibold text-gray-900 text-sm">{donativo.nombre}</p>
-                                        {donativo.nombre_arabe && <p className="text-xs text-gray-500" dir="rtl">{donativo.nombre_arabe}</p>}
-                                    </div>
-                                    <span className="font-bold text-[#0F5132] whitespace-nowrap">{parseFloat(donativo.cantidad).toFixed(2)} €</span>
-                                </div>
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                        {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
-                                    </span>
-                                    <span className="text-xs text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</span>
-                                </div>
-                                <div className="flex gap-2 pt-3 border-t border-gray-100">
-                                    <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="flex-1 px-3 py-3 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 min-h-[44px] text-center block">
-                                        {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
-                                    </Link>
-                                    <button onClick={() => openEdit(donativo)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
-                                        {t('common', 'edit')}
-                                    </button>
-                                    <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
-                                        {t('common', 'delete')}
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Pagination */}
-                {donativos.last_page > 1 && (
-                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                        {donativos.prev_page_url && (
-                            <Link href={donativos.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">← {t('common', 'previous')}</Link>
-                        )}
-                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">{donativos.current_page} / {donativos.last_page}</span>
-                        {donativos.next_page_url && (
-                            <Link href={donativos.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">{t('common', 'next')} →</Link>
-                        )}
-                    </div>
-                )}
+                <Pagination meta={donativos} />
             </div>
 
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-                        <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
-                             {editando ? t('adminDonativos', 'editTitle') : t('donativos', 'addNew')}
-                        </h2>
+            <FormModal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title={editando ? t('adminDonativos', 'editTitle') : t('donativos', 'addNew')}
+                onSubmit={handleSubmit}
+                submitText={editando ? t('adminDonativos', 'update') : t('adminDonativos', 'create')}
+                processing={formData.processing}
+            >
+                <FormField label={t('adminDonativos', 'nombreLabel')} name="nombre" required>
+                    <input
+                        type="text"
+                        value={formData.data.nombre}
+                        onChange={(e) => formData.setData('nombre', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        required
+                    />
+                </FormField>
 
-                        <div className="space-y-4">
-                            <div>
-                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'nombreLabel')}</label>
-                                <input
-                                    type="text"
-                                    value={formData.data.nombre}
-                                    onChange={(e) => formData.setData('nombre', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'nombreArLabel')}</label>
-                                <input
-                                    type="text"
-                                    value={formData.data.nombre_arabe}
-                                    onChange={(e) => formData.setData('nombre_arabe', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    dir="rtl"
-                                />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'cantidadLabel')}</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        value={formData.data.cantidad}
-                                        onChange={(e) => formData.setData('cantidad', e.target.value)}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'yearLabel')}</label>
-                                    <input
-                                        type="number"
-                                        value={formData.data.año}
-                                        onChange={(e) => formData.setData('año', e.target.value)}
-                                        className="w-full px-3 py-2 border rounded-lg text-sm"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    id="pagado"
-                                    checked={formData.data.pagado}
-                                    onChange={(e) => formData.setData('pagado', e.target.checked)}
-                                    className="rounded"
-                                />
-                                 <label htmlFor="pagado" className="text-sm text-gray-700">{t('adminDonativos', 'paidLabel')}</label>
-                            </div>
-                            <div>
-                                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminDonativos', 'notasLabel')}</label>
-                                <textarea
-                                    value={formData.data.notas}
-                                    onChange={(e) => formData.setData('notas', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg text-sm"
-                                    rows="2"
-                                />
-                            </div>
-                        </div>
+                <FormField label={t('adminDonativos', 'nombreArLabel')} name="nombre_arabe">
+                    <input
+                        type="text"
+                        value={formData.data.nombre_arabe}
+                        onChange={(e) => formData.setData('nombre_arabe', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        dir="rtl"
+                    />
+                </FormField>
 
-                        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
-                                 <button
-                                 type="button"
-                                 onClick={() => setShowModal(false)}
-                                 className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
-                             >
-                                 {t('common', 'cancel')}
-                             </button>
-                            <button
-                                type="button"
-                                onClick={handleSubmit}
-                                disabled={formData.processing}
-                                className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] disabled:opacity-50 text-sm"
-                            >
-                                 {editando ? t('adminDonativos', 'update') : t('adminDonativos', 'create')}
-                            </button>
-                        </div>
-                    </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField label={t('adminDonativos', 'cantidadLabel')} name="cantidad" required>
+                        <input
+                            type="number"
+                            step="0.01"
+                            value={formData.data.cantidad}
+                            onChange={(e) => formData.setData('cantidad', e.target.value)}
+                            className="w-full px-3 py-2 border rounded-lg text-sm"
+                            required
+                        />
+                    </FormField>
+
+                    <FormField label={t('adminDonativos', 'yearLabel')} name="año" required>
+                        <input
+                            type="number"
+                            value={formData.data.año}
+                            onChange={(e) => formData.setData('año', e.target.value)}
+                            className="w-full px-3 py-2 border rounded-lg text-sm"
+                            required
+                        />
+                    </FormField>
                 </div>
-            )}
+
+                <FormField name="pagado">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="pagado"
+                            checked={formData.data.pagado}
+                            onChange={(e) => formData.setData('pagado', e.target.checked)}
+                            className="rounded"
+                        />
+                        <label htmlFor="pagado" className="text-sm text-gray-700">{t('adminDonativos', 'paidLabel')}</label>
+                    </div>
+                </FormField>
+
+                <FormField label={t('adminDonativos', 'notasLabel')} name="notas">
+                    <textarea
+                        value={formData.data.notas}
+                        onChange={(e) => formData.setData('notas', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        rows="2"
+                    />
+                </FormField>
+            </FormModal>
         </AdminLayout>
     );
 }

@@ -1,6 +1,7 @@
 import { usePage, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import FormField from '../../Components/FormField';
 
 export default function Ubicacion() {
     const { t } = useTranslation();
@@ -18,9 +19,7 @@ export default function Ubicacion() {
 
     const handleSubmit = () => {
         formData.post('/admin/ubicacion/guardar', {
-            onSuccess: () => {
-                // Optionally show success message
-            },
+            onSuccess: () => {},
         });
     };
 
@@ -36,9 +35,9 @@ export default function Ubicacion() {
 
                 <div className="bg-white rounded-xl shadow-sm border p-6">
                     <div className="space-y-4 max-w-2xl">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('adminUbicacion', 'address')} *</label>
+                        <FormField label={t('adminUbicacion', 'address')} name="direccion" required>
                             <textarea
+                                id="direccion"
                                 value={formData.data.direccion}
                                 onChange={(e) => formData.setData('direccion', e.target.value)}
                                 className="w-full px-3 py-2 border rounded-lg text-sm"
@@ -46,65 +45,65 @@ export default function Ubicacion() {
                                 required
                                 placeholder="Calle ejemplo, 123, Ciudad"
                             />
-                        </div>
+                        </FormField>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'latitude')}</label>
+                            <FormField label={t('ubicacion', 'latitude')} name="latitud">
                                 <input
                                     type="text"
+                                    id="latitud"
                                     value={formData.data.latitud}
                                     onChange={(e) => formData.setData('latitud', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-lg text-sm"
                                     placeholder="40.416775"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">{t('adminUbicacion', 'coordHint')}</p>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'longitude')}</label>
+                            </FormField>
+                            <FormField label={t('ubicacion', 'longitude')} name="longitud">
                                 <input
                                     type="text"
+                                    id="longitud"
                                     value={formData.data.longitud}
                                     onChange={(e) => formData.setData('longitud', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-lg text-sm"
                                     placeholder="-3.703790"
                                 />
-                            </div>
+                            </FormField>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'phone')}</label>
+                            <FormField label={t('ubicacion', 'phone')} name="telefono">
                                 <input
                                     type="text"
+                                    id="telefono"
                                     value={formData.data.telefono}
                                     onChange={(e) => formData.setData('telefono', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-lg text-sm"
                                     placeholder="+34 600 000 000"
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'whatsapp')}</label>
+                            </FormField>
+                            <FormField label={t('ubicacion', 'whatsapp')} name="whatsapp">
                                 <input
                                     type="text"
+                                    id="whatsapp"
                                     value={formData.data.whatsapp}
                                     onChange={(e) => formData.setData('whatsapp', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-lg text-sm"
                                     placeholder="+34 600 000 000"
                                 />
-                            </div>
+                            </FormField>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('ubicacion', 'email')}</label>
+                        <FormField label={t('ubicacion', 'email')} name="email">
                             <input
                                 type="email"
+                                id="email"
                                 value={formData.data.email}
                                 onChange={(e) => formData.setData('email', e.target.value)}
                                 className="w-full px-3 py-2 border rounded-lg text-sm"
                                 placeholder="contacto@mezquita.com"
                             />
-                        </div>
+                        </FormField>
                     </div>
 
                     <div className="mt-6">
