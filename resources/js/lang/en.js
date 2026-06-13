@@ -326,6 +326,8 @@ const en = {
         no: 'No',
         previous: 'Previous',
         next: 'Next',
+            active: 'Active',
+            inactive: 'Inactive',
     },
     adminDashboard: {
         title: 'Admin Panel',
@@ -528,6 +530,10 @@ const en = {
         high: 'High',
         normal: 'Normal',
         low: 'Low',
+    },
+    modules: {
+        disabledTitle: 'Module temporarily disabled',
+        disabledMessage: 'This section is not available right now. Please try again later.',
     },
 };
 

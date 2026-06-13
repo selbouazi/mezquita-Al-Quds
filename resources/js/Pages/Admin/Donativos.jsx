@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { usePage, router, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Donativos() {
     const { t } = useTranslation();
@@ -75,6 +76,7 @@ export default function Donativos() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'donations')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('adminDonativos', 'description')}</p>
                     </div>
+                    <ModuleToggle module="donativos" />
                     <button
                         onClick={openCreate}
                         className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"

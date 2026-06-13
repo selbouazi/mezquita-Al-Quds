@@ -27,6 +27,10 @@ class HorarioController extends Controller
      */
     public function horarios(Request $request)
     {
+        if (!\moduleIsActive('horarios')) {
+            return inertia('ModuleDisabled');
+        }
+
         $year = $request->input('year', now()->year);
         $month = $request->input('month', now()->month);
 

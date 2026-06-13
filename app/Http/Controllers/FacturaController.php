@@ -16,6 +16,10 @@ class FacturaController extends Controller
      */
     public function index(): Response
     {
+        if (!\moduleIsActive('facturas')) {
+            return inertia('ModuleDisabled');
+        }
+
         $facturas = Factura::orderBy('fecha', 'desc')->get();
 
         return inertia('Facturas', ['facturas' => $facturas]);

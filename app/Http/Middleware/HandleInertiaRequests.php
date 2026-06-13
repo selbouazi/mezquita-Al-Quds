@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ModuleStatus;
 use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -14,8 +16,13 @@ class HandleInertiaRequests extends Middleware
     {
         $tiemposEspera = TiempoEsperaService::getTiemposEspera();
 
+        $modules = Cache::remember('module_status_all', 3600, function () {
+            return ModuleStatus::pluck('activo', 'module');
+        });
+
         return array_merge(parent::share($request), [
             'locale' => app()->getLocale(),
+            'modules' => $modules,
             'tiemposEspera' => $tiemposEspera,
             'auth' => [
                 'user' => $request->user() ? [

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { usePage, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Facturas() {
     const { t } = useTranslation();
@@ -60,6 +61,7 @@ export default function Facturas() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'invoices')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('adminFacturas', 'description')}</p>
                     </div>
+                    <ModuleToggle module="facturas" />
                     <button
                         onClick={openCreate}
                         className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"

@@ -316,6 +316,8 @@ const es = {
         clear: 'Limpiar',
         noData: 'No hay datos disponibles',
         processing: 'Procesando...',
+            active: 'Activo',
+            inactive: 'Inactivo',
     },
     adminDashboard: {
         title: 'Panel de Administración',
@@ -516,6 +518,10 @@ const es = {
         high: 'Alta',
         normal: 'Normal',
         low: 'Baja',
+    },
+    modules: {
+        disabledTitle: 'Módulo temporalmente desactivado',
+        disabledMessage: 'Esta sección no está disponible en estos momentos. Vuelve a intentarlo más tarde.',
     },
 };
 

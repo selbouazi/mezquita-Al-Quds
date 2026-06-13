@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FacturasController;
 use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NoticiasController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ModuleStatusController;
 use App\Http\Controllers\Admin\TiemposEsperaController;
 use App\Http\Controllers\Admin\UbicacionController;
 use App\Http\Middleware\AdminMiddleware;
@@ -17,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Module status toggle
+    Route::post('/modules/{module}/toggle', [ModuleStatusController::class, 'toggle']);
 
     // Notificaciones
     Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notificaciones.index');

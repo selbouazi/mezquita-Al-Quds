@@ -19,6 +19,10 @@ class PublicController extends Controller
      */
     public function ubicacion(): Response
     {
+        if (!\moduleIsActive('ubicacion')) {
+            return Inertia::render('ModuleDisabled');
+        }
+
         return Inertia::render('Ubicacion');
     }
 
@@ -27,6 +31,10 @@ class PublicController extends Controller
      */
     public function imam(): Response
     {
+        if (!\moduleIsActive('imam')) {
+            return Inertia::render('ModuleDisabled');
+        }
+
         $imam = Cache::remember('imam_data', 86400, function () {
             return ImamSetting::first();
         });

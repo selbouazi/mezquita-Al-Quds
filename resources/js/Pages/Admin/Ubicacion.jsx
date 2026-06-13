@@ -2,6 +2,7 @@ import { usePage, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
 import FormField from '../../Components/FormField';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Ubicacion() {
     const { t } = useTranslation();
@@ -31,6 +32,7 @@ export default function Ubicacion() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'location')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('adminUbicacion', 'description')}</p>
                     </div>
+                    <ModuleToggle module="ubicacion" />
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-6">

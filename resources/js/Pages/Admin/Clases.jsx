@@ -5,6 +5,7 @@ import AdminTable from '../../Components/AdminTable';
 import FormModal from '../../Components/FormModal';
 import FormField from '../../Components/FormField';
 import { useTranslation } from '../../hooks/useTranslation';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Clases() {
     const { t } = useTranslation();
@@ -137,6 +138,7 @@ export default function Clases() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'classes')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('clases', 'subtitle')}</p>
                     </div>
+                    <ModuleToggle module="clases" />
                     <button
                         onClick={openCreate}
                         className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"

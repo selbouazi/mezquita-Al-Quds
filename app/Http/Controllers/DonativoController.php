@@ -16,6 +16,10 @@ class DonativoController extends Controller
      */
     public function index(Request $request): Response
     {
+        if (!\moduleIsActive('donativos')) {
+            return inertia('ModuleDisabled');
+        }
+
         $año = $request->input('año', date('Y'));
         $donativos = Donativo::where('año', $año)
             ->orderBy('created_at', 'desc')

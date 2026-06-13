@@ -533,6 +533,12 @@ const ar = {
         clear: 'مسح',
         noData: 'لا توجد بيانات متاحة',
         processing: 'جارٍ المعالجة...',
+            active: 'نشط',
+            inactive: 'غير نشط',
+    },
+    modules: {
+        disabledTitle: 'الوحدة معطلة مؤقتًا',
+        disabledMessage: 'هذا القسم غير متاح حاليًا. يرجى المحاولة مرة أخرى لاحقًا.',
     },
 };
 

@@ -10,9 +10,18 @@ const LANGUAGES = [
     { code: 'ar', label: 'العربية' },
 ];
 
+const MODULE_MAP = {
+    '/horarios': 'horarios',
+    '/noticias': 'noticias',
+    '/imam': 'imam',
+    '/ubicacion': 'ubicacion',
+    '/facturas': 'facturas',
+    '/donativos': 'donativos',
+};
+
 export default function Navbar() {
     const { t, locale, isRTL } = useTranslation();
-    const { auth } = usePage().props;
+    const { auth, modules } = usePage().props;
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [langOpen, setLangOpen] = useState(false);
@@ -37,7 +46,7 @@ export default function Navbar() {
             .catch(() => {});
     }, []);
 
-    const navLinks = [
+    const allNavLinks = [
         { href: '/', label: t('navbar', 'home') },
         { href: '/horarios', label: t('navbar', 'prayers') },
         { href: '/noticias', label: t('adminModules', 'news') },
@@ -46,13 +55,23 @@ export default function Navbar() {
         { href: '/contacto', label: t('navbar', 'contact') },
     ];
     
+    const navLinks = allNavLinks.filter(link => {
+        const mod = MODULE_MAP[link.href];
+        return !mod || (modules?.[mod] ?? true);
+    });
+    
     const isLoggedIn = auth?.user !== null;
     const isAdmin = auth?.user?.is_admin === true;
     
-    const userLinks = isLoggedIn ? [
+    const allUserLinks = isLoggedIn ? [
         { href: '/facturas', label: t('adminModules', 'invoices') },
         { href: '/donativos', label: t('adminModules', 'donations') },
     ] : [];
+    
+    const userLinks = allUserLinks.filter(link => {
+        const mod = MODULE_MAP[link.href];
+        return !mod || (modules?.[mod] ?? true);
+    });
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 border-b border-[#C9A227]/20 transition-all duration-300

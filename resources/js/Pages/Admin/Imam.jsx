@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
 import FormField from '../../Components/FormField';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Imam({ imam }) {
     const { t } = useTranslation();
@@ -35,6 +36,7 @@ export default function Imam({ imam }) {
             <div className="max-w-2xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-sm border p-6 sm:p-8">
                     <h1 className="text-2xl font-bold text-[#0F5132] mb-2">{t('imam', 'title')}</h1>
+                    <ModuleToggle module="imam" />
                     <p className="text-gray-600 mb-8">{t('imam', 'subtitle')}</p>
 
                     <div className="mb-6">

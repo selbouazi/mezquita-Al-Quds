@@ -302,6 +302,8 @@ const ca = {
         clear: 'Netejar',
         noData: 'No hi ha dades disponibles',
         processing: 'Processant...',
+            active: 'Actiu',
+            inactive: 'Inactiu',
     },
     adminDashboard: {
         title: 'Panel d\u0027Administració',
@@ -504,6 +506,10 @@ const ca = {
         high: 'Alta',
         normal: 'Normal',
         low: 'Baixa',
+    },
+    modules: {
+        disabledTitle: 'Mòdul temporalment desactivat',
+        disabledMessage: 'Aquesta secció no està disponible en aquests moments. Torna a intentar-ho més tard.',
     },
 };
 

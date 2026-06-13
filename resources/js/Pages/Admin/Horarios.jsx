@@ -2,6 +2,7 @@ import { usePage, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import ModuleToggle from '../../Components/ModuleToggle';
 
 export default function Horarios() {
     const { t } = useTranslation();
@@ -35,6 +36,7 @@ export default function Horarios() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'schedules')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('adminHorarios', 'waitTimes')}</p>
                     </div>
+                    <ModuleToggle module="horarios" />
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">

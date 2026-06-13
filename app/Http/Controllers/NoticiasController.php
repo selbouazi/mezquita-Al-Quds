@@ -11,6 +11,10 @@ class NoticiasController extends Controller
 {
     public function index(Request $request): Response
     {
+        if (!\moduleIsActive('noticias')) {
+            return inertia('ModuleDisabled');
+        }
+
         $page = $request->input('page', 1);
         $version = Cache::remember('noticias_version', 86400 * 30, fn() => 1);
         $noticias = Cache::remember('noticias_v' . $version . '_p' . $page, 3600, function () {
@@ -26,6 +30,10 @@ class NoticiasController extends Controller
 
     public function show(Noticia $noticia): Response
     {
+        if (!\moduleIsActive('noticias')) {
+            return inertia('ModuleDisabled');
+        }
+
         if (! $noticia->publicado) {
             abort(404);
         }
