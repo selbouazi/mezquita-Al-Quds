@@ -2,23 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactRequest;
 use App\Models\ContactMessage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class ContactController extends Controller
 {
     /**
-     * Store a newly created contact message.
+     * Muestra el formulario de contacto.
+     *
+     * @return Response
      */
-    public function store(Request $request)
+    public function create(): Response
     {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|max:255',
-            'message' => 'required|string|max:5000',
-            'type'    => 'required|in:web,phone',
-            'phone'   => 'required_if:type,phone|nullable|string|max:20',
-        ]);
+        return inertia('Contacto');
+    }
+
+    /**
+     * Procesa el envío del formulario de contacto.
+     *
+     * @param ContactRequest $request
+     * @return RedirectResponse
+     */
+    public function store(ContactRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
 
         ContactMessage::create([
             'name'       => $validated['name'],

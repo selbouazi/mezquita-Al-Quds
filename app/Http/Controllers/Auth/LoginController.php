@@ -3,17 +3,30 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Response;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
+    /**
+     * Muestra el formulario de inicio de sesión.
+     *
+     * @return Response
+     */
+    public function showLoginForm(): Response
     {
         return inertia('Auth/Login');
     }
 
-    public function login(Request $request)
+    /**
+     * Maneja la solicitud de inicio de sesión.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -35,7 +48,13 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+    /**
+     * Cierra la sesión del usuario.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();

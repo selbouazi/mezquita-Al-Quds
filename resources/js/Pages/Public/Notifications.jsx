@@ -24,7 +24,9 @@ export default function Notifications({ notificaciones }) {
     };
 
     return (
-        <MainLayout title={t('notifications', 'allNotifications')}>
+        <MainLayout title={t('notifications', 'allNotifications')}
+            description="Todas las notificaciones activas de la Mezquita Al‑Quds de El Vendrell."
+            canonical="/notifications">
             <section className="py-16 fade">
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="text-center mb-12">

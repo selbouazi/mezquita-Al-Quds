@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Noticia;
+use Inertia\Response;
 
 class NoticiasController extends Controller
 {
-    public function index()
+    /**
+     * Muestra el listado de noticias publicadas.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $noticias = Noticia::publicado()
             ->orderBy('fecha_publicacion', 'desc')

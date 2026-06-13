@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ClaseRequest;
 use App\Models\Clase;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Response;
 
 class ClasesController extends Controller
 {
-    public function index()
+    /**
+     * Muestra el listado de clases.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $clases = Clase::orderBy('created_at', 'desc')->get();
 
@@ -17,41 +24,44 @@ class ClasesController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Almacena una nueva clase.
+     *
+     * @param ClaseRequest $request
+     * @return RedirectResponse
+     */
+    public function store(ClaseRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'horarios' => 'nullable|string|max:255',
-            'nivel' => 'nullable|string|max:100',
-            'profesor' => 'nullable|string|max:255',
-            'requisitos' => 'nullable|string',
-            'activo' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         Clase::create($validated);
 
         return redirect()->back()->with('success', 'Clase creada correctamente');
     }
 
-    public function update(Request $request, Clase $clase)
+    /**
+     * Actualiza una clase existente.
+     *
+     * @param ClaseRequest $request
+     * @param Clase $clase
+     * @return RedirectResponse
+     */
+    public function update(ClaseRequest $request, Clase $clase): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'horarios' => 'nullable|string|max:255',
-            'nivel' => 'nullable|string|max:100',
-            'profesor' => 'nullable|string|max:255',
-            'requisitos' => 'nullable|string',
-            'activo' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $clase->update($validated);
 
         return redirect()->back()->with('success', 'Clase actualizada');
     }
 
-    public function destroy(Clase $clase)
+    /**
+     * Elimina una clase.
+     *
+     * @param Clase $clase
+     * @return RedirectResponse
+     */
+    public function destroy(Clase $clase): RedirectResponse
     {
         $clase->delete();
 

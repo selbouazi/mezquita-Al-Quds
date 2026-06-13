@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UbicacionRequest;
 use App\Models\Ubicacion;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Response;
 
 class UbicacionController extends Controller
 {
-    public function index()
+    /**
+     * Display the location settings form.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $ubicacion = Ubicacion::first();
 
@@ -17,16 +24,15 @@ class UbicacionController extends Controller
         ]);
     }
 
-    public function guardar(Request $request)
+    /**
+     * Store or update the location.
+     *
+     * @param UbicacionRequest $request
+     * @return RedirectResponse
+     */
+    public function guardar(UbicacionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'direccion' => 'required|string|max:500',
-            'latitud' => 'nullable|string|max:50',
-            'longitud' => 'nullable|string|max:50',
-            'telefono' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'whatsapp' => 'nullable|string|max:50',
-        ]);
+        $validated = $request->validated();
 
         $ubicacion = Ubicacion::first();
 

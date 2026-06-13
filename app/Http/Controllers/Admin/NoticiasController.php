@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\NoticiaRequest;
 use App\Models\Noticia;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Response;
 
 class NoticiasController extends Controller
 {
-    public function index()
+    /**
+     * Muestra el listado de noticias.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $noticias = Noticia::orderBy('fecha_publicacion', 'desc')->paginate(20);
 
@@ -18,19 +26,24 @@ class NoticiasController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Almacena una nueva noticia.
+     *
+     * @param NoticiaRequest $request
+     * @return RedirectResponse
+     */
+    public function store(NoticiaRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'imagen' => 'nullable|image|max:2048',
-            'fecha_publicacion' => 'required|date',
-            'publicado' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('noticias', 'public');
-            $validated['imagen'] = $path;
+            try {
+                $path = $request->file('imagen')->store('noticias', 'public');
+                $validated['imagen'] = $path;
+            } catch (\Exception $e) {
+                Log::error('Error al subir imagen de noticia: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Error al subir la imagen. Inténtalo de nuevo.')->withInput();
+            }
         }
 
         Noticia::create($validated);
@@ -38,22 +51,28 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia creada correctamente');
     }
 
-    public function update(Request $request, Noticia $noticia)
+    /**
+     * Actualiza una noticia existente.
+     *
+     * @param NoticiaRequest $request
+     * @param Noticia $noticia
+     * @return RedirectResponse
+     */
+    public function update(NoticiaRequest $request, Noticia $noticia): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'imagen' => 'nullable|image|max:2048',
-            'fecha_publicacion' => 'required|date',
-            'publicado' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('imagen')) {
-            if ($noticia->imagen) {
-                Storage::disk('public')->delete($noticia->imagen);
+            try {
+                if ($noticia->imagen) {
+                    Storage::disk('public')->delete($noticia->imagen);
+                }
+                $path = $request->file('imagen')->store('noticias', 'public');
+                $validated['imagen'] = $path;
+            } catch (\Exception $e) {
+                Log::error('Error al subir imagen de noticia: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Error al subir la imagen. Inténtalo de nuevo.')->withInput();
             }
-            $path = $request->file('imagen')->store('noticias', 'public');
-            $validated['imagen'] = $path;
         }
 
         $noticia->update($validated);
@@ -61,10 +80,20 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia actualizada');
     }
 
-    public function destroy(Noticia $noticia)
+    /**
+     * Elimina una noticia.
+     *
+     * @param Noticia $noticia
+     * @return RedirectResponse
+     */
+    public function destroy(Noticia $noticia): RedirectResponse
     {
-        if ($noticia->imagen) {
-            Storage::disk('public')->delete($noticia->imagen);
+        try {
+            if ($noticia->imagen) {
+                Storage::disk('public')->delete($noticia->imagen);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar imagen de noticia: ' . $e->getMessage());
         }
 
         $noticia->delete();

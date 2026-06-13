@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TiempoEsperaRequest;
 use App\Models\TiempoEspera;
-use Illuminate\Http\Request;
+use App\Services\TiempoEsperaService;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Response;
 
 class TiemposEsperaController extends Controller
 {
-    public function index()
+    /**
+     * Display the waiting times settings form.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $tiemposDb = TiempoEspera::all()->keyBy('rezo');
 
@@ -26,16 +34,23 @@ class TiemposEsperaController extends Controller
         ]);
     }
 
-    public function update(Request $request, $rezo)
+    /**
+     * Update the waiting time for a specific prayer.
+     *
+     * @param TiempoEsperaRequest $request
+     * @param string $rezo
+     * @return RedirectResponse
+     */
+    public function update(TiempoEsperaRequest $request, string $rezo): RedirectResponse
     {
-        $validated = $request->validate([
-            'minutos' => 'required|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         TiempoEspera::updateOrCreate(
             ['rezo' => $rezo],
             ['minutos' => $validated['minutos']]
         );
+
+        TiempoEsperaService::clearCache();
 
         return redirect()->back()->with('success', 'Tiempo actualizado');
     }

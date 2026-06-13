@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /facturas
+Disallow: /donativos
+
+Sitemap: https://mezquita-alquds.cat/sitemap.xml

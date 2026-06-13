@@ -3,14 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ImamRequest;
 use App\Models\ImamSetting;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ImamController extends Controller
 {
-    public function index()
+    /**
+     * Display the imam settings form.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $imam = ImamSetting::first();
 
@@ -19,21 +27,28 @@ class ImamController extends Controller
         ]);
     }
 
-    public function guardar(Request $request)
+    /**
+     * Store or update the imam information.
+     *
+     * @param ImamRequest $request
+     * @return RedirectResponse
+     */
+    public function guardar(ImamRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'nombre' => 'nullable|string|max:255',
-            'descripcion' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $imam = ImamSetting::firstOrNew([]);
 
         if ($request->hasFile('foto')) {
-            if ($imam->foto) {
-                Storage::disk('public')->delete($imam->foto);
+            try {
+                if ($imam->foto) {
+                    Storage::disk('public')->delete($imam->foto);
+                }
+                $validated['foto'] = $request->file('foto')->store('imam', 'public');
+            } catch (\Exception $e) {
+                Log::error('Error al subir foto del imam: ' . $e->getMessage());
+                return back()->with('error', 'Error al subir la foto. Inténtalo de nuevo.');
             }
-            $validated['foto'] = $request->file('foto')->store('imam', 'public');
         } else {
             unset($validated['foto']);
         }

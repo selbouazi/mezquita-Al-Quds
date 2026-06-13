@@ -23,7 +23,9 @@ export default function Contacto() {
     };
 
     return (
-        <MainLayout title={t('navbar', 'contact')}>
+        <MainLayout title={t('navbar', 'contact')}
+            description="Ponte en contacto con la Mezquita Al‑Quds de El Vendrell. Envíanos un mensaje o llama al imán directamente."
+            canonical="/contacto">
             <section className="pt-28 pb-16 max-w-4xl mx-auto px-6">
                 <h1 className="text-3xl font-bold text-[#0F5132] mb-4">{t('contacto', 'title')}</h1>
                 <p className="text-gray-600 mb-8">{t('contacto', 'subtitle')}</p>
@@ -56,20 +58,23 @@ export default function Contacto() {
                         <div className="space-y-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div>
-                                    <input type="text" name="name" value={data.name} onChange={e => setData('name', e.target.value)}
+                                    <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-1">{t('contacto', 'name')}</label>
+                                    <input id="contact-name" type="text" name="name" value={data.name} onChange={e => setData('name', e.target.value)}
                                            placeholder={t('contacto', 'name')}
                                            className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227]/40 transition" />
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
                                 <div>
-                                    <input type="email" name="email" value={data.email} onChange={e => setData('email', e.target.value)}
+                                    <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-1">{t('contacto', 'email')}</label>
+                                    <input id="contact-email" type="email" name="email" value={data.email} onChange={e => setData('email', e.target.value)}
                                            placeholder={t('contacto', 'email')}
                                            className="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227]/40 transition" />
                                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                 </div>
                             </div>
                             <div>
-                                <textarea name="message" value={data.message} onChange={e => setData('message', e.target.value)}
+                                <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-1">{t('contacto', 'message')}</label>
+                                <textarea id="contact-message" name="message" value={data.message} onChange={e => setData('message', e.target.value)}
                                           placeholder={t('contacto', 'message')}
                                           className="w-full p-3 border border-gray-200 rounded-xl text-sm h-32 focus:outline-none focus:ring-2 focus:ring-[#C9A227]/40 transition resize-none" />
                                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}

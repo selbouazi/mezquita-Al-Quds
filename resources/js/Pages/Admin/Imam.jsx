@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import FormField from '../../Components/FormField';
 
 export default function Imam({ imam }) {
     const { t } = useTranslation();
@@ -62,25 +63,29 @@ export default function Imam({ imam }) {
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">{t('imam', 'name')}</label>
-                        <input
-                            type="text"
-                            value={form.data.nombre}
-                            onChange={(e) => form.setData('nombre', e.target.value)}
-                            placeholder={t('imam', 'namePlaceholder')}
-                            className="w-full px-4 py-3 border rounded-xl"
-                        />
+                        <FormField label={t('imam', 'name')} name="nombre">
+                            <input
+                                type="text"
+                                id="nombre"
+                                value={form.data.nombre}
+                                onChange={(e) => form.setData('nombre', e.target.value)}
+                                placeholder={t('imam', 'namePlaceholder')}
+                                className="w-full px-4 py-3 border rounded-xl"
+                            />
+                        </FormField>
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">{t('imam', 'description')}</label>
-                        <textarea
-                            value={form.data.descripcion}
-                            onChange={(e) => form.setData('descripcion', e.target.value)}
-                            placeholder={t('imam', 'descriptionPlaceholder')}
-                            className="w-full px-4 py-3 border rounded-xl"
-                            rows={5}
-                        />
+                        <FormField label={t('imam', 'description')} name="descripcion">
+                            <textarea
+                                id="descripcion"
+                                value={form.data.descripcion}
+                                onChange={(e) => form.setData('descripcion', e.target.value)}
+                                placeholder={t('imam', 'descriptionPlaceholder')}
+                                className="w-full px-4 py-3 border rounded-xl"
+                                rows={5}
+                            />
+                        </FormField>
                     </div>
 
                     <button

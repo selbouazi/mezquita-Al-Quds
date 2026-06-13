@@ -3,14 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ActivationCodeRequest;
 use App\Models\ActivationCode;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 use Illuminate\Support\Str;
 
 class ActivationCodeController extends Controller
 {
-    public function index()
+    /**
+     * Display the activation code form.
+     *
+     * @return Response
+     */
+    public function index(): Response
     {
         $codigo = ActivationCode::where('activo', true)
             ->orderBy('created_at', 'desc')
@@ -21,7 +29,13 @@ class ActivationCodeController extends Controller
         ]);
     }
 
-    public function generar(Request $request)
+    /**
+     * Generate a new activation code.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function generar(Request $request): RedirectResponse
     {
         $codigo = strtoupper(Str::random(8));
         
@@ -33,12 +47,15 @@ class ActivationCodeController extends Controller
         return back()->with('success', 'Código generado correctamente');
     }
 
-    public function actualizar(Request $request)
+    /**
+     * Update or replace the active activation code.
+     *
+     * @param ActivationCodeRequest $request
+     * @return RedirectResponse
+     */
+    public function actualizar(ActivationCodeRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'codigo' => 'required|string|min:8|max:100',
-        ]);
-
+        $validated = $request->validated();
         $validated['codigo'] = strtoupper($validated['codigo']);
 
         ActivationCode::where('activo', true)->update(['activo' => false]);

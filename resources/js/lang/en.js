@@ -11,6 +11,7 @@ const en = {
         location: 'How to Get Here',
         contact: 'Contact',
         selectLang: 'Select language',
+        menu: 'Menu',
     },
     footer: {
         title: 'Al‑Quds Mosque',
@@ -181,6 +182,7 @@ const en = {
         selectModule: 'Select a module to manage',
         back: 'Back',
         goToWebsite: 'Go to website',
+        toggleSidebar: 'Open sidebar menu',
         welcome: 'Welcome',
         manage: 'Manage',
         title: 'Admin Panel',
@@ -348,6 +350,7 @@ const en = {
         save: 'Save',
         cancel: 'Cancel',
         saveSuccess: 'News saved successfully',
+        removeImage: 'Remove image',
     },
     adminDonativos: {
         title: 'Donations',
