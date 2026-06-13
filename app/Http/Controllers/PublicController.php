@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ImamSetting;
 use App\Models\Notification;
+use App\Models\Ubicacion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,13 @@ class PublicController extends Controller
             return Inertia::render('ModuleDisabled');
         }
 
-        return Inertia::render('Ubicacion');
+        $ubicacion = Cache::remember('ubicacion_public', 86400, function () {
+            return Ubicacion::first();
+        });
+
+        return Inertia::render('Ubicacion', [
+            'ubicacion' => $ubicacion,
+        ]);
     }
 
     /**

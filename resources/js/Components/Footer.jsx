@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
+import MapButton from '../Components/MapButton';
 
 export default function Footer() {
     const { t } = useTranslation();
+    const { props } = usePage();
+    const ubicacion = props?.ubicacion ?? null;
+    const lat = ubicacion?.latitud || 41.230468;
+    const lng = ubicacion?.longitud || 1.532069;
 
     return (
         <footer className="bg-[#0F5132] text-white pt-16 pb-10 mt-20 border-t border-[#C9A227]/30 fade">
@@ -33,10 +38,10 @@ export default function Footer() {
                     <p className="text-lg font-semibold mb-2">{t('footer', 'contact_title')}</p>
                     <p className="text-white/80 text-sm">{t('footer', 'address')}</p>
                     <p className="text-white/80 text-sm">{t('footer', 'email')}</p>
-                    <a href="https://maps.google.com"
-                       className="inline-block mt-3 bg-[#C9A227] text-[#0F5132] px-6 py-2 rounded-full font-semibold shadow-md hover:bg-[#b8921f] transition">
+                    <MapButton lat={lat} lng={lng}
+                        className="inline-block mt-3 bg-[#C9A227] text-[#0F5132] px-6 py-2 rounded-full font-semibold shadow-md hover:bg-[#b8921f] transition">
                         {t('footer', 'google_maps')}
-                    </a>
+                    </MapButton>
                 </div>
             </div>
 

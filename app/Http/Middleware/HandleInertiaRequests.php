@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ModuleStatus;
+use App\Models\Ubicacion;
 use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -20,9 +21,14 @@ class HandleInertiaRequests extends Middleware
             return ModuleStatus::pluck('activo', 'module');
         });
 
+        $ubicacion = Cache::remember('ubicacion_public', 86400, function () {
+            return Ubicacion::first();
+        });
+
         return array_merge(parent::share($request), [
             'locale' => app()->getLocale(),
             'modules' => $modules,
+            'ubicacion' => $ubicacion,
             'tiemposEspera' => $tiemposEspera,
             'auth' => [
                 'user' => $request->user() ? [

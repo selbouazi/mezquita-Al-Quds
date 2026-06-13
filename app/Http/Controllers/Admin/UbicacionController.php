@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UbicacionRequest;
 use App\Models\Ubicacion;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Response;
 
 class UbicacionController extends Controller
@@ -41,6 +42,8 @@ class UbicacionController extends Controller
         } else {
             Ubicacion::create($validated);
         }
+
+        Cache::forget('ubicacion_public');
 
         return redirect()->back()->with('success', 'Ubicación guardada correctamente');
     }
