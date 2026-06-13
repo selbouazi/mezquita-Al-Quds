@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             ImamSettingSeeder::class,
             TiemposEsperaSeeder::class,
             Horarios2026Seeder::class,
+            UbicacionSeeder::class,
+            ModuleStatusSeeder::class,
         ]);
     }
 }

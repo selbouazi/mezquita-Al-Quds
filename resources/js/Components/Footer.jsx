@@ -7,8 +7,8 @@ export default function Footer() {
     const { t } = useTranslation();
     const { props } = usePage();
     const ubicacion = props?.ubicacion ?? null;
-    const lat = ubicacion?.latitud || 41.230468;
-    const lng = ubicacion?.longitud || 1.532069;
+    const lat = ubicacion?.latitud || 41.230484;
+    const lng = ubicacion?.longitud || 1.532144;
 
     return (
         <footer className="bg-[#0F5132] text-white pt-16 pb-10 mt-20 border-t border-[#C9A227]/30 fade">
