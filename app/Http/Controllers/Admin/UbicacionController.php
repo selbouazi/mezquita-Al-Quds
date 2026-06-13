@@ -10,6 +10,11 @@ use Inertia\Response;
 
 class UbicacionController extends Controller
 {
+    /**
+     * Display the location settings form.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $ubicacion = Ubicacion::first();
@@ -19,6 +24,12 @@ class UbicacionController extends Controller
         ]);
     }
 
+    /**
+     * Store or update the location.
+     *
+     * @param UbicacionRequest $request
+     * @return RedirectResponse
+     */
     public function guardar(UbicacionRequest $request): RedirectResponse
     {
         $validated = $request->validated();

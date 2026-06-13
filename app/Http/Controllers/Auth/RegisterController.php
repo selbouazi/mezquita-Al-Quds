@@ -14,11 +14,22 @@ use Inertia\Response;
 
 class RegisterController extends Controller
 {
+    /**
+     * Muestra el formulario de registro.
+     *
+     * @return Response
+     */
     public function showRegistrationForm(): Response
     {
         return inertia('Auth/Register');
     }
 
+    /**
+     * Maneja la solicitud de registro de usuario.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function register(Request $request): RedirectResponse
     {
         $request->validate([

@@ -10,11 +10,22 @@ use Inertia\Response;
 
 class ContactController extends Controller
 {
+    /**
+     * Muestra el formulario de contacto.
+     *
+     * @return Response
+     */
     public function create(): Response
     {
         return inertia('Contacto');
     }
 
+    /**
+     * Procesa el envío del formulario de contacto.
+     *
+     * @param ContactRequest $request
+     * @return RedirectResponse
+     */
     public function store(ContactRequest $request): RedirectResponse
     {
         $validated = $request->validated();

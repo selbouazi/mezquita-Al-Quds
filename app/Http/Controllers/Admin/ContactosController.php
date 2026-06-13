@@ -9,6 +9,11 @@ use Inertia\Response;
 
 class ContactosController extends Controller
 {
+    /**
+     * Muestra el listado de mensajes de contacto.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $contactos = Contacto::orderBy('created_at', 'desc')->paginate(20);
@@ -20,6 +25,12 @@ class ContactosController extends Controller
         ]);
     }
 
+    /**
+     * Marca un mensaje como leído.
+     *
+     * @param Contacto $contacto
+     * @return RedirectResponse
+     */
     public function marcarLeido(Contacto $contacto): RedirectResponse
     {
         $contacto->update(['leido' => true]);
@@ -27,6 +38,12 @@ class ContactosController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Elimina un mensaje de contacto.
+     *
+     * @param Contacto $contacto
+     * @return RedirectResponse
+     */
     public function destroy(Contacto $contacto): RedirectResponse
     {
         $contacto->delete();

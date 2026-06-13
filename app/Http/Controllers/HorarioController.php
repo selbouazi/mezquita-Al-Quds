@@ -10,6 +10,11 @@ use Inertia\Response;
 
 class HorarioController extends Controller
 {
+    /**
+     * Muestra la página principal con los horarios de hoy.
+     *
+     * @return Response
+     */
     public function home(): Response
     {
         $tiemposEspera = TiempoEsperaService::getTiemposEspera();
@@ -20,6 +25,12 @@ class HorarioController extends Controller
         ]);
     }
 
+    /**
+     * Muestra los horarios de un mes específico.
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function horarios(Request $request): Response
     {
         $year = $request->input('year', now()->year);

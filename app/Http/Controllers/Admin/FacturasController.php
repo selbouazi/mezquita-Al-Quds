@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FacturasController extends Controller
 {
+    /**
+     * Muestra el listado de facturas.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $facturas = Factura::orderBy('fecha', 'desc')
@@ -23,6 +28,12 @@ class FacturasController extends Controller
         ]);
     }
 
+    /**
+     * Almacena una nueva factura.
+     *
+     * @param FacturaRequest $request
+     * @return RedirectResponse
+     */
     public function store(FacturaRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -42,6 +53,13 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura creada correctamente');
     }
 
+    /**
+     * Actualiza una factura existente.
+     *
+     * @param FacturaRequest $request
+     * @param Factura $factura
+     * @return RedirectResponse
+     */
     public function update(FacturaRequest $request, Factura $factura): RedirectResponse
     {
         $validated = $request->validated();
@@ -64,6 +82,12 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura actualizada');
     }
 
+    /**
+     * Elimina una factura.
+     *
+     * @param Factura $factura
+     * @return RedirectResponse
+     */
     public function destroy(Factura $factura): RedirectResponse
     {
         try {
@@ -79,6 +103,12 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura eliminada');
     }
 
+    /**
+     * Descarga el PDF de una factura.
+     *
+     * @param Factura $factura
+     * @return StreamedResponse|RedirectResponse
+     */
     public function download(Factura $factura): StreamedResponse|RedirectResponse
     {
         if (! $factura->archivo_pdf) {

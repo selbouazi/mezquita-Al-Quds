@@ -8,6 +8,12 @@ use Inertia\Response;
 
 class DonativoController extends Controller
 {
+    /**
+     * Muestra el listado de donativos filtrados por año.
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function index(Request $request): Response
     {
         $año = $request->input('año', date('Y'));

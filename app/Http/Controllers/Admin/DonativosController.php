@@ -11,6 +11,12 @@ use Inertia\Response;
 
 class DonativosController extends Controller
 {
+    /**
+     * Muestra el listado de donativos.
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function index(Request $request): Response
     {
         $year = $request->get('año', date('Y'));
@@ -47,6 +53,12 @@ class DonativosController extends Controller
         ]);
     }
 
+    /**
+     * Almacena un nuevo donativo.
+     *
+     * @param DonativoRequest $request
+     * @return RedirectResponse
+     */
     public function store(DonativoRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -56,6 +68,13 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo creado correctamente');
     }
 
+    /**
+     * Actualiza un donativo existente.
+     *
+     * @param DonativoRequest $request
+     * @param Donativo $donativo
+     * @return RedirectResponse
+     */
     public function update(DonativoRequest $request, Donativo $donativo): RedirectResponse
     {
         $validated = $request->validated();
@@ -65,6 +84,12 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo actualizado');
     }
 
+    /**
+     * Elimina un donativo.
+     *
+     * @param Donativo $donativo
+     * @return RedirectResponse
+     */
     public function destroy(Donativo $donativo): RedirectResponse
     {
         $donativo->delete();
@@ -72,6 +97,12 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo eliminado');
     }
 
+    /**
+     * Alterna el estado de pago de un donativo.
+     *
+     * @param Donativo $donativo
+     * @return RedirectResponse
+     */
     public function togglePagado(Donativo $donativo): RedirectResponse
     {
         $donativo->update(['pagado' => ! $donativo->pagado]);

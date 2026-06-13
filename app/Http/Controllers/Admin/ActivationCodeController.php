@@ -13,6 +13,11 @@ use Illuminate\Support\Str;
 
 class ActivationCodeController extends Controller
 {
+    /**
+     * Display the activation code form.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $codigo = ActivationCode::where('activo', true)
@@ -24,6 +29,12 @@ class ActivationCodeController extends Controller
         ]);
     }
 
+    /**
+     * Generate a new activation code.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function generar(Request $request): RedirectResponse
     {
         $codigo = strtoupper(Str::random(8));
@@ -36,6 +47,12 @@ class ActivationCodeController extends Controller
         return back()->with('success', 'Código generado correctamente');
     }
 
+    /**
+     * Update or replace the active activation code.
+     *
+     * @param ActivationCodeRequest $request
+     * @return RedirectResponse
+     */
     public function actualizar(ActivationCodeRequest $request): RedirectResponse
     {
         $validated = $request->validated();

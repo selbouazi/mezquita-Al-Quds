@@ -7,6 +7,11 @@ use Inertia\Response;
 
 class NoticiasController extends Controller
 {
+    /**
+     * Muestra el listado de noticias publicadas.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $noticias = Noticia::publicado()

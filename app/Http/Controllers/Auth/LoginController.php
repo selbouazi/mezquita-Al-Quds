@@ -10,11 +10,22 @@ use Inertia\Response;
 
 class LoginController extends Controller
 {
+    /**
+     * Muestra el formulario de inicio de sesión.
+     *
+     * @return Response
+     */
     public function showLoginForm(): Response
     {
         return inertia('Auth/Login');
     }
 
+    /**
+     * Maneja la solicitud de inicio de sesión.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -37,6 +48,12 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
+    /**
+     * Cierra la sesión del usuario.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

@@ -13,6 +13,11 @@ use Inertia\Response;
 
 class ImamController extends Controller
 {
+    /**
+     * Display the imam settings form.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $imam = ImamSetting::first();
@@ -22,6 +27,12 @@ class ImamController extends Controller
         ]);
     }
 
+    /**
+     * Store or update the imam information.
+     *
+     * @param ImamRequest $request
+     * @return RedirectResponse
+     */
     public function guardar(ImamRequest $request): RedirectResponse
     {
         $validated = $request->validated();

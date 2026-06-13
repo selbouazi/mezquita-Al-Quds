@@ -13,11 +13,17 @@ use Inertia\Response;
 
 class PublicController extends Controller
 {
+    /**
+     * Muestra la página de ubicación.
+     */
     public function ubicacion(): Response
     {
         return Inertia::render('Ubicacion');
     }
 
+    /**
+     * Muestra la página del imam.
+     */
     public function imam(): Response
     {
         $imam = ImamSetting::first();
@@ -25,6 +31,9 @@ class PublicController extends Controller
         return Inertia::render('Imam', ['imam' => $imam]);
     }
 
+    /**
+     * Muestra las notificaciones públicas.
+     */
     public function notifications(): Response
     {
         $notificaciones = Notification::activas()
@@ -36,6 +45,13 @@ class PublicController extends Controller
         ]);
     }
 
+    /**
+     * Cambia el idioma de la sesión.
+     *
+     * @param Request $request
+     * @param string $lang
+     * @return RedirectResponse
+     */
     public function switchLang(Request $request, string $lang): RedirectResponse
     {
         if (in_array($lang, ['es', 'ca', 'ar', 'en'])) {
@@ -45,6 +61,11 @@ class PublicController extends Controller
         return back();
     }
 
+    /**
+     * Devuelve los datos del imam en JSON.
+     *
+     * @return JsonResponse
+     */
     public function apiImam(): JsonResponse
     {
         $imam = ImamSetting::first();
@@ -55,6 +76,11 @@ class PublicController extends Controller
         return response()->json($imam);
     }
 
+    /**
+     * Devuelve las notificaciones activas en JSON.
+     *
+     * @return JsonResponse
+     */
     public function apiNotificaciones(): JsonResponse
     {
         $notificaciones = Notification::activas()

@@ -11,6 +11,11 @@ use Inertia\Response;
 
 class TiemposEsperaController extends Controller
 {
+    /**
+     * Display the waiting times settings form.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $tiemposDb = TiempoEspera::all()->keyBy('rezo');
@@ -29,6 +34,13 @@ class TiemposEsperaController extends Controller
         ]);
     }
 
+    /**
+     * Update the waiting time for a specific prayer.
+     *
+     * @param TiempoEsperaRequest $request
+     * @param string $rezo
+     * @return RedirectResponse
+     */
     public function update(TiempoEsperaRequest $request, string $rezo): RedirectResponse
     {
         $validated = $request->validated();

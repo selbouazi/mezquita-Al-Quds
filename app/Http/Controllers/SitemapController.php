@@ -6,6 +6,11 @@ use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
+    /**
+     * Genera el sitemap XML del sitio.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $pages = [

@@ -12,6 +12,12 @@ use Inertia\Response;
 
 class NotificationController extends Controller
 {
+    /**
+     * Display a listing of notifications.
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function index(Request $request): Response
     {
         $query = Notification::query()->orderBy('created_at', 'desc');
@@ -39,6 +45,12 @@ class NotificationController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created notification.
+     *
+     * @param NotificationRequest $request
+     * @return RedirectResponse
+     */
     public function store(NotificationRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -53,6 +65,13 @@ class NotificationController extends Controller
             ->with('success', 'Notificación creada correctamente');
     }
 
+    /**
+     * Update the specified notification.
+     *
+     * @param NotificationRequest $request
+     * @param Notification $notification
+     * @return RedirectResponse
+     */
     public function update(NotificationRequest $request, Notification $notification): RedirectResponse
     {
         $validated = $request->validated();
@@ -63,6 +82,12 @@ class NotificationController extends Controller
             ->with('success', 'Notificación actualizada correctamente');
     }
 
+    /**
+     * Remove the specified notification.
+     *
+     * @param Notification $notification
+     * @return RedirectResponse
+     */
     public function destroy(Notification $notification): RedirectResponse
     {
         $notification->delete();
@@ -71,6 +96,12 @@ class NotificationController extends Controller
             ->with('success', 'Notificación eliminada correctamente');
     }
 
+    /**
+     * Toggle notification active status.
+     *
+     * @param Notification $notification
+     * @return RedirectResponse
+     */
     public function toggle(Notification $notification): RedirectResponse
     {
         $notification->update(['activa' => !$notification->activa]);

@@ -12,6 +12,11 @@ use Inertia\Response;
 
 class NoticiasController extends Controller
 {
+    /**
+     * Muestra el listado de noticias.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         $noticias = Noticia::orderBy('fecha_publicacion', 'desc')->paginate(20);
@@ -21,6 +26,12 @@ class NoticiasController extends Controller
         ]);
     }
 
+    /**
+     * Almacena una nueva noticia.
+     *
+     * @param NoticiaRequest $request
+     * @return RedirectResponse
+     */
     public function store(NoticiaRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -40,6 +51,13 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia creada correctamente');
     }
 
+    /**
+     * Actualiza una noticia existente.
+     *
+     * @param NoticiaRequest $request
+     * @param Noticia $noticia
+     * @return RedirectResponse
+     */
     public function update(NoticiaRequest $request, Noticia $noticia): RedirectResponse
     {
         $validated = $request->validated();
@@ -62,6 +80,12 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia actualizada');
     }
 
+    /**
+     * Elimina una noticia.
+     *
+     * @param Noticia $noticia
+     * @return RedirectResponse
+     */
     public function destroy(Noticia $noticia): RedirectResponse
     {
         try {
