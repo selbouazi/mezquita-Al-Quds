@@ -21,7 +21,6 @@ export default function Codigos({ codigo }) {
             onSuccess: () => {},
             onError: (errors) => {
                 setError(t('activation', 'errorGenerate'));
-                console.error(errors);
             },
         });
     };
@@ -42,7 +41,6 @@ export default function Codigos({ codigo }) {
             },
             onError: (errors) => {
                 setError(t('activation', 'errorUpdate'));
-                console.error(errors);
             },
         });
     };
@@ -54,7 +52,7 @@ export default function Codigos({ codigo }) {
                 setCopiado(true);
                 setTimeout(() => setCopiado(false), 2000);
             } catch (err) {
-                console.error('Error al copiar:', err);
+                // Clipboard access may fail silently
             }
         }
     };
