@@ -19,19 +19,19 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Notificaciones
-    Route::get('/notificaciones', [NotificationController::class, 'index']);
+    Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notificaciones.index');
     Route::post('/notificaciones', [NotificationController::class, 'store']);
     Route::put('/notificaciones/{notification}', [NotificationController::class, 'update']);
     Route::delete('/notificaciones/{notification}', [NotificationController::class, 'destroy']);
     Route::post('/notificaciones/{notification}/toggle', [NotificationController::class, 'toggle']);
 
     // Codigos de activación
-    Route::get('/codigos', [ActivationCodeController::class, 'index']);
+    Route::get('/codigos', [ActivationCodeController::class, 'index'])->name('codigos.index');
     Route::post('/codigos/generar', [ActivationCodeController::class, 'generar']);
     Route::post('/codigos/actualizar', [ActivationCodeController::class, 'actualizar']);
 
     // Imam
-    Route::get('/imam', [ImamController::class, 'index']);
+    Route::get('/imam', [ImamController::class, 'index'])->name('imam.index');
     Route::post('/imam/guardar', [ImamController::class, 'guardar']);
 
     // Donativos

@@ -8,7 +8,7 @@ export default function Home({ prayerTimes }) {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={t('navbar', 'home')}>
+        <MainLayout title={t('navbar', 'home')} meta={{ title: t('meta.home.title'), description: t('meta.home.description') }}>
             {/* HERO */}
             <section className="relative pt-24 pb-20 fade bg-white/70 backdrop-blur-sm shadow-sm rounded-b-3xl">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#C9A22715,_transparent_70%)]" />

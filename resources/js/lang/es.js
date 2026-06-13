@@ -1,6 +1,30 @@
 const es = {
     meta: {
         description: 'Mezquita Al-Quds — Comunidad musulmana de El Vendrell. Horarios de oración, noticias y actividades.',
+        home: {
+            title: 'Mezquita Al‑Quds — Comunidad Musulmana de El Vendrell',
+            description: 'Mezquita Al‑Quds, comunidad musulmana en El Vendrell, Tarragona. Horarios de oración, clases de árabe y Corán, noticias y eventos.',
+        },
+        horarios: {
+            title: 'Horarios de Oración — Mezquita Al‑Quds',
+            description: 'Consulta los horarios de oración (Fajr, Dhuhr, Asr, Maghrib, Isha) de la Mezquita Al‑Quds en El Vendrell. Actualizados mensualmente.',
+        },
+        noticias: {
+            title: 'Noticias — Mezquita Al‑Quds',
+            description: 'Últimas noticias y actividades de la Mezquita Al‑Quds en El Vendrell. Clases, eventos comunitarios y más.',
+        },
+        imam: {
+            title: 'Imam — Mezquita Al‑Quds',
+            description: 'Conoce al Imam de la Mezquita Al‑Quds en El Vendrell. Biografía, trayectoria y labor comunitaria.',
+        },
+        ubicacion: {
+            title: 'Cómo Llegar — Mezquita Al‑Quds',
+            description: 'Dirección, mapa y contacto de la Mezquita Al‑Quds en El Vendrell, Tarragona. Cómo llegar y horarios de apertura.',
+        },
+        contacto: {
+            title: 'Contacto — Mezquita Al‑Quds',
+            description: 'Ponte en contacto con la Mezquita Al‑Quds. Envíanos un mensaje a través de nuestro formulario de contacto.',
+        },
     },
     navbar: {
         title: 'Mezquita Al‑Quds',

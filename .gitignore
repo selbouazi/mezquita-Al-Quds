@@ -26,4 +26,5 @@ Thumbs.db
 nul
 .vite/
 docs/*.pdf
+AGENTS.md
 **/*.pdf

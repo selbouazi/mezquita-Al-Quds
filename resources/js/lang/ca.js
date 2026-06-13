@@ -1,6 +1,30 @@
 const ca = {
     meta: {
         description: 'Mesquita Al-Quds — Comunitat musulmana del Vendrell. Horaris de pregària, notícies i activitats.',
+        home: {
+            title: 'Mesquita Al‑Quds — Comunitat Musulmana del Vendrell',
+            description: 'Mesquita Al‑Quds, comunitat musulmana al Vendrell, Tarragona. Horaris de pregària, classes d\'àrab i Alcorà, notícies i esdeveniments.',
+        },
+        horarios: {
+            title: 'Horaris de Pregària — Mesquita Al‑Quds',
+            description: 'Consulta els horaris de pregària (Fajr, Dhuhr, Asr, Maghrib, Isha) de la Mesquita Al‑Quds al Vendrell. Actualitzats mensualment.',
+        },
+        noticias: {
+            title: 'Notícies — Mesquita Al‑Quds',
+            description: 'Últimes notícies i activitats de la Mesquita Al‑Quds al Vendrell. Classes, esdeveniments comunitaris i més.',
+        },
+        imam: {
+            title: 'Imam — Mesquita Al‑Quds',
+            description: 'Coneix al Imam de la Mesquita Al‑Quds al Vendrell. Biografia, trajectòria i tasca comunitària.',
+        },
+        ubicacion: {
+            title: 'Com Arribar — Mesquita Al‑Quds',
+            description: 'Adreça, mapa i contacte de la Mesquita Al‑Quds al Vendrell, Tarragona. Com arribar i horaris d\'obertura.',
+        },
+        contacto: {
+            title: 'Contacte — Mesquita Al‑Quds',
+            description: 'Posa\'t en contacte amb la Mesquita Al‑Quds. Envia\'ns un missatge a través del nostre formulari de contacte.',
+        },
     },
     navbar: {
         title: 'Mesquita Al‑Quds',

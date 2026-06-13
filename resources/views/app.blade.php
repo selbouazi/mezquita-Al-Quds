@@ -14,6 +14,40 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cairo:wght@400;600;700&display=swap"
         rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
+    <link rel="alternate" hreflang="es" href="{{ url()->current() }}" />
+    <link rel="alternate" hreflang="ca" href="{{ url()->current() }}" />
+    <link rel="alternate" hreflang="en" href="{{ url()->current() }}" />
+    <link rel="alternate" hreflang="ar" href="{{ url()->current() }}" />
+
+    <script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "Mosque",
+    "name": "Mezquita Al-Quds",
+    "alternateName": ["Mesquita Al-Quds", "Al-Quds Mosque", "مسجد القدس"],
+    "description": "Comunidad musulmana de El Vendrell. Horarios de oraci\u00f3n, clases de \u00e1rabe y Cor\u00e1n.",
+    "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "El Vendrell",
+        "addressLocality": "Tarragona",
+        "addressCountry": "ES"
+    },
+    "telephone": "+34 123 456 789",
+    "email": "info@mezquita-alquds.cat",
+    "url": "https://mezquita-alquds.cat",
+    "sameAs": ["https://www.facebook.com/mezquitaalquds"],
+    "openingHoursSpecification": [
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Monday", "opens": "09:00", "closes": "21:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Tuesday", "opens": "09:00", "closes": "21:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "09:00", "closes": "21:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:00", "closes": "21:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "09:00", "closes": "21:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "14:00"},
+        {"@@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "10:00", "closes": "14:00"}
+    ]
+}
+    </script>
     @if(app()->environment('local'))
         <script type="module">
             import RefreshRuntime from 'http://localhost:5173/@react-refresh'

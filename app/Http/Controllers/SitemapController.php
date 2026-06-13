@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Noticia;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    /**
-     * Genera el sitemap XML del sitio.
-     *
-     * @return Response
-     */
     public function index(): Response
     {
         $pages = [
@@ -20,7 +16,12 @@ class SitemapController extends Controller
             ['loc' => '/imam', 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['loc' => '/ubicacion', 'changefreq' => 'yearly', 'priority' => '0.6'],
             ['loc' => '/contacto', 'changefreq' => 'yearly', 'priority' => '0.6'],
+            ['loc' => '/notificaciones', 'changefreq' => 'weekly', 'priority' => '0.5'],
         ];
+
+        $noticias = Noticia::publicado()
+            ->orderBy('fecha_publicacion', 'desc')
+            ->get(['id', 'updated_at', 'fecha_publicacion']);
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
@@ -28,6 +29,7 @@ class SitemapController extends Controller
         foreach ($pages as $page) {
             $xml .= "  <url>\n";
             $xml .= "    <loc>" . url($page['loc']) . "</loc>\n";
+            $xml .= "    <lastmod>" . now()->toDateString() . "</lastmod>\n";
             $xml .= "    <changefreq>{$page['changefreq']}</changefreq>\n";
             $xml .= "    <priority>{$page['priority']}</priority>\n";
             $xml .= "  </url>\n";

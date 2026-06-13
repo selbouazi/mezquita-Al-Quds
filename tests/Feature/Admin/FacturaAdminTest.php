@@ -62,7 +62,7 @@ class FacturaAdminTest extends TestCase
         Storage::fake('public');
         $factura = Factura::create(['titulo' => 'Old', 'fecha' => now()]);
 
-        $response = $this->actingAs($this->admin())->post('/admin/facturas/'.$factura->id, [
+        $response = $this->actingAs($this->admin())->put('/admin/facturas/'.$factura->id, [
             'titulo' => 'Updated',
             'fecha' => now()->format('Y-m-d'),
         ]);

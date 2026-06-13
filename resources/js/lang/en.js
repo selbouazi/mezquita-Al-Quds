@@ -1,6 +1,30 @@
 const en = {
     meta: {
         description: 'Al-Quds Mosque — Muslim community of El Vendrell. Prayer times, news and activities.',
+        home: {
+            title: 'Al‑Quds Mosque — Muslim Community of El Vendrell',
+            description: 'Al‑Quds Mosque, Muslim community in El Vendrell, Tarragona. Prayer times, Arabic and Quran classes, news and events.',
+        },
+        horarios: {
+            title: 'Prayer Times — Al‑Quds Mosque',
+            description: 'Check the prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) at Al‑Quds Mosque in El Vendrell. Updated monthly.',
+        },
+        noticias: {
+            title: 'News — Al‑Quds Mosque',
+            description: 'Latest news and activities from Al‑Quds Mosque in El Vendrell. Classes, community events and more.',
+        },
+        imam: {
+            title: 'Imam — Al‑Quds Mosque',
+            description: 'Meet the Imam of Al‑Quds Mosque in El Vendrell. Biography, background and community work.',
+        },
+        ubicacion: {
+            title: 'Location — Al‑Quds Mosque',
+            description: 'Address, map and contact information for Al‑Quds Mosque in El Vendrell, Tarragona.',
+        },
+        contacto: {
+            title: 'Contact — Al‑Quds Mosque',
+            description: 'Get in touch with Al‑Quds Mosque. Send us a message through our contact form.',
+        },
     },
     navbar: {
         title: 'Al‑Quds Mosque',

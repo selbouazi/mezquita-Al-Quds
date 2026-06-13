@@ -11,7 +11,10 @@ export function useTranslation() {
     const dict = langs[locale] ?? langs['es'];
 
     function t(section, key) {
-        return dict[section]?.[key] ?? `${section}.${key}`;
+        const resolve = (obj, path) => path.split('.').reduce((acc, part) => acc?.[part], obj);
+        return key
+            ? resolve(dict[section], key) ?? `${section}.${key}`
+            : resolve(dict, section) ?? section;
     }
 
     return { t, locale, isRTL: locale === 'ar' };

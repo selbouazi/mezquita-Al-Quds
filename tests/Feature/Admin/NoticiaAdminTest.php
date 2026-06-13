@@ -65,7 +65,7 @@ class NoticiaAdminTest extends TestCase
     {
         $noticia = Noticia::create(['titulo' => 'Old', 'contenido' => 'Old content', 'publicado' => true, 'fecha_publicacion' => now()]);
 
-        $response = $this->actingAs($this->admin())->post('/admin/noticias/'.$noticia->id, [
+        $response = $this->actingAs($this->admin())->put('/admin/noticias/'.$noticia->id, [
             'titulo' => 'Updated',
             'contenido' => 'Updated content',
             'publicado' => false,

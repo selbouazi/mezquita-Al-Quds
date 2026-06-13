@@ -57,7 +57,7 @@ class ClaseAdminTest extends TestCase
     {
         $clase = Clase::create(['titulo' => 'Old', 'descripcion' => 'Old desc', 'horarios' => 'Mon 10:00']);
 
-        $response = $this->actingAs($this->admin())->post('/admin/clases/'.$clase->id, [
+        $response = $this->actingAs($this->admin())->put('/admin/clases/'.$clase->id, [
             'titulo' => 'Updated',
             'descripcion' => 'Updated desc',
             'horarios' => 'Wed 18:00',
