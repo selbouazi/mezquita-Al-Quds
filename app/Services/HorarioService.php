@@ -21,7 +21,9 @@ class HorarioService
                 return self::emptyTimes();
             }
             
-            return self::formatHorario($horario);
+            $formatted = self::formatHorario($horario);
+            unset($formatted['fecha_hijri']);
+            return $formatted;
         });
     }
     
