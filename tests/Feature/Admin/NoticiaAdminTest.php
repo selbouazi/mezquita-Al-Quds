@@ -59,4 +59,20 @@ class NoticiaAdminTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseMissing('noticias', ['id' => $noticia->id]);
     }
+
+    /** @test */
+    public function it_updates_noticia()
+    {
+        $noticia = Noticia::create(['titulo' => 'Old', 'contenido' => 'Old content', 'publicado' => true, 'fecha_publicacion' => now()]);
+
+        $response = $this->actingAs($this->admin())->post('/admin/noticias/'.$noticia->id, [
+            'titulo' => 'Updated',
+            'contenido' => 'Updated content',
+            'publicado' => false,
+            'fecha_publicacion' => now()->format('Y-m-d'),
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('noticias', ['titulo' => 'Updated']);
+    }
 }

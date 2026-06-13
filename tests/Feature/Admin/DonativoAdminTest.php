@@ -61,4 +61,27 @@ class DonativoAdminTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseMissing('donativos', ['id' => $donativo->id]);
     }
+
+    /** @test */
+    public function it_updates_donativo()
+    {
+        $donativo = Donativo::create(['nombre' => 'Old', 'cantidad' => 100, 'año' => date('Y')]);
+
+        $response = $this->actingAs($this->admin())->put('/admin/donativos/'.$donativo->id, [
+            'nombre' => 'Updated',
+            'cantidad' => 200,
+            'año' => date('Y'),
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('donativos', ['nombre' => 'Updated']);
+    }
+
+    /** @test */
+    public function it_validates_donativo_on_create()
+    {
+        $response = $this->actingAs($this->admin())->post('/admin/donativos', []);
+
+        $response->assertSessionHasErrors(['nombre', 'cantidad', 'año']);
+    }
 }

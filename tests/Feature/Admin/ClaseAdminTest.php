@@ -33,8 +33,8 @@ class ClaseAdminTest extends TestCase
         $response = $this->actingAs($this->admin())->post('/admin/clases', [
             'titulo' => 'Arabic Class',
             'descripcion' => 'Learn Arabic',
-            'dia_semana' => 'tuesday',
-            'hora' => '18:00',
+            'horarios' => 'Tue 18:00',
+            'profesor' => 'Teacher',
         ]);
 
         $response->assertRedirect();
@@ -50,5 +50,28 @@ class ClaseAdminTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('clases', ['id' => $clase->id]);
+    }
+
+    /** @test */
+    public function it_updates_clase()
+    {
+        $clase = Clase::create(['titulo' => 'Old', 'descripcion' => 'Old desc', 'horarios' => 'Mon 10:00']);
+
+        $response = $this->actingAs($this->admin())->post('/admin/clases/'.$clase->id, [
+            'titulo' => 'Updated',
+            'descripcion' => 'Updated desc',
+            'horarios' => 'Wed 18:00',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('clases', ['titulo' => 'Updated']);
+    }
+
+    /** @test */
+    public function it_validates_clase_on_create()
+    {
+        $response = $this->actingAs($this->admin())->post('/admin/clases', []);
+
+        $response->assertSessionHasErrors(['titulo']);
     }
 }

@@ -20,7 +20,7 @@ class FacturaRequest extends FormRequest
             'notas' => 'nullable|string',
         ];
 
-        if ($this->isMethod('POST')) {
+        if ($this->isMethod('POST') && $this->route()->getActionMethod() === 'store') {
             $rules['archivo_pdf'] = 'required|file|mimes:pdf|max:10240';
         }
 
