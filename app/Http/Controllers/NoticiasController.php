@@ -7,11 +7,6 @@ use Inertia\Response;
 
 class NoticiasController extends Controller
 {
-    /**
-     * Muestra el listado de noticias publicadas.
-     *
-     * @return Response
-     */
     public function index(): Response
     {
         $noticias = Noticia::publicado()
@@ -20,6 +15,17 @@ class NoticiasController extends Controller
 
         return inertia('Noticias', [
             'noticias' => $noticias,
+        ]);
+    }
+
+    public function show(Noticia $noticia): Response
+    {
+        if (! $noticia->publicado) {
+            abort(404);
+        }
+
+        return inertia('NoticiaShow', [
+            'noticia' => $noticia,
         ]);
     }
 }

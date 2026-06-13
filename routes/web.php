@@ -89,6 +89,7 @@ Route::get('/horarios', function () {
 });
 
 Route::get('/noticias', [NoticiasController::class, 'index']);
+Route::get('/noticias/{noticia}', [NoticiasController::class, 'show']);
 Route::get('/contacto', fn () => Inertia::render('Contacto'));
 Route::post('/contacto', [ContactController::class, 'store'])
     ->middleware('throttle:5,1');
