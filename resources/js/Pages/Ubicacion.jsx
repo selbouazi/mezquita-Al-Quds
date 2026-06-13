@@ -40,14 +40,6 @@ export default function Ubicacion({ ubicacion }) {
                                 <p className="text-sm text-gray-500">{t('ubicacion', 'address')}</p>
                                 <p className="text-[#0F5132] font-medium">{address}</p>
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">{t('ubicacion', 'latitude')}</p>
-                                <p className="text-[#0F5132] font-medium">{lat}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500">{t('ubicacion', 'longitude')}</p>
-                                <p className="text-[#0F5132] font-medium">{lng}</p>
-                            </div>
                             {ubicacion?.telefono && (
                                 <div>
                                     <p className="text-sm text-gray-500">{t('ubicacion', 'phone')}</p>
