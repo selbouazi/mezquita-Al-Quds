@@ -6,9 +6,11 @@ export default function Noticias({ noticias }) {
     const { t, locale } = useTranslation();
 
     return (
-        <MainLayout title={t('noticias', 'title')}>
+        <MainLayout title={t('noticias', 'title')}
+            description="Noticias y comunicados de la Mezquita Al‑Quds de El Vendrell. Mantente informado sobre actividades, eventos y anuncios de la comunidad."
+            canonical="/noticias">
             <section className="pt-28 pb-16 max-w-7xl mx-auto px-6">
-                <h1 className="text-3xl font-bold text-[#0F5132] mb-4">{t('noticias', 'title')}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#0F5132] mb-4">{t('noticias', 'title')}</h1>
                 <p className="text-gray-600 mb-8">{t('noticias', 'subtitle')}</p>
 
                 {noticias.data.length === 0 ? (
@@ -24,15 +26,16 @@ export default function Noticias({ noticias }) {
                                         src={`/storage/${noticia.imagen}`} 
                                         alt={noticia.titulo}
                                         className="w-full h-48 sm:h-64 object-cover"
+                                        loading="lazy"
                                     />
                                 )}
-                                <div className="p-6">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className="text-sm text-gray-500">
+                                <div className="p-4 sm:p-6">
+                                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                                        <span className="text-xs sm:text-sm text-gray-500">
                                             {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString(locale === 'ar' ? 'ar-EG' : locale === 'ca' ? 'ca-ES' : locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
                                         </span>
                                     </div>
-                                    <h2 className="text-xl sm:text-2xl font-bold text-[#0F5132] mb-3">
+                                    <h2 className="text-lg sm:text-2xl font-bold text-[#0F5132] mb-3">
                                         {noticia.titulo}
                                     </h2>
                                     <p className="text-gray-600 line-clamp-3">
@@ -45,7 +48,7 @@ export default function Noticias({ noticias }) {
                 )}
 
                 {noticias.last_page > 1 && (
-                    <div className="flex justify-center gap-2 mt-8">
+                    <div className="flex justify-center gap-2 mt-8 flex-wrap">
                         {noticias.prev_page_url && (
                             <Link href={noticias.prev_page_url} className="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
                                 ← {t('common', 'previous')}

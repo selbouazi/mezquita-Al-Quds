@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TiempoEsperaRequest;
 use App\Models\TiempoEspera;
 use App\Services\TiempoEsperaService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 
 class TiemposEsperaController extends Controller
@@ -29,11 +29,9 @@ class TiemposEsperaController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $rezo): RedirectResponse
+    public function update(TiempoEsperaRequest $request, string $rezo): RedirectResponse
     {
-        $validated = $request->validate([
-            'minutos' => 'required|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         TiempoEspera::updateOrCreate(
             ['rezo' => $rezo],

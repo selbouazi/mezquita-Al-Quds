@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
 
+const YEAR = new Date().getFullYear();
+
 export default function Footer() {
     const { t } = useTranslation();
 
@@ -11,7 +13,7 @@ export default function Footer() {
 
                 {/* LOGO + IDENTIDAD */}
                 <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-4">
-                    <img src="/img/mezquitaAlquds_logo3.png" className="h-20 brightness-0 invert" alt="Logo" />
+                    <img src="/img/mezquitaAlquds_logo3.png" className="h-20 brightness-0 invert" alt={t('footer', 'title')} loading="lazy" />
                     <div>
                         <p className="text-lg font-semibold tracking-wide">{t('footer', 'title')}</p>
                         <p className="text-sm text-[#C9A227]">{t('footer', 'subtitle')}</p>
@@ -41,7 +43,7 @@ export default function Footer() {
             </div>
 
             <div className="mt-16 border-t border-white/10 pt-6 text-center text-white/60 text-sm">
-                © {new Date().getFullYear()} Mezquita Al‑Quds — {t('footer', 'rights')}
+                © {YEAR} Mezquita Al‑Quds — {t('footer', 'rights')}
             </div>
         </footer>
     );

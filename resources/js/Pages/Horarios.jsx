@@ -90,7 +90,9 @@ export default function Horarios({ horariosMes, year, month }) {
     }
 
     return (
-        <MainLayout title={t('navbar', 'prayers')}>
+        <MainLayout title={t('navbar', 'prayers')}
+            description="Horarios de oración (salat) para la Mezquita Al‑Quds de El Vendrell. Consulta los tiempos de Fajr, Dhuhr, Asr, Maghrib e Isha."
+            canonical="/horarios">
             <section className="pt-28 pb-16 max-w-3xl mx-auto px-4 sm:px-6">
 
                 {/* ── CABECERA MES ── */}

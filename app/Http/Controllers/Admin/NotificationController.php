@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\NotificationRequest;
 use App\Models\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,16 +39,9 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(NotificationRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'nullable|string|max:255',
-            'mensaje' => 'required|string',
-            'prioridad' => 'nullable|in:muy_alta,alta,normal,baja',
-            'activa' => 'nullable|boolean',
-            'fecha_publicacion' => 'nullable|date',
-            'fecha_expiracion' => 'nullable|date|after:fecha_publicacion',
-        ]);
+        $validated = $request->validated();
 
         $validated['prioridad'] = $validated['prioridad'] ?? 'normal';
         $validated['activa'] = $validated['activa'] ?? true;
@@ -59,16 +53,9 @@ class NotificationController extends Controller
             ->with('success', 'Notificación creada correctamente');
     }
 
-    public function update(Request $request, Notification $notification): RedirectResponse
+    public function update(NotificationRequest $request, Notification $notification): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'nullable|string|max:255',
-            'mensaje' => 'required|string',
-            'prioridad' => 'nullable|in:muy_alta,alta,normal,baja',
-            'activa' => 'nullable|boolean',
-            'fecha_publicacion' => 'nullable|date',
-            'fecha_expiracion' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
         $notification->update($validated);
 

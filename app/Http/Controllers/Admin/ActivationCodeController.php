@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ActivationCodeRequest;
 use App\Models\ActivationCode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,12 +36,9 @@ class ActivationCodeController extends Controller
         return back()->with('success', 'Código generado correctamente');
     }
 
-    public function actualizar(Request $request): RedirectResponse
+    public function actualizar(ActivationCodeRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'codigo' => 'required|string|min:8|max:100',
-        ]);
-
+        $validated = $request->validated();
         $validated['codigo'] = strtoupper($validated['codigo']);
 
         ActivationCode::where('activo', true)->update(['activo' => false]);

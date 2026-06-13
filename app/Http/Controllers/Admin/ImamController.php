@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ImamRequest;
 use App\Models\ImamSetting;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -22,13 +22,9 @@ class ImamController extends Controller
         ]);
     }
 
-    public function guardar(Request $request): RedirectResponse
+    public function guardar(ImamRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'nombre' => 'nullable|string|max:255',
-            'descripcion' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $imam = ImamSetting::firstOrNew([]);
 

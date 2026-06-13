@@ -80,7 +80,7 @@ export default function Donativos() {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{stats?.total || 0}</p>
                         <p className="text-sm text-gray-600">{t('adminDonativos', 'total')}</p>
@@ -121,7 +121,8 @@ export default function Donativos() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                {/* Desktop table */}
+                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50">
@@ -135,59 +136,28 @@ export default function Donativos() {
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {filteredDonativos.length === 0 ? (
-                                    <tr>
-                                             <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
-                                             {t('donativos', 'noDonations')}
-                                         </td>
-                                    </tr>
+                                    <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">{t('donativos', 'noDonations')}</td></tr>
                                 ) : (
                                     filteredDonativos.map((donativo) => (
                                         <tr key={donativo.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
-                                                <div>
-                                                    <p className="font-medium text-gray-900">{donativo.nombre}</p>
-                                                    {donativo.nombre_arabe && (
-                                                        <p className="text-xs text-gray-500">{donativo.nombre_arabe}</p>
-                                                    )}
-                                                </div>
+                                                <p className="font-medium text-gray-900">{donativo.nombre}</p>
+                                                {donativo.nombre_arabe && <p className="text-xs text-gray-500">{donativo.nombre_arabe}</p>}
                                             </td>
-                                            <td className="px-4 py-3 font-semibold text-[#0F5132]">
-                                                {parseFloat(donativo.cantidad).toFixed(2)} €
-                                            </td>
+                                            <td className="px-4 py-3 font-semibold text-[#0F5132]">{parseFloat(donativo.cantidad).toFixed(2)} €</td>
                                             <td className="px-4 py-3">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                    donativo.pagado 
-                                                        ? 'bg-green-100 text-green-800' 
-                                                        : 'bg-yellow-100 text-yellow-800'
-                                                }`}>
-                                                     {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                    {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3 text-sm text-gray-500">
-                                                {new Date(donativo.created_at).toLocaleDateString('es')}
-                                            </td>
+                                            <td className="px-4 py-3 text-sm text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Link
-                                                         href={`/admin/donativos/${donativo.id}/toggle`}
-                                                         method="post"
-                                                         className="px-2 py-1 text-xs rounded hover:bg-gray-100"
-                                                     >
-                                                         {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
-                                                     </Link>
-                                                    <button
-                                                         onClick={() => openEdit(donativo)}
-                                                         className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                     >
-                                                         {t('common', 'edit')}
-                                                     </button>
-                                                     <Link
-                                                         href={`/admin/donativos/${donativo.id}`}
-                                                         method="delete"
-                                                         className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
-                                                     >
-                                                         {t('common', 'delete')}
-                                                     </Link>
+                                                    <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="px-2 py-1 text-xs rounded hover:bg-gray-100">
+                                                        {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
+                                                    </Link>
+                                                    <button onClick={() => openEdit(donativo)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                                                    <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -196,30 +166,61 @@ export default function Donativos() {
                             </tbody>
                         </table>
                     </div>
-
-                    {donativos.last_page > 1 && (
-                        <div className="flex justify-center gap-2 py-4 border-t">
-                            {donativos.prev_page_url && (
-                                 <Link href={donativos.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                     ← {t('common', 'previous')}
-                                 </Link>
-                            )}
-                            <span className="px-3 py-2 text-gray-600 text-sm">
-                                {donativos.current_page} / {donativos.last_page}
-                            </span>
-                            {donativos.next_page_url && (
-                                 <Link href={donativos.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                     {t('common', 'next')} →
-                                 </Link>
-                            )}
-                        </div>
-                    )}
                 </div>
+
+                {/* Mobile cards */}
+                {filteredDonativos.length === 0 ? (
+                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">{t('donativos', 'noDonations')}</div>
+                ) : (
+                    <div className="md:hidden space-y-3">
+                        {filteredDonativos.map((donativo) => (
+                            <div key={donativo.id} className="bg-white rounded-xl shadow-sm border p-4">
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="min-w-0 flex-1 mr-2">
+                                        <p className="font-semibold text-gray-900 text-sm">{donativo.nombre}</p>
+                                        {donativo.nombre_arabe && <p className="text-xs text-gray-500" dir="rtl">{donativo.nombre_arabe}</p>}
+                                    </div>
+                                    <span className="font-bold text-[#0F5132] whitespace-nowrap">{parseFloat(donativo.cantidad).toFixed(2)} €</span>
+                                </div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${donativo.pagado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                        {donativo.pagado ? t('adminDonativos', 'paid') : t('adminDonativos', 'pending')}
+                                    </span>
+                                    <span className="text-xs text-gray-500">{new Date(donativo.created_at).toLocaleDateString('es')}</span>
+                                </div>
+                                <div className="flex gap-2 pt-3 border-t border-gray-100">
+                                    <Link href={`/admin/donativos/${donativo.id}/toggle`} method="post" className="flex-1 px-3 py-3 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 min-h-[44px] text-center block">
+                                        {donativo.pagado ? t('adminDonativos', 'pending') : t('adminDonativos', 'paid')}
+                                    </Link>
+                                    <button onClick={() => openEdit(donativo)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
+                                        {t('common', 'edit')}
+                                    </button>
+                                    <Link href={`/admin/donativos/${donativo.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                                        {t('common', 'delete')}
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Pagination */}
+                {donativos.last_page > 1 && (
+                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        {donativos.prev_page_url && (
+                            <Link href={donativos.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">← {t('common', 'previous')}</Link>
+                        )}
+                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">{donativos.current_page} / {donativos.last_page}</span>
+                        {donativos.next_page_url && (
+                            <Link href={donativos.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">{t('common', 'next')} →</Link>
+                        )}
+                    </div>
+                )}
             </div>
 
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg">
+                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
                              {editando ? t('adminDonativos', 'editTitle') : t('donativos', 'addNew')}
                         </h2>

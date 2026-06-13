@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\NoticiaRequest;
 use App\Models\Noticia;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
@@ -21,15 +21,9 @@ class NoticiasController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(NoticiaRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'imagen' => 'nullable|image|max:2048',
-            'fecha_publicacion' => 'required|date',
-            'publicado' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('imagen')) {
             try {
@@ -46,15 +40,9 @@ class NoticiasController extends Controller
         return redirect()->back()->with('success', 'Noticia creada correctamente');
     }
 
-    public function update(Request $request, Noticia $noticia): RedirectResponse
+    public function update(NoticiaRequest $request, Noticia $noticia): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'imagen' => 'nullable|image|max:2048',
-            'fecha_publicacion' => 'required|date',
-            'publicado' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('imagen')) {
             try {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DonativoRequest;
 use App\Models\Donativo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,32 +47,18 @@ class DonativosController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(DonativoRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'nombre_arabe' => 'nullable|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'cantidad' => 'required|numeric|min:0',
-            'pagado' => 'boolean',
-            'año' => 'required|integer|min:2000|max:2100',
-            'notas' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         Donativo::create($validated);
 
         return redirect()->back()->with('success', 'Donativo creado correctamente');
     }
 
-    public function update(Request $request, Donativo $donativo): RedirectResponse
+    public function update(DonativoRequest $request, Donativo $donativo): RedirectResponse
     {
-        $validated = $request->validate([
-            'nombre_arabe' => 'nullable|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'cantidad' => 'required|numeric|min:0',
-            'pagado' => 'boolean',
-            'año' => 'required|integer|min:2000|max:2100',
-            'notas' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $donativo->update($validated);
 

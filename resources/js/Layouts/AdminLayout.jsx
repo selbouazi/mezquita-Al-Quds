@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 
 const LANGUAGES = [
@@ -41,6 +41,17 @@ export default function AdminLayout({ title, children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [langOpen, setLangOpen] = useState(false);
 
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setSidebarOpen(false);
+                setLangOpen(false);
+            }
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
@@ -49,7 +60,7 @@ export default function AdminLayout({ title, children }) {
                     {/* Logo */}
                     <div className="p-6 border-b border-white/10">
                         <Link href="/" className="flex items-center gap-3">
-                            <img src="/img/mezquitaAlquds_logo2.png" className="h-10" alt="Logo" />
+                            <img src="/img/mezquitaAlquds_logo2.png" className="h-10" alt={t('navbar', 'title')} />
                             <div>
                                 <p className="text-xs text-white/70">{t('navbar', 'subtitle')}</p>
                                 <p className="font-bold text-lg">Al‑Quds</p>
@@ -96,11 +107,13 @@ export default function AdminLayout({ title, children }) {
             <div className="flex-1 lg:ml-64">
                 {/* Header */}
                 <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-                    <div className="flex items-center justify-between px-6 py-4">
+                        <div className="flex items-center justify-between px-4 lg:px-6 py-4">
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
                                 className="lg:hidden p-2 text-gray-600 hover:text-[#0F5132]"
+                                aria-label={t('admin', 'toggleSidebar')}
+                                aria-expanded={sidebarOpen}
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -116,8 +129,10 @@ export default function AdminLayout({ title, children }) {
                                 <button
                                     className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50 transition"
                                     onClick={() => setLangOpen(v => !v)}
+                                    aria-label={t('navbar', 'selectLang')}
+                                    aria-expanded={langOpen}
                                 >
-                                    <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} />
+                                    <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale === 'es' ? 'Español' : locale === 'ca' ? 'Català' : locale === 'en' ? 'English' : 'العربية'} />
                                     <span className="text-sm font-medium uppercase">{locale}</span>
                                 </button>
                                 {langOpen && (
@@ -148,7 +163,7 @@ export default function AdminLayout({ title, children }) {
                 </header>
 
                 {/* Page Content */}
-                <main className="p-6">
+                <main id="main-content" className="p-3 sm:p-6">
                     {children}
                 </main>
             </div>

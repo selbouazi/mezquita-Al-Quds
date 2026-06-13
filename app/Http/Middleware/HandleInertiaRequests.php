@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\TiempoEspera;
+use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -12,9 +12,7 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request): array
     {
-        $tiemposEspera = TiempoEspera::all()
-            ->pluck('minutos', 'rezo')
-            ->toArray();
+        $tiemposEspera = TiempoEsperaService::getTiemposEspera();
 
         return array_merge(parent::share($request), [
             'locale' => app()->getLocale(),

@@ -8,7 +8,9 @@ export default function Home({ prayerTimes }) {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={t('navbar', 'home')}>
+        <MainLayout title={t('navbar', 'home')}
+            description="Mezquita Al‑Quds en El Vendrell, Tarragona. Horarios de oración, clases de árabe y Corán, comunidad musulmana abierta a todos."
+            canonical="/">
             {/* HERO */}
             <section className="relative pt-24 pb-20 fade bg-white/70 backdrop-blur-sm shadow-sm rounded-b-3xl">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#C9A22715,_transparent_70%)]" />
@@ -33,7 +35,7 @@ export default function Home({ prayerTimes }) {
                     </div>
                     <div className="flex justify-center">
                         <div className="bg-white border border-[#C9A227]/40 shadow-xl rounded-3xl p-10 w-full max-w-sm text-center hover:shadow-2xl hover:-translate-y-1 transition">
-                            <img src="/img/mezquitaAlquds_logo.png" className="h-32 mx-auto mb-4" alt="Logo" />
+                            <img src="/img/mezquitaAlquds_logo.png" className="h-32 mx-auto mb-4" alt={t('navbar', 'title')} loading="lazy" />
                             <p className="text-2xl text-[#0F5132] font-semibold mb-1">مسجد القدس</p>
                             <p className="text-xs text-gray-500">{t('home', 'card_subtitle')}</p>
                         </div>

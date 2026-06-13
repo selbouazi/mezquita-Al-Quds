@@ -79,7 +79,7 @@ export default function Clases() {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{clases.length}</p>
                         <p className="text-sm text-gray-600">{t('clases', 'total')}</p>
@@ -88,13 +88,14 @@ export default function Clases() {
                         <p className="text-2xl font-bold text-green-600">{activeClases.length}</p>
                         <p className="text-sm text-gray-600">{t('clases', 'active')}</p>
                     </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border col-span-2 md:col-span-1">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-gray-400">{inactiveClases.length}</p>
                         <p className="text-sm text-gray-600">{t('clases', 'inactive')}</p>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                {/* Desktop table */}
+                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50">
@@ -109,59 +110,30 @@ export default function Clases() {
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {clases.length === 0 ? (
-                                    <tr>
-                                             <td colSpan="6" className="px-4 py-8 text-center text-gray-500">
-                                             {t('clases', 'noClases')}
-                                         </td>
-                                    </tr>
+                                    <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">{t('clases', 'noClases')}</td></tr>
                                 ) : (
                                     clases.map((clase) => (
                                         <tr key={clase.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
                                                 <p className="font-medium text-gray-900">{clase.titulo}</p>
-                                                {clase.descripcion && (
-                                                    <p className="text-xs text-gray-500 line-clamp-1">{clase.descripcion}</p>
-                                                )}
+                                                {clase.descripcion && <p className="text-xs text-gray-500 line-clamp-1">{clase.descripcion}</p>}
                                             </td>
                                             <td className="px-4 py-3">
                                                 {clase.nivel ? (
-                                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                                                        {clase.nivel}
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-gray-400">-</span>
-                                                )}
+                                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{clase.nivel}</span>
+                                                ) : <span className="text-gray-400">-</span>}
                                             </td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">
-                                                {clase.horarios || '-'}
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">
-                                                {clase.profesor || '-'}
-                                            </td>
+                                            <td className="px-4 py-3 text-sm text-gray-600">{clase.horarios || '-'}</td>
+                                            <td className="px-4 py-3 text-sm text-gray-600">{clase.profesor || '-'}</td>
                                             <td className="px-4 py-3 text-center">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                    clase.activo 
-                                                        ? 'bg-green-100 text-green-800' 
-                                                        : 'bg-gray-100 text-gray-600'
-                                                }`}>
-                                                     {clase.activo ? t('clases', 'active') : t('clases', 'inactive')}
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${clase.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                                    {clase.activo ? t('clases', 'active') : t('clases', 'inactive')}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <button
-                                                        onClick={() => openEdit(clase)}
-                                                        className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                    >
-                                                        {t('common', 'edit')}
-                                                    </button>
-                                                    <Link
-                                                        href={`/admin/clases/${clase.id}`}
-                                                        method="delete"
-                                                        className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
-                                                    >
-                                                        {t('common', 'delete')}
-                                                    </Link>
+                                                    <button onClick={() => openEdit(clase)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                                                    <Link href={`/admin/clases/${clase.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -171,6 +143,40 @@ export default function Clases() {
                         </table>
                     </div>
                 </div>
+
+                {/* Mobile cards */}
+                {clases.length === 0 ? (
+                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">{t('clases', 'noClases')}</div>
+                ) : (
+                    <div className="md:hidden space-y-3">
+                        {clases.map((clase) => (
+                            <div key={clase.id} className="bg-white rounded-xl shadow-sm border p-4">
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="min-w-0 flex-1 mr-2">
+                                        <h3 className="font-semibold text-gray-900 text-sm">{clase.titulo}</h3>
+                                        {clase.descripcion && <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{clase.descripcion}</p>}
+                                    </div>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${clase.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                        {clase.activo ? t('clases', 'active') : t('clases', 'inactive')}
+                                    </span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+                                    {clase.nivel && <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{clase.nivel}</span>}
+                                    {clase.profesor && <span>👤 {clase.profesor}</span>}
+                                    {clase.horarios && <span>🕐 {clase.horarios}</span>}
+                                </div>
+                                <div className="flex gap-2 pt-3 border-t border-gray-100">
+                                    <button onClick={() => openEdit(clase)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
+                                        {t('common', 'edit')}
+                                    </button>
+                                    <Link href={`/admin/clases/${clase.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                                        {t('common', 'delete')}
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {showModal && (

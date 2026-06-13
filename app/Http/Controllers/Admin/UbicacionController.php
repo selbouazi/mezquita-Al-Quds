@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UbicacionRequest;
 use App\Models\Ubicacion;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 
 class UbicacionController extends Controller
@@ -19,16 +19,9 @@ class UbicacionController extends Controller
         ]);
     }
 
-    public function guardar(Request $request): RedirectResponse
+    public function guardar(UbicacionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'direccion' => 'required|string|max:500',
-            'latitud' => 'nullable|string|max:50',
-            'longitud' => 'nullable|string|max:50',
-            'telefono' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'whatsapp' => 'nullable|string|max:50',
-        ]);
+        $validated = $request->validated();
 
         $ubicacion = Ubicacion::first();
 

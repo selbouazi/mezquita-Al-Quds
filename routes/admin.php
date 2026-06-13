@@ -14,62 +14,51 @@ use App\Http\Controllers\Admin\UbicacionController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Notificaciones
-    Route::get('/notificaciones', [NotificationController::class, 'index']);
-    Route::post('/notificaciones', [NotificationController::class, 'store']);
-    Route::put('/notificaciones/{notification}', [NotificationController::class, 'update']);
-    Route::delete('/notificaciones/{notification}', [NotificationController::class, 'destroy']);
-    Route::post('/notificaciones/{notification}/toggle', [NotificationController::class, 'toggle']);
+    Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notificaciones.index');
+    Route::post('/notificaciones', [NotificationController::class, 'store'])->name('notificaciones.store');
+    Route::put('/notificaciones/{notification}', [NotificationController::class, 'update'])->name('notificaciones.update');
+    Route::delete('/notificaciones/{notification}', [NotificationController::class, 'destroy'])->name('notificaciones.destroy');
+    Route::post('/notificaciones/{notification}/toggle', [NotificationController::class, 'toggle'])->name('notificaciones.toggle');
 
-    // Codigos de activación
-    Route::get('/codigos', [ActivationCodeController::class, 'index']);
-    Route::post('/codigos/generar', [ActivationCodeController::class, 'generar']);
-    Route::post('/codigos/actualizar', [ActivationCodeController::class, 'actualizar']);
+    Route::get('/codigos', [ActivationCodeController::class, 'index'])->name('codigos.index');
+    Route::post('/codigos/generar', [ActivationCodeController::class, 'generar'])->name('codigos.generar');
+    Route::post('/codigos/actualizar', [ActivationCodeController::class, 'actualizar'])->name('codigos.actualizar');
 
-    // Imam
-    Route::get('/imam', [ImamController::class, 'index']);
-    Route::post('/imam/guardar', [ImamController::class, 'guardar']);
+    Route::get('/imam', [ImamController::class, 'index'])->name('imam.index');
+    Route::post('/imam/guardar', [ImamController::class, 'guardar'])->name('imam.guardar');
 
-    // Donativos
-    Route::get('/donativos', [DonativosController::class, 'index']);
-    Route::post('/donativos', [DonativosController::class, 'store']);
-    Route::put('/donativos/{donativo}', [DonativosController::class, 'update']);
-    Route::delete('/donativos/{donativo}', [DonativosController::class, 'destroy']);
-    Route::post('/donativos/{donativo}/toggle', [DonativosController::class, 'togglePagado']);
+    Route::get('/donativos', [DonativosController::class, 'index'])->name('donativos.index');
+    Route::post('/donativos', [DonativosController::class, 'store'])->name('donativos.store');
+    Route::put('/donativos/{donativo}', [DonativosController::class, 'update'])->name('donativos.update');
+    Route::delete('/donativos/{donativo}', [DonativosController::class, 'destroy'])->name('donativos.destroy');
+    Route::post('/donativos/{donativo}/toggle', [DonativosController::class, 'togglePagado'])->name('donativos.toggle');
 
-    // Facturas
-    Route::get('/facturas', [FacturasController::class, 'index']);
-    Route::post('/facturas', [FacturasController::class, 'store']);
-    Route::post('/facturas/{factura}', [FacturasController::class, 'update']);
-    Route::delete('/facturas/{factura}', [FacturasController::class, 'destroy']);
-    Route::get('/facturas/{factura}/download', [FacturasController::class, 'download']);
+    Route::get('/facturas', [FacturasController::class, 'index'])->name('facturas.index');
+    Route::post('/facturas', [FacturasController::class, 'store'])->name('facturas.store');
+    Route::post('/facturas/{factura}', [FacturasController::class, 'update'])->name('facturas.update');
+    Route::delete('/facturas/{factura}', [FacturasController::class, 'destroy'])->name('facturas.destroy');
+    Route::get('/facturas/{factura}/download', [FacturasController::class, 'download'])->name('facturas.download');
 
-    // Clases
-    Route::get('/clases', [ClasesController::class, 'index']);
-    Route::post('/clases', [ClasesController::class, 'store']);
-    Route::post('/clases/{clase}', [ClasesController::class, 'update']);
-    Route::delete('/clases/{clase}', [ClasesController::class, 'destroy']);
+    Route::get('/clases', [ClasesController::class, 'index'])->name('clases.index');
+    Route::post('/clases', [ClasesController::class, 'store'])->name('clases.store');
+    Route::post('/clases/{clase}', [ClasesController::class, 'update'])->name('clases.update');
+    Route::delete('/clases/{clase}', [ClasesController::class, 'destroy'])->name('clases.destroy');
 
-    // Contactos
-    Route::get('/contactos', [ContactosController::class, 'index']);
-    Route::post('/contactos/{contacto}/leido', [ContactosController::class, 'marcarLeido']);
-    Route::delete('/contactos/{contacto}', [ContactosController::class, 'destroy']);
+    Route::get('/contactos', [ContactosController::class, 'index'])->name('contactos.index');
+    Route::post('/contactos/{contacto}/leido', [ContactosController::class, 'marcarLeido'])->name('contactos.leido');
+    Route::delete('/contactos/{contacto}', [ContactosController::class, 'destroy'])->name('contactos.destroy');
 
-    // Noticias
-    Route::get('/noticias', [NoticiasController::class, 'index']);
-    Route::post('/noticias', [NoticiasController::class, 'store']);
-    Route::post('/noticias/{noticia}', [NoticiasController::class, 'update']);
-    Route::delete('/noticias/{noticia}', [NoticiasController::class, 'destroy']);
+    Route::get('/noticias', [NoticiasController::class, 'index'])->name('noticias.index');
+    Route::post('/noticias', [NoticiasController::class, 'store'])->name('noticias.store');
+    Route::post('/noticias/{noticia}', [NoticiasController::class, 'update'])->name('noticias.update');
+    Route::delete('/noticias/{noticia}', [NoticiasController::class, 'destroy'])->name('noticias.destroy');
 
-    // Ubicación
-    Route::get('/ubicacion', [UbicacionController::class, 'index']);
-    Route::post('/ubicacion/guardar', [UbicacionController::class, 'guardar']);
+    Route::get('/ubicacion', [UbicacionController::class, 'index'])->name('ubicacion.index');
+    Route::post('/ubicacion/guardar', [UbicacionController::class, 'guardar'])->name('ubicacion.guardar');
 
-    // Horarios (tiempos de espera)
-    Route::get('/horarios', [TiemposEsperaController::class, 'index']);
-    Route::post('/horarios/{rezo}', [TiemposEsperaController::class, 'update']);
+    Route::get('/horarios', [TiemposEsperaController::class, 'index'])->name('tiempos-espera.index');
+    Route::post('/horarios/{rezo}', [TiemposEsperaController::class, 'update'])->name('tiempos-espera.update');
 });

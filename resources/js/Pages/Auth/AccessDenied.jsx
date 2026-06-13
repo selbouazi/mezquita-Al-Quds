@@ -6,7 +6,7 @@ export default function AccessDenied({ title, message }) {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={title || t('auth', 'accessDenied')}>
+        <MainLayout title={title || t('auth', 'accessDenied')} noindex>
             <section className="pt-28 pb-16 max-w-md mx-auto px-6">
                 <div className="bg-white rounded-2xl shadow-sm border border-red-200 p-8 text-center">
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">

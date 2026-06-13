@@ -6,7 +6,9 @@ export default function Imam({ imam }) {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={t('navbar', 'imam')}>
+        <MainLayout title={t('navbar', 'imam')}
+            description="Conoce al imán de la Mezquita Al‑Quds de El Vendrell. Biografía, trayectoria y labor comunitaria."
+            canonical="/imam">
             <section className="py-20 fade">
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="text-center mb-12">
@@ -19,11 +21,12 @@ export default function Imam({ imam }) {
                         <div className="bg-white rounded-3xl shadow-lg border border-[#C9A227]/20 p-8 md:p-12">
                             <div className="flex flex-col md:flex-row items-center gap-8">
                                 {imam.foto ? (
-                                    <img 
-                                        src={imam.foto} 
-                                        alt={imam.nombre} 
-                                        className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-lg border-4 border-[#C9A227]/30"
-                                    />
+                                <img 
+                                    src={imam.foto} 
+                                    alt={imam.nombre} 
+                                    className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-lg border-4 border-[#C9A227]/30"
+                                    loading="lazy"
+                                />
                                 ) : (
                                     <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-[#F8F8F8] flex items-center justify-center border-4 border-[#C9A227]/30 text-6xl">
                                         👤

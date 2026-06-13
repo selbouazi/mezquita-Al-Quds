@@ -21,7 +21,7 @@ export default function Register() {
     };
 
     return (
-        <MainLayout title={t('auth', 'register')}>
+        <MainLayout title={t('auth', 'register')} noindex>
             <section className="pt-28 pb-16 max-w-md mx-auto px-6">
                 <div className="bg-white rounded-2xl shadow-sm border border-[#C9A227]/20 p-8">
                     <h1 className="text-2xl font-bold text-[#0F5132] mb-6 text-center">{t('auth', 'create_account')}</h1>

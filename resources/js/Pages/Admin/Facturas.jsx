@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePage, router, Link } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -39,6 +39,15 @@ export default function Facturas() {
         setShowModal(true);
     };
 
+    useEffect(() => {
+        if (!showModal) return;
+        const handler = (e) => {
+            if (e.key === 'Escape') setShowModal(false);
+        };
+        document.addEventListener('keydown', handler);
+        return () => document.removeEventListener('keydown', handler);
+    }, [showModal]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         
@@ -78,7 +87,8 @@ export default function Facturas() {
                     </button>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                {/* Desktop table */}
+                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50">
@@ -91,28 +101,18 @@ export default function Facturas() {
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {facturas.data.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="4" className="px-4 py-8 text-center text-gray-500">
-                                             {t('facturas', 'noData')}
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-500">{t('facturas', 'noData')}</td></tr>
                                 ) : (
                                     facturas.data.map((factura) => (
                                         <tr key={factura.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
                                                 <p className="font-medium text-gray-900">{factura.titulo}</p>
-                                                {factura.notas && (
-                                                    <p className="text-xs text-gray-500 truncate max-w-xs">{factura.notas}</p>
-                                                )}
+                                                {factura.notas && <p className="text-xs text-gray-500">{factura.notas}</p>}
                                             </td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">
-                                                {new Date(factura.fecha).toLocaleDateString('es')}
-                                            </td>
+                                            <td className="px-4 py-3 text-sm text-gray-600">{new Date(factura.fecha).toLocaleDateString('es')}</td>
                                             <td className="px-4 py-3 text-center">
                                                 {factura.archivo_pdf ? (
-                                                     <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">
-                                                        {t('facturas', 'pdfAvailable')}
-                                                    </span>
+                                                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">{t('facturas', 'pdfAvailable')}</span>
                                                 ) : (
                                                     <span className="text-gray-400 text-sm">{t('facturas', 'noFile')}</span>
                                                 )}
@@ -120,26 +120,10 @@ export default function Facturas() {
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
                                                     {factura.archivo_pdf && (
-                                                        <a
-                                                            href={`/admin/facturas/${factura.id}/download`}
-                                                            className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                        >
-                                                                {t('facturas', 'download')}
-                                                        </a>
+                                                        <a href={`/admin/facturas/${factura.id}/download`} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('facturas', 'download')}</a>
                                                     )}
-                                                    <button
-                                                        onClick={() => openEdit(factura)}
-                                                        className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                    >
-                                                        {t('common', 'edit')}
-                                                    </button>
-                                                    <Link
-                                                        href={`/admin/facturas/${factura.id}`}
-                                                        method="delete"
-                                                        className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
-                                                    >
-                                                        {t('common', 'delete')}
-                                                    </Link>
+                                                    <button onClick={() => openEdit(factura)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                                                    <Link href={`/admin/facturas/${factura.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -148,31 +132,69 @@ export default function Facturas() {
                             </tbody>
                         </table>
                     </div>
-
-                    {facturas.last_page > 1 && (
-                        <div className="flex justify-center gap-2 py-4 border-t">
-                            {facturas.prev_page_url && (
-                                <Link href={facturas.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← {t('common', 'previous')}
-                                </Link>
-                            )}
-                            <span className="px-3 py-2 text-gray-600 text-sm">
-                                {facturas.current_page} / {facturas.last_page}
-                            </span>
-                            {facturas.next_page_url && (
-                                <Link href={facturas.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    {t('common', 'next')} →
-                                </Link>
-                            )}
-                        </div>
-                    )}
                 </div>
+
+                {/* Mobile cards */}
+                {facturas.data.length === 0 ? (
+                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">{t('facturas', 'noData')}</div>
+                ) : (
+                    <div className="md:hidden space-y-3">
+                        {facturas.data.map((factura) => (
+                            <div key={factura.id} className="bg-white rounded-xl shadow-sm border p-4">
+                                <div className="mb-2">
+                                    <h3 className="font-semibold text-gray-900 text-sm">{factura.titulo}</h3>
+                                    {factura.notas && <p className="text-xs text-gray-500 mt-0.5">{factura.notas}</p>}
+                                </div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className="text-xs text-gray-500">{new Date(factura.fecha).toLocaleDateString('es')}</span>
+                                    {factura.archivo_pdf ? (
+                                        <span className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">{t('facturas', 'pdfAvailable')}</span>
+                                    ) : (
+                                        <span className="text-gray-400 text-xs">{t('facturas', 'noFile')}</span>
+                                    )}
+                                </div>
+                                <div className="flex gap-2 pt-3 border-t border-gray-100">
+                                    {factura.archivo_pdf && (
+                                        <a href={`/admin/facturas/${factura.id}/download`} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px] text-center block">
+                                            {t('facturas', 'download')}
+                                        </a>
+                                    )}
+                                    <button onClick={() => openEdit(factura)} className={`flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px] ${!factura.archivo_pdf ? 'flex-1' : ''}`}>
+                                        {t('common', 'edit')}
+                                    </button>
+                                    <Link href={`/admin/facturas/${factura.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                                        {t('common', 'delete')}
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Pagination */}
+                {facturas.last_page > 1 && (
+                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        {facturas.prev_page_url && (
+                            <Link href={facturas.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">← {t('common', 'previous')}</Link>
+                        )}
+                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">{facturas.current_page} / {facturas.last_page}</span>
+                        {facturas.next_page_url && (
+                            <Link href={facturas.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">{t('common', 'next')} →</Link>
+                        )}
+                    </div>
+                )}
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg">
-                        <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
+                <div
+                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                    onClick={() => setShowModal(false)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="facturas-modal-title"
+                >
+                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <h2 id="facturas-modal-title" className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
                             {editando ? t('adminFacturas', 'editTitle') : t('facturas', 'addNew')}
                         </h2>
 

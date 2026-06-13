@@ -31,6 +31,17 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setMobileOpen(false);
+                setLangOpen(false);
+            }
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, []);
+
+    useEffect(() => {
         fetch('/api/notificaciones')
             .then(res => res.json())
             .then(data => setNotifications(data))
@@ -63,15 +74,18 @@ export default function Navbar() {
                 {/* LOGO + HAMBURGUESA */}
                 <div className="flex items-center w-full md:w-auto">
                     <Link href="/" className="flex items-center gap-3 flex-grow">
-                        <img src="/img/mezquitaAlquds_logo2.png" className="h-12" alt="Logo" />
+                        <img src="/img/mezquitaAlquds_logo2.png" className="h-12" alt={t('navbar', 'title')} />
                         <div className={isRTL ? 'text-right' : ''}>
                             <p className="text-xs text-gray-500">{t('navbar', 'subtitle')}</p>
                             <p className="text-xl font-bold text-[#0F5132] tracking-wide">{t('navbar', 'title')}</p>
                         </div>
                     </Link>
                     <button
-                        className="md:hidden text-[#0F5132] text-3xl"
+                        className="md:hidden text-[#0F5132] text-3xl min-w-[44px] min-h-[44px] flex items-center justify-center"
                         onClick={() => setMobileOpen(v => !v)}
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-menu"
+                        aria-label={t('navbar', 'menu')}
                     >
                         ☰
                     </button>
@@ -103,15 +117,17 @@ export default function Navbar() {
                             className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50 transition"
                             onClick={e => { e.stopPropagation(); setLangOpen(v => !v); }}
                         >
-                            <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale} />
+                            <img src={`/img/lang/${locale}.png`} className="h-5 w-5" alt={locale === 'es' ? 'Español' : locale === 'ca' ? 'Català' : locale === 'en' ? 'English' : 'العربية'} />
                             <span className="text-sm font-medium uppercase">{locale}</span>
                         </button>
                         {langOpen && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg py-2">
+                            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg py-2" role="listbox" aria-label={t('navbar', 'selectLang')}>
                                 {LANGUAGES.map(l => (
                                     <a key={l.code} href={`/lang/${l.code}`}
-                                       className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100">
-                                        <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.code} />
+                                       className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100"
+                                       role="option"
+                                       aria-selected={locale === l.code}>
+                                        <img src={`/img/lang/${l.code}.png`} className="h-5 w-5" alt={l.label} />
                                         {l.label}
                                     </a>
                                 ))}
@@ -145,7 +161,7 @@ export default function Navbar() {
 
             {/* MENÚ MÓVIL */}
             {mobileOpen && (
-                <div className="bg-white/95 backdrop-blur-xl border-t border-[#C9A227]/20 md:hidden px-6 py-4 space-y-3 text-sm">
+                <div id="mobile-menu" className="bg-white/95 backdrop-blur-xl border-t border-[#C9A227]/20 md:hidden px-6 py-4 space-y-3 text-sm">
                     {navLinks.map(link => (
                         <Link key={link.href} href={link.href}
                               className="block text-gray-700 hover:text-[#C9A227] transition"
@@ -171,8 +187,9 @@ export default function Navbar() {
                     <div className="flex gap-3 pt-2">
                         {LANGUAGES.map(l => (
                             <a key={l.code} href={`/lang/${l.code}`}
-                               className="flex items-center gap-1 px-2 py-1 border rounded-lg text-xs hover:bg-gray-100">
-                                <img src={`/img/lang/${l.code}.png`} className="h-4 w-4" alt={l.code} />
+                               className="flex items-center gap-1 px-2 py-1 border rounded-lg text-xs hover:bg-gray-100"
+                               aria-label={l.label}>
+                                <img src={`/img/lang/${l.code}.png`} className="h-4 w-4" alt={l.label} />
                             </a>
                         ))}
                     </div>

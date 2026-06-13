@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePage, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -67,6 +67,15 @@ export default function Noticias() {
         }
     };
 
+    useEffect(() => {
+        if (!showModal) return;
+        const handler = (e) => {
+            if (e.key === 'Escape') setShowModal(false);
+        };
+        document.addEventListener('keydown', handler);
+        return () => document.removeEventListener('keydown', handler);
+    }, [showModal]);
+
     const noticiasList = noticias?.data || noticias || [];
     const publishedNews = noticiasList.filter(n => n.publicado);
     const draftNews = noticiasList.filter(n => !n.publicado);
@@ -87,7 +96,7 @@ export default function Noticias() {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{noticiasList.length}</p>
                         <p className="text-sm text-gray-600">{t('adminNoticias', 'totalNews')}</p>
@@ -96,13 +105,14 @@ export default function Noticias() {
                         <p className="text-2xl font-bold text-green-600">{publishedNews.length}</p>
                         <p className="text-sm text-gray-600">{t('adminNoticias', 'published')}</p>
                     </div>
-                    <div className="bg-white p-4 rounded-xl shadow-sm border col-span-2 md:col-span-1">
+                    <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-gray-400">{draftNews.length}</p>
                         <p className="text-sm text-gray-600">{t('adminNoticias', 'drafts')}</p>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                {/* Desktop table */}
+                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50">
@@ -117,7 +127,7 @@ export default function Noticias() {
                             <tbody className="divide-y divide-gray-200">
                                 {noticiasList.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                                        <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                                             {t('adminNoticias', 'noNewsAdmin')}
                                         </td>
                                     </tr>
@@ -126,11 +136,7 @@ export default function Noticias() {
                                         <tr key={noticia.id} className="hover:bg-gray-50">
                                             <td className="px-4 py-3">
                                                 {noticia.imagen ? (
-                                                    <img 
-                                                        src={`/storage/${noticia.imagen}`} 
-                                                        alt={noticia.titulo}
-                                                        className="w-16 h-12 object-cover rounded-lg"
-                                                    />
+                                                    <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-12 object-cover rounded-lg" />
                                                 ) : (
                                                     <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                                                         <span className="text-gray-400 text-xs">{t('adminNoticias', 'noImage')}</span>
@@ -145,29 +151,14 @@ export default function Noticias() {
                                                 {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : '-'}
                                             </td>
                                             <td className="px-4 py-3 text-center">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                    noticia.publicado 
-                                                        ? 'bg-green-100 text-green-800' 
-                                                        : 'bg-gray-100 text-gray-600'
-                                                }`}>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
                                                     {t('noticias', noticia.publicado ? 'published' : 'draft')}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <button
-                                                        onClick={() => openEdit(noticia)}
-                                                        className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50"
-                                                    >
-                                                        {t('common', 'edit')}
-                                                    </button>
-                                                    <Link
-                                                        href={`/admin/noticias/${noticia.id}`}
-                                                        method="delete"
-                                                        className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50"
-                                                    >
-                                                        {t('common', 'delete')}
-                                                    </Link>
+                                                    <button onClick={() => openEdit(noticia)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
+                                                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -176,31 +167,77 @@ export default function Noticias() {
                             </tbody>
                         </table>
                     </div>
-
-                    {noticias.last_page > 1 && (
-                        <div className="flex justify-center gap-2 py-4 border-t">
-                            {noticias.prev_page_url && (
-                                <Link href={noticias.prev_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    ← {t('common', 'previous')}
-                                </Link>
-                            )}
-                            <span className="px-3 py-2 text-gray-600 text-sm">
-                                {noticias.current_page} / {noticias.last_page}
-                            </span>
-                            {noticias.next_page_url && (
-                                <Link href={noticias.next_page_url} className="px-3 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm">
-                                    {t('common', 'next')} →
-                                </Link>
-                            )}
-                        </div>
-                    )}
                 </div>
+
+                {/* Mobile cards */}
+                {noticiasList.length === 0 ? (
+                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">
+                        {t('adminNoticias', 'noNewsAdmin')}
+                    </div>
+                ) : (
+                    <div className="md:hidden space-y-3">
+                        {noticiasList.map((noticia) => (
+                            <div key={noticia.id} className="bg-white rounded-xl shadow-sm border p-4">
+                                <div className="flex gap-3 mb-3">
+                                    {noticia.imagen && (
+                                        <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo} className="w-16 h-14 rounded-lg object-cover flex-shrink-0" />
+                                    )}
+                                    <div className="min-w-0 flex-1">
+                                        <h3 className="font-semibold text-gray-900 text-sm leading-tight">{noticia.titulo}</h3>
+                                        <p className="text-xs text-gray-500 line-clamp-2 mt-1">{noticia.contenido}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${noticia.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                        {t('noticias', noticia.publicado ? 'published' : 'draft')}
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                        {noticia.fecha_publicacion ? new Date(noticia.fecha_publicacion).toLocaleDateString('es') : ''}
+                                    </span>
+                                </div>
+                                <div className="flex gap-2 pt-3 border-t border-gray-100">
+                                    <button onClick={() => openEdit(noticia)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
+                                        {t('common', 'edit')}
+                                    </button>
+                                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                                        {t('common', 'delete')}
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Pagination */}
+                {noticias.last_page > 1 && (
+                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                        {noticias.prev_page_url && (
+                            <Link href={noticias.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">
+                                ← {t('common', 'previous')}
+                            </Link>
+                        )}
+                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">
+                            {noticias.current_page} / {noticias.last_page}
+                        </span>
+                        {noticias.next_page_url && (
+                            <Link href={noticias.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">
+                                {t('common', 'next')} →
+                            </Link>
+                        )}
+                    </div>
+                )}
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-                        <h2 className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
+                <div
+                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                    onClick={() => setShowModal(false)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="noticias-modal-title"
+                >
+                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <h2 id="noticias-modal-title" className="text-lg sm:text-xl font-bold text-[#0F5132] mb-4">
                             {editando ? t('adminNoticias', 'editTitle') : t('noticias', 'addNew')}
                         </h2>
 
@@ -235,7 +272,7 @@ export default function Noticias() {
                                 />
                                 {imagenPreview && (
                                     <div className="mt-2 relative inline-block">
-                                        <img src={imagenPreview} alt="Preview" className="w-32 h-20 object-cover rounded-lg" />
+                                        <img src={imagenPreview} alt={t('adminNoticias', 'imagenLabel')} className="w-32 h-20 object-cover rounded-lg" />
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -243,6 +280,7 @@ export default function Noticias() {
                                                 formData.setData('imagen', null);
                                             }}
                                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                            aria-label={t('noticias', 'removeImage')}
                                         >
                                             ×
                                         </button>

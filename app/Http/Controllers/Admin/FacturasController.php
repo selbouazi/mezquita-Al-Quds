@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\FacturaRequest;
 use App\Models\Factura;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
@@ -23,14 +23,9 @@ class FacturasController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(FacturaRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'fecha' => 'required|date',
-            'archivo_pdf' => 'required|file|mimes:pdf|max:10240',
-            'notas' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('archivo_pdf')) {
             try {
@@ -47,14 +42,9 @@ class FacturasController extends Controller
         return redirect()->back()->with('success', 'Factura creada correctamente');
     }
 
-    public function update(Request $request, Factura $factura): RedirectResponse
+    public function update(FacturaRequest $request, Factura $factura): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'fecha' => 'required|date',
-            'archivo_pdf' => 'nullable|file|mimes:pdf|max:10240',
-            'notas' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('archivo_pdf')) {
             try {

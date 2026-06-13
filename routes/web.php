@@ -1,164 +1,42 @@
 <?php
 
-use App\Http\Controllers\Admin\ActivationCodeController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ImamController;
-use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DonativoController;
+use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\NoticiasController;
-use App\Models\Donativo;
-use App\Models\Factura;
-use App\Models\Horario;
-use App\Models\ImamSetting;
-use App\Models\Notification;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
 
-Fortify::loginView(function () {
-    return Inertia::render('Auth/Login');
-});
+Fortify::loginView(fn () => Inertia::render('Auth/Login'));
 
-Fortify::registerView(function () {
-    return Inertia::render('Auth/Register');
-});
+Fortify::registerView(fn () => Inertia::render('Auth/Register'));
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:registration');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notificaciones.index');
-    Route::post('/notificaciones', [NotificationController::class, 'store']);
-    Route::put('/notificaciones/{notification}', [NotificationController::class, 'update']);
-    Route::delete('/notificaciones/{notification}', [NotificationController::class, 'destroy']);
-    Route::post('/notificaciones/{notification}/toggle', [NotificationController::class, 'toggle']);
-    Route::get('/codigos', [ActivationCodeController::class, 'index'])->name('codigos.index');
-    Route::post('/codigos/generar', [ActivationCodeController::class, 'generar']);
-    Route::post('/codigos/actualizar', [ActivationCodeController::class, 'actualizar']);
-    Route::get('/imam', [ImamController::class, 'index'])->name('imam.index');
-    Route::post('/imam/guardar', [ImamController::class, 'guardar']);
-});
-
-use App\Models\TiempoEspera;
-
-function getHorarioHoy(): array
-{
-    $horario = Horario::where('fecha', today()->toDateString())->first();
-
-    if (! $horario) {
-        return ['fajr' => '--:--', 'sunrise' => '--:--', 'dhuhr' => '--:--', 'asr' => '--:--', 'maghrib' => '--:--', 'isha' => '--:--'];
-    }
-
-    return [
-        'fajr' => substr($horario->fajr, 0, 5),
-        'sunrise' => substr($horario->sunrise, 0, 5),
-        'dhuhr' => substr($horario->dhuhr, 0, 5),
-        'asr' => substr($horario->asr, 0, 5),
-        'maghrib' => substr($horario->maghrib, 0, 5),
-        'isha' => substr($horario->isha, 0, 5),
-    ];
-}
-
-Route::get('/', fn () => Inertia::render('Home', [
-    'prayerTimes' => getHorarioHoy(),
-    'tiemposEspera' => TiempoEspera::all()->pluck('minutos', 'rezo')->toArray(),
-]));
-
-Route::get('/horarios', function () {
-    $year = request('year', now()->year);
-    $month = request('month', now()->month);
-
-    $horarios = Horario::whereYear('fecha', $year)
-        ->whereMonth('fecha', $month)
-        ->orderBy('fecha')
-        ->get(['fecha', 'fecha_hijri', 'fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'])
-        ->keyBy(fn ($h) => $h->fecha->format('Y-m-d'))
-        ->map(fn ($h) => [
-            'fecha_hijri' => $h->fecha_hijri,
-            'fajr' => substr($h->fajr, 0, 5),
-            'sunrise' => substr($h->sunrise, 0, 5),
-            'dhuhr' => substr($h->dhuhr, 0, 5),
-            'asr' => substr($h->asr, 0, 5),
-            'maghrib' => substr($h->maghrib, 0, 5),
-            'isha' => substr($h->isha, 0, 5),
-        ]);
-
-    return Inertia::render('Horarios', [
-        'horariosMes' => $horarios,
-        'year' => (int) $year,
-        'month' => (int) $month,
-        'prayerTimes' => getHorarioHoy(),
-        'tiemposEspera' => TiempoEspera::all()->pluck('minutos', 'rezo')->toArray(),
-    ]);
-});
-
+Route::get('/', [HorarioController::class, 'home']);
+Route::get('/horarios', [HorarioController::class, 'horarios']);
 Route::get('/noticias', [NoticiasController::class, 'index']);
-Route::get('/contacto', fn () => Inertia::render('Contacto'));
-Route::get('/ubicacion', fn () => Inertia::render('Ubicacion'));
+Route::get('/contacto', [ContactController::class, 'create']);
+Route::post('/contacto', [ContactController::class, 'store'])->middleware('throttle:contact');
+Route::get('/ubicacion', [PublicController::class, 'ubicacion']);
+Route::get('/imam', [PublicController::class, 'imam']);
+Route::get('/notifications', [PublicController::class, 'notifications']);
+Route::get('/lang/{lang}', [PublicController::class, 'switchLang'])->name('lang.switch');
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+
+Route::get('/api/imam', [PublicController::class, 'apiImam']);
+Route::get('/api/notificaciones', [PublicController::class, 'apiNotificaciones']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/facturas', function () {
-        $facturas = Factura::orderBy('fecha', 'desc')->get();
-
-        return Inertia::render('Facturas', ['facturas' => $facturas]);
-    });
-    Route::get('/facturas/{factura}/download', function (Factura $factura) {
-        if (! $factura->archivo_pdf) {
-            abort(404);
-        }
-
-        return Storage::disk('public')->download($factura->archivo_pdf);
-    });
-    Route::get('/donativos', function () {
-        $año = request('año', date('Y'));
-        $donativos = Donativo::where('año', $año)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return Inertia::render('Donativos', [
-            'donativos' => $donativos,
-            'añoActual' => (int) $año,
-        ]);
-    });
+    Route::get('/facturas', [FacturaController::class, 'index']);
+    Route::get('/facturas/{factura}/download', [FacturaController::class, 'download']);
+    Route::get('/donativos', [DonativoController::class, 'index']);
 });
-
-Route::get('/imam', function () {
-    $imam = ImamSetting::first();
-
-    return Inertia::render('Imam', ['imam' => $imam]);
-});
-
-Route::get('/notifications', function () {
-    $notificaciones = Notification::activas()
-        ->ordenadas()
-        ->paginate(10);
-
-    return Inertia::render('Public/Notifications', ['notificaciones' => $notificaciones]);
-});
-
-Route::get('/api/imam', function () {
-    $imam = ImamSetting::first();
-    if ($imam && $imam->foto) {
-        $imam->foto = Storage::url($imam->foto);
-    }
-
-    return response()->json($imam);
-});
-
-Route::get('/api/notificaciones', function () {
-    $notificaciones = Notification::activas()->ordenadas()->take(10)->get();
-
-    return response()->json($notificaciones);
-});
-
-Route::get('/lang/{lang}', function ($lang) {
-    if (in_array($lang, ['es', 'ca', 'ar', 'en'])) {
-        session(['locale' => $lang]);
-    }
-
-    return back();
-})->name('lang.switch');
 
 require __DIR__.'/admin.php';

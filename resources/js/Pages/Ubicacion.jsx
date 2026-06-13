@@ -5,9 +5,11 @@ export default function Ubicacion() {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={t('ubicacion', 'title')}>
+        <MainLayout title={t('ubicacion', 'title')}
+            description="Cómo llegar a la Mezquita Al‑Quds en El Vendrell, Tarragona. Dirección, mapa y coordenadas."
+            canonical="/ubicacion">
             <section className="pt-28 pb-16 max-w-7xl mx-auto px-6 text-center">
-                <h1 className="text-3xl font-bold text-[#0F5132] mb-4">{t('ubicacion', 'title')}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#0F5132] mb-4">{t('ubicacion', 'title')}</h1>
                 <p className="text-gray-600 mb-8">{t('ubicacion', 'subtitle')}</p>
                 <a href="https://maps.google.com"
                    className="inline-block bg-[#0F5132] text-white px-8 py-3 rounded-full font-semibold

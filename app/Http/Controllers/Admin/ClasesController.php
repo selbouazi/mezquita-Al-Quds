@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ClaseRequest;
 use App\Models\Clase;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 
 class ClasesController extends Controller
@@ -19,34 +19,18 @@ class ClasesController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ClaseRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'horarios' => 'nullable|string|max:255',
-            'nivel' => 'nullable|string|max:100',
-            'profesor' => 'nullable|string|max:255',
-            'requisitos' => 'nullable|string',
-            'activo' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         Clase::create($validated);
 
         return redirect()->back()->with('success', 'Clase creada correctamente');
     }
 
-    public function update(Request $request, Clase $clase): RedirectResponse
+    public function update(ClaseRequest $request, Clase $clase): RedirectResponse
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'horarios' => 'nullable|string|max:255',
-            'nivel' => 'nullable|string|max:100',
-            'profesor' => 'nullable|string|max:255',
-            'requisitos' => 'nullable|string',
-            'activo' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $clase->update($validated);
 

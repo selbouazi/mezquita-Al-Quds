@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
 
@@ -6,7 +6,8 @@ const IQAMA_WINDOW = 30;
 
 export default function PrayerHeader({ prayerTimes }) {
     const { t } = useTranslation();
-    const { tiemposEspera } = usePage().props;
+    const { locale, tiemposEspera } = usePage().props;
+    const lastDisplay = useRef({ title: '', waiting: '' });
 
     const [display, setDisplay] = useState({
         title: '',
@@ -74,44 +75,37 @@ export default function PrayerHeader({ prayerTimes }) {
             const remaining = t('time', 'remaining');
             const iqama = t('time', 'iqama');
 
+            let newTitle, newWaiting;
+
             if (diffPast < lastWaiting * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
-
-                setDisplay({
-                    title: locale === 'en'
-                        ? `${lastName} · ${m}:${String(s).padStart(2,'0')} ${mins} ${ago}`
-                        : `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`,
-                    waiting: `${wait} ${remaining}: ${lastWaiting - m} ${mins}`,
-                });
-                return;
-            }
-
-            if (diffPast < (lastWaiting + IQAMA_WINDOW) * 60) {
+                newTitle = locale === 'en'
+                    ? `${lastName} · ${m}:${String(s).padStart(2,'0')} ${mins} ${ago}`
+                    : `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`;
+                newWaiting = `${wait} ${remaining}: ${lastWaiting - m} ${mins}`;
+            } else if (diffPast < (lastWaiting + IQAMA_WINDOW) * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
-
                 const iqamaM = m - lastWaiting;
-
-                setDisplay({
-                    title: locale === 'en'
-                        ? `${lastName} · ${m} ${mins} ${ago}`
-                        : `${lastName} · ${ago} ${m} ${mins}`,
-                    waiting: locale === 'en'
-                        ? `${iqama} · ${iqamaM}:${String(s).padStart(2,'0')} ${mins} ${ago}`
-                        : `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`,
-                });
-                return;
+                newTitle = locale === 'en'
+                    ? `${lastName} · ${m} ${mins} ${ago}`
+                    : `${lastName} · ${ago} ${m} ${mins}`;
+                newWaiting = locale === 'en'
+                    ? `${iqama} · ${iqamaM}:${String(s).padStart(2,'0')} ${mins} ${ago}`
+                    : `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`;
+            } else {
+                const h = Math.floor(diffFuture / 3600);
+                const m = Math.floor((diffFuture % 3600) / 60);
+                const s = diffFuture % 60;
+                newTitle = `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                newWaiting = `${wait}: ${nextWaiting} ${mins}`;
             }
 
-            const h = Math.floor(diffFuture / 3600);
-            const m = Math.floor((diffFuture % 3600) / 60);
-            const s = diffFuture % 60;
-
-            setDisplay({
-                title: `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
-                waiting: `${wait}: ${nextWaiting} ${mins}`,
-            });
+            if (newTitle !== lastDisplay.current.title || newWaiting !== lastDisplay.current.waiting) {
+                lastDisplay.current = { title: newTitle, waiting: newWaiting };
+                setDisplay({ title: newTitle, waiting: newWaiting });
+            }
         }
 
         update();
