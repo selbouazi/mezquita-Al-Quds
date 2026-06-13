@@ -7,6 +7,7 @@ use App\Models\Notification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,7 +27,9 @@ class PublicController extends Controller
      */
     public function imam(): Response
     {
-        $imam = ImamSetting::first();
+        $imam = Cache::remember('imam_data', 86400, function () {
+            return ImamSetting::first();
+        });
 
         return Inertia::render('Imam', ['imam' => $imam]);
     }
@@ -36,9 +39,13 @@ class PublicController extends Controller
      */
     public function notifications(): Response
     {
-        $notificaciones = Notification::activas()
-            ->ordenadas()
-            ->paginate(10);
+        $page = request('page', 1);
+        $version = Cache::remember('notificaciones_version', 86400 * 30, fn() => 1);
+        $notificaciones = Cache::remember('notificaciones_v' . $version . '_p' . $page, 3600, function () {
+            return Notification::activas()
+                ->ordenadas()
+                ->paginate(10);
+        });
 
         return Inertia::render('Public/Notifications', [
             'notificaciones' => $notificaciones,
@@ -68,10 +75,13 @@ class PublicController extends Controller
      */
     public function apiImam(): JsonResponse
     {
-        $imam = ImamSetting::first();
-        if ($imam && $imam->foto) {
-            $imam->foto = Storage::url($imam->foto);
-        }
+        $imam = Cache::remember('api_imam_data', 86400, function () {
+            $imam = ImamSetting::first();
+            if ($imam && $imam->foto) {
+                $imam->foto = Storage::url($imam->foto);
+            }
+            return $imam;
+        });
 
         return response()->json($imam);
     }
@@ -83,10 +93,12 @@ class PublicController extends Controller
      */
     public function apiNotificaciones(): JsonResponse
     {
-        $notificaciones = Notification::activas()
-            ->ordenadas()
-            ->take(10)
-            ->get();
+        $notificaciones = Cache::remember('api_notificaciones_v' . Cache::remember('notificaciones_version', 86400 * 30, fn() => 1), 3600, function () {
+            return Notification::activas()
+                ->ordenadas()
+                ->take(10)
+                ->get();
+        });
 
         return response()->json($notificaciones);
     }
