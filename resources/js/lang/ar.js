@@ -501,7 +501,11 @@ const ar = {
         no: 'لا',
         previous: 'السابق',
         next: 'التالي',
-    },
-};
+        confirm: 'هل أنت متأكد؟',
+        confirmMessage: 'لا يمكن التراجع عن هذا الإجراء.',
+        clear: 'مسح',
+        noData: 'لا توجد بيانات متاحة',
+        processing: 'جارٍ المعالجة...',
+    };
 
 export default ar;

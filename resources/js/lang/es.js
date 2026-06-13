@@ -284,6 +284,11 @@ const es = {
         no: 'No',
         previous: 'Anterior',
         next: 'Siguiente',
+        confirm: '¿Estás seguro?',
+        confirmMessage: 'Esta acción no se puede deshacer.',
+        clear: 'Limpiar',
+        noData: 'No hay datos disponibles',
+        processing: 'Procesando...',
     },
     adminDashboard: {
         title: 'Panel de Administración',

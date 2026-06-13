@@ -270,6 +270,11 @@ const ca = {
         no: 'No',
         previous: 'Anterior',
         next: 'Següent',
+        confirm: 'Estàs segur?',
+        confirmMessage: 'Aquesta acció no es pot desfer.',
+        clear: 'Netejar',
+        noData: 'No hi ha dades disponibles',
+        processing: 'Processant...',
     },
     adminDashboard: {
         title: 'Panel d\u0027Administració',
