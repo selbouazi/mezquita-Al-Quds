@@ -18,7 +18,9 @@ export default function Donativos() {
     };
 
     return (
-        <MainLayout title={t('navbar', 'donations')} noindex>
+        <MainLayout title={t('navbar', 'donations')}
+            description="Consulta los donativos de la Mezquita Al‑Quds de El Vendrell. Estado de aportaciones y colaboraciones."
+            canonical="/donativos" noindex>
             <section className="py-20 fade">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="text-center mb-12">

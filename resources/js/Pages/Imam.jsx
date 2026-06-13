@@ -6,7 +6,7 @@ export default function Imam({ imam }) {
     const { t } = useTranslation();
 
     return (
-        <MainLayout title={t('navbar', 'imam')} meta={{ title: t('meta.imam.title'), description: t('meta.imam.description') }}
+        <MainLayout title={t('navbar', 'imam')} meta={{ title: t('meta.imam.title'), description: t('meta.imam.description') }} canonical="/imam">
             image={imam?.foto || undefined}>
             <section className="py-20 fade">
                 <div className="max-w-4xl mx-auto px-6">

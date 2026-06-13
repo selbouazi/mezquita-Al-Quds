@@ -8,7 +8,9 @@ export default function Facturas() {
     const { facturas } = props;
 
     return (
-        <MainLayout title={t('facturas', 'title')}>
+        <MainLayout title={t('facturas', 'title')}
+            description="Descarga las facturas de la Mezquita Al‑Quds de El Vendrell. Facturas anuales y documentos oficiales de la comunidad."
+            canonical="/facturas">
             <section className="py-20 fade">
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="text-center mb-12">

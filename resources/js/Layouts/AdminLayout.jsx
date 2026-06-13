@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 
@@ -42,7 +42,11 @@ export default function AdminLayout({ title, children }) {
     const [langOpen, setLangOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <>
+            <Head>
+                <meta name="robots" content="noindex, nofollow" />
+            </Head>
+            <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
             <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0F5132] text-white transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="flex flex-col h-full">
@@ -161,5 +165,6 @@ export default function AdminLayout({ title, children }) {
                 />
             )}
         </div>
+        </>
     );
 }
