@@ -506,6 +506,7 @@ const ar = {
         clear: 'مسح',
         noData: 'لا توجد بيانات متاحة',
         processing: 'جارٍ المعالجة...',
-    };
+    },
+};
 
 export default ar;
