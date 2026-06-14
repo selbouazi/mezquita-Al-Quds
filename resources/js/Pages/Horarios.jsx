@@ -116,25 +116,36 @@ export default function Horarios({ horariosMes, year, month }) {
                 </div>
             </section>
 
-            {/* === CALENDAR SECTION === */}
-            <section ref={calRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F7F5F0] overflow-hidden">
+            {/* === UNIFIED BACKGROUND WRAPPER === */}
+            <div className="relative">
+                {/* Full allahakbar background like Home hero */}
+                <div className="absolute inset-0 bg-[url('/img/allahakbar.png')] bg-cover bg-center animate-ken-burns" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200, 160, 60, 0.35), rgba(170, 130, 40, 0.3))' }} />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64612,transparent_60%)] pointer-events-none animate-gold-pulse" />
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent animate-shimmer" />
+                </div>
+                {/* Girih pattern overlay */}
                 <div className="footer-pattern">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                         <defs>
                             <pattern id="girih-horarios" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-                                <polygon points="60,0 90,30 90,70 60,100 30,70 30,30" fill="none" stroke="#C9A646" strokeWidth="0.5" opacity="0.12" />
-                                <polygon points="60,20 80,40 80,60 60,80 40,60 40,40" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.08" />
+                                <polygon points="60,0 90,30 90,70 60,100 30,70 30,30" fill="none" stroke="#C9A646" strokeWidth="0.5" opacity="0.1" />
+                                <polygon points="60,20 80,40 80,60 60,80 40,60 40,40" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.06" />
                             </pattern>
                         </defs>
                         <rect width="100%" height="100%" fill="url(#girih-horarios)" />
                     </svg>
                 </div>
 
+            {/* === CALENDAR SECTION === */}
+            <section ref={calRef} className="reveal relative py-16 sm:py-20 lg:py-24 overflow-hidden">
+
                 {/* Month navigation */}
                 <div className={`relative max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between mb-8 sm:mb-10 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <button
                         onClick={() => goToMonth(year, month - 1)}
-                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[#C9A646]/20 text-[#0F3B2E] hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm hover:shadow-lg text-xl font-bold"
+                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold"
                         aria-label={t('common', 'previous')}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -142,13 +153,13 @@ export default function Horarios({ horariosMes, year, month }) {
                         </svg>
                     </button>
 
-                    <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0F3B2E] leading-[1.3]">
-                        {Array.isArray(monthNames) ? monthNames[month - 1] : month} {year}
+                    <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-[1.3] drop-shadow-lg">
+                        {Array.isArray(monthNames) ? monthNames[month - 1] : month} <span className="text-[#C9A646]">{year}</span>
                     </h2>
 
                     <button
                         onClick={() => goToMonth(year, month + 1)}
-                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[#C9A646]/20 text-[#0F3B2E] hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm hover:shadow-lg text-xl font-bold"
+                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold"
                         aria-label={t('common', 'next')}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -217,15 +228,14 @@ export default function Horarios({ horariosMes, year, month }) {
             </section>
 
             {/* === DIAMOND SEPARATOR === */}
-            <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-gradient-to-b from-[#F7F5F0] to-[#F7F5F0]" aria-hidden="true">
+            <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-[#0F3B2E]" aria-hidden="true">
                 {[0,1,2,3,4,5,6,7,8].map(i => (
-                    <span key={i} className={`block w-1 h-1 bg-[#C9A646]/${i % 2 === 0 ? '40' : '25'} rotate-45`} />
+                    <span key={i} className={`block w-1 h-1 bg-[#C9A646]/${i % 2 === 0 ? '50' : '30'} rotate-45`} />
                 ))}
             </div>
 
             {/* === DAY DETAIL SECTION === */}
-            <section ref={detailRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-[#F7F5F0] to-white overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,#C9A64608,transparent_50%)] pointer-events-none" />
+            <section ref={detailRef} className="reveal relative py-16 sm:py-20 lg:py-24 overflow-hidden">
 
                 <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
                     {selected && selectedData ? (
@@ -281,6 +291,7 @@ export default function Horarios({ horariosMes, year, month }) {
                     ) : null}
                 </div>
             </section>
+            </div>
         </MainLayout>
     );
 }

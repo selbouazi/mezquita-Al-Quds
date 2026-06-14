@@ -75,30 +75,7 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
                 </div>
 
-                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-                    <div className={`hero-shape w-32 h-32 rounded-full border-2 top-[15%] ${isRTL ? 'right-[10%]' : 'left-[10%]'} animate-float-spin hidden lg:block`} style={{ borderColor: 'rgba(201, 166, 70, 0.12)' }} />
-                    <div className={`hero-shape w-24 h-24 rotate-45 top-[25%] ${isRTL ? 'left-[15%]' : 'right-[15%]'} animate-float-spin-reverse hidden lg:block`} style={{ borderWidth: '1.5px', borderColor: 'rgba(201, 166, 70, 0.12)' }} />
-                    <div className={`hero-shape w-40 h-40 rounded-full border top-[60%] ${isRTL ? 'right-[5%]' : 'left-[5%]'} animate-float-spin-reverse hidden lg:block`} style={{ animationDuration: '18s', borderColor: 'rgba(201, 166, 70, 0.12)' }} />
-                    <div className={`hero-shape w-20 h-20 rotate-12 top-[70%] ${isRTL ? 'left-[10%]' : 'right-[10%]'} animate-float-spin hidden lg:block`} style={{ animationDuration: '14s', borderWidth: '1px', borderColor: 'rgba(201, 166, 70, 0.12)' }} />
-
-                    {/* Medallón central: luna creciente + Rub el Hizb */}
-                    <div className={`absolute top-1/2 ${isRTL ? '-translate-x-1/3' : 'translate-x-1/3'} -translate-y-1/2 w-[250px] h-[250px] md:w-[350px] md:h-[350px] lg:w-[450px] lg:h-[450px] opacity-[0.13]`}>
-                        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                            <defs>
-                                <mask id="hero-crescent">
-                                    <rect width="200" height="200" fill="white" />
-                                    <circle cx="42" cy="72" r="75" fill="black" />
-                                </mask>
-                            </defs>
-                            <circle cx="100" cy="100" r="98" stroke="#C9A646" strokeWidth="0.3" />
-                            <circle cx="118" cy="105" r="92" fill="#C9A646" mask="url(#hero-crescent)" />
-                            <rect x="55" y="55" width="90" height="90" stroke="#C9A646" strokeWidth="0.4" />
-                            <rect x="55" y="55" width="90" height="90" stroke="#C9A646" strokeWidth="0.4" transform="rotate(45 100 100)" />
-                            <circle cx="100" cy="100" r="8" stroke="#C9A646" strokeWidth="0.3" />
-                            <circle cx="100" cy="100" r="3" fill="#C9A646" />
-                        </svg>
-                    </div>
-                </div>
+                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true" />
 
                 <div className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-24 lg:py-32">
                     <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-14 items-center">
@@ -152,14 +129,7 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     </div>
                 </div>
 
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-scroll-hint hidden sm:block" aria-hidden="true">
-                    <div className="flex flex-col items-center gap-1.5 text-white/30">
-                        <span className="text-xs tracking-widest uppercase">Scroll</span>
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
-                    </div>
-                </div>
+
             </section>
 
             {/* ===== NOTIFICACIONES ===== */}
@@ -196,94 +166,6 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
 
             {/* ===== TODAY'S PRAYER TIMES ===== */}
             <section ref={timesRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F7F5F0] overflow-hidden">
-                {/* Patrón geométrico islámico — cuadrados superpuestos rotados */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <defs>
-                        <pattern id="islamic-geo-prayers" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
-                            <rect x="20" y="20" width="120" height="120" fill="none" stroke="#C9A646" strokeWidth="0.6" opacity="0.45"/>
-                            <rect x="20" y="20" width="120" height="120" fill="none" stroke="#C9A646" strokeWidth="0.6" opacity="0.45" transform="rotate(45 80 80)"/>
-                            <circle cx="80" cy="80" r="11" fill="none" stroke="#C9A646" strokeWidth="0.4" opacity="0.4"/>
-                            <circle cx="80" cy="80" r="3" fill="#C9A646" opacity="0.3"/>
-                            <line x1="80" y1="0"   x2="80" y2="20"  stroke="#C9A646" strokeWidth="0.3" opacity="0.25"/>
-                            <line x1="80" y1="140" x2="80" y2="160" stroke="#C9A646" strokeWidth="0.3" opacity="0.25"/>
-                            <line x1="0"  y1="80"  x2="20" y2="80"  stroke="#C9A646" strokeWidth="0.3" opacity="0.25"/>
-                            <line x1="140" y1="80" x2="160" y2="80" stroke="#C9A646" strokeWidth="0.3" opacity="0.25"/>
-                            <line x1="0"   y1="0"   x2="20"  y2="20"  stroke="#C9A646" strokeWidth="0.2" opacity="0.15"/>
-                            <line x1="160" y1="0"   x2="140" y2="20"  stroke="#C9A646" strokeWidth="0.2" opacity="0.15"/>
-                            <line x1="0"   y1="160" x2="20"  y2="140" stroke="#C9A646" strokeWidth="0.2" opacity="0.15"/>
-                            <line x1="160" y1="160" x2="140" y2="140" stroke="#C9A646" strokeWidth="0.2" opacity="0.15"/>
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#islamic-geo-prayers)"/>
-                </svg>
-
-                {/* Media luna pequeña — esquina inferior izquierda */}
-                <div className="absolute bottom-0 left-0 w-28 h-28 sm:w-36 sm:h-36 pointer-events-none opacity-[0.05]" aria-hidden="true">
-                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                        <defs>
-                            <mask id="crescent-prayers-sm">
-                                <rect width="200" height="200" fill="white"/>
-                                <circle cx="55" cy="75" r="80" fill="black"/>
-                            </mask>
-                        </defs>
-                        <circle cx="120" cy="100" r="95" fill="#0F3B2E" mask="url(#crescent-prayers-sm)"/>
-                    </svg>
-                </div>
-
-                {/* Caligrafía árabe "السلام" difuminada al centro */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.04] select-none w-full text-center" aria-hidden="true">
-                    <span className="font-serif text-[8rem] sm:text-[12rem] lg:text-[16rem] text-[#0F3B2E] leading-none whitespace-nowrap">
-                        السلام
-                    </span>
-                </div>
-
-                {/* Estrellas de 8 puntas decorativas */}
-                <div className="absolute top-6 left-6 w-8 h-8 sm:w-10 sm:h-10 pointer-events-none opacity-[0.08]" aria-hidden="true">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                        <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#C9A646"/>
-                    </svg>
-                </div>
-                <div className="absolute bottom-8 right-8 w-6 h-6 sm:w-8 sm:h-8 pointer-events-none opacity-[0.07]" aria-hidden="true">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                        <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#C9A646"/>
-                    </svg>
-                </div>
-
-                {/* Silueta de mezquita — base inferior centrada */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[260px] sm:w-[360px] lg:w-[480px] pointer-events-none opacity-[0.035]" aria-hidden="true">
-                    <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" className="w-full">
-                        <rect x="20" y="60" width="18" height="140" fill="#0F3B2E"/>
-                        <polygon points="29,40 14,60 44,60" fill="#0F3B2E"/>
-                        <rect x="24" y="35" width="10" height="10" fill="#0F3B2E"/>
-                        <rect x="282" y="60" width="18" height="140" fill="#0F3B2E"/>
-                        <polygon points="291,40 276,60 306,60" fill="#0F3B2E"/>
-                        <rect x="286" y="35" width="10" height="10" fill="#0F3B2E"/>
-                        <rect x="55" y="100" width="210" height="100" fill="#0F3B2E"/>
-                        <ellipse cx="160" cy="100" rx="60" ry="50" fill="#0F3B2E"/>
-                        <ellipse cx="90" cy="120" rx="38" ry="32" fill="#0F3B2E"/>
-                        <ellipse cx="230" cy="120" rx="38" ry="32" fill="#0F3B2E"/>
-                        <rect x="135" y="140" width="50" height="60" fill="white"/>
-                        <ellipse cx="160" cy="140" rx="25" ry="18" fill="white"/>
-                    </svg>
-                </div>
-
-                {/* Caligrafía "بسم الله" — esquina superior discreta */}
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 pointer-events-none opacity-[0.04] select-none" aria-hidden="true">
-                    <span className="font-serif text-6xl sm:text-8xl lg:text-9xl text-[#C9A646] whitespace-nowrap">
-                        بسم الله
-                    </span>
-                </div>
-
-                {/* Minarete lateral derecho */}
-                <div className="absolute top-0 right-0 h-full w-12 sm:w-16 pointer-events-none opacity-[0.04]" aria-hidden="true">
-                    <svg viewBox="0 0 50 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                        <rect x="16" y="80" width="18" height="320" fill="#0F3B2E"/>
-                        <polygon points="25,50 10,80 40,80" fill="#0F3B2E"/>
-                        <rect x="19" y="36" width="12" height="20" fill="#0F3B2E"/>
-                        <circle cx="25" cy="26" r="10" fill="#C9A646" opacity="0.5"/>
-                    </svg>
-                </div>
-
                 <div className="max-w-3xl mx-auto px-5 sm:px-8">
                     <div className="text-center mb-10 sm:mb-12 lg:mb-14">
                         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
@@ -395,31 +277,6 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
             {/* ===== ABOUT ===== */}
             <section ref={aboutRef} className="reveal relative py-16 sm:py-20 lg:py-24 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#F7F5F0] to-[#efece4]" />
-
-                {/* Caligrafía "السلام" — watermark central */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.04] select-none text-center" aria-hidden="true">
-                    <span className="font-serif text-[10rem] sm:text-[14rem] lg:text-[18rem] text-[#0F3B2E] leading-none whitespace-nowrap tracking-[-0.05em]">
-                        السلام
-                    </span>
-                </div>
-
-                {/* Silueta mezquita — base inferior */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[280px] sm:w-[380px] lg:w-[500px] pointer-events-none opacity-[0.035]" aria-hidden="true">
-                    <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" className="w-full">
-                        <rect x="20" y="60" width="18" height="140" fill="#0F3B2E"/>
-                        <polygon points="29,40 14,60 44,60" fill="#0F3B2E"/>
-                        <rect x="24" y="35" width="10" height="10" fill="#0F3B2E"/>
-                        <rect x="282" y="60" width="18" height="140" fill="#0F3B2E"/>
-                        <polygon points="291,40 276,60 306,60" fill="#0F3B2E"/>
-                        <rect x="286" y="35" width="10" height="10" fill="#0F3B2E"/>
-                        <rect x="55" y="100" width="210" height="100" fill="#0F3B2E"/>
-                        <ellipse cx="160" cy="100" rx="60" ry="50" fill="#0F3B2E"/>
-                        <ellipse cx="90" cy="120" rx="38" ry="32" fill="#0F3B2E"/>
-                        <ellipse cx="230" cy="120" rx="38" ry="32" fill="#0F3B2E"/>
-                        <rect x="135" y="140" width="50" height="60" fill="white"/>
-                        <ellipse cx="160" cy="140" rx="25" ry="18" fill="white"/>
-                    </svg>
-                </div>
 
                 <div className="max-w-3xl mx-auto px-5 sm:px-8">
                     <div className="text-center mb-10 sm:mb-12 lg:mb-14">

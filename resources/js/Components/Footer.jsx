@@ -38,13 +38,14 @@ function BackToTop() {
 
 export default function Footer() {
     const { t, isRTL } = useTranslation();
-    const { props } = usePage();
+    const { component, props } = usePage();
+    const isHorarios = component === 'Horarios';
     const ubicacion = props?.ubicacion ?? null;
     const lat = ubicacion?.latitud || 41.230484;
     const lng = ubicacion?.longitud || 1.532144;
 
     return (
-        <footer className="relative bg-gradient-to-br from-[#0F3B2E] via-[#061a10] to-[#04150c] text-white pt-16 pb-6 mt-20 overflow-hidden">
+        <footer className={`relative bg-gradient-to-br from-[#0F3B2E] via-[#061a10] to-[#04150c] text-white pt-16 pb-6 overflow-hidden ${isHorarios ? '' : 'mt-20'}`}>
             {/* Patrón geométrico islámico de fondo */}
             <div className="footer-pattern">
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
