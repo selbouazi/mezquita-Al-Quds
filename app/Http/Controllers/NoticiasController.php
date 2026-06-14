@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comentario;
 use App\Models\Noticia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -38,8 +39,15 @@ class NoticiasController extends Controller
             abort(404);
         }
 
+        $comentarios = Comentario::with('user')
+            ->where('noticia_id', $noticia->id)
+            ->where('aprobado', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return inertia('NoticiaShow', [
             'noticia' => $noticia,
+            'comentarios' => $comentarios,
         ]);
     }
 }

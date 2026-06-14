@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Noticia extends Model
 {
@@ -24,6 +25,16 @@ class Noticia extends Model
     public function scopePublicado($query)
     {
         return $query->where('publicado', true);
+    }
+
+    public function comentarios(): HasMany
+    {
+        return $this->hasMany(Comentario::class);
+    }
+
+    public function comentariosAprobados(): HasMany
+    {
+        return $this->hasMany(Comentario::class)->where('aprobado', true);
     }
 
     public function getImagenAttribute($value)

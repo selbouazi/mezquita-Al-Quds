@@ -4,7 +4,7 @@ import { useTranslation } from '../hooks/useTranslation';
 
 const IQAMA_WINDOW = 30;
 
-export default function PrayerHeader({ prayerTimes }) {
+export default function PrayerHeader({ prayerTimes, compact }) {
     const { t } = useTranslation();
     const { locale, tiemposEspera } = usePage().props;
     const lastDisplay = useRef({ title: '', waiting: '' });
@@ -112,6 +112,19 @@ export default function PrayerHeader({ prayerTimes }) {
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
     }, [tiemposEspera, prayerTimes]);
+
+    if (compact) {
+        return (
+            <div className="text-center fade">
+                <div className="text-xl sm:text-2xl font-semibold text-white/95 tracking-tight mb-1">
+                    {display.title}
+                </div>
+                <div className="text-white/70 text-base font-medium">
+                    {display.waiting}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <section className="flex justify-center mt-0 fade">

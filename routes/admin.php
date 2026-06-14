@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivationCodeController;
 use App\Http\Controllers\Admin\ClasesController;
+use App\Http\Controllers\Admin\ComentariosController;
 use App\Http\Controllers\Admin\ContactosController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DonativosController;
@@ -68,6 +69,11 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::post('/noticias', [NoticiasController::class, 'store']);
     Route::put('/noticias/{noticia}', [NoticiasController::class, 'update']);
     Route::delete('/noticias/{noticia}', [NoticiasController::class, 'destroy']);
+
+    // Comentarios
+    Route::get('/comentarios', [ComentariosController::class, 'index']);
+    Route::post('/comentarios/{comentario}/approve', [ComentariosController::class, 'approve']);
+    Route::delete('/comentarios/{comentario}', [ComentariosController::class, 'destroy']);
 
     // Ubicación
     Route::get('/ubicacion', [UbicacionController::class, 'index']);

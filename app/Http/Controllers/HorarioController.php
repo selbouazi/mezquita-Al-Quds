@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Noticia;
+use App\Models\Notification;
 use App\Services\HorarioService;
 use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class HorarioController extends Controller
@@ -16,9 +19,25 @@ class HorarioController extends Controller
     {
         $tiemposEspera = TiempoEsperaService::getTiemposEspera();
 
+        $latestNews = Cache::remember('home_latest_news', 3600, function () {
+            return Noticia::publicado()
+                ->orderBy('fecha_publicacion', 'desc')
+                ->take(3)
+                ->get(['id', 'titulo', 'contenido', 'imagen', 'fecha_publicacion']);
+        });
+
+        $notificaciones = Cache::remember('home_notificaciones', 3600, function () {
+            return Notification::activas()
+                ->ordenadas()
+                ->take(5)
+                ->get(['id', 'titulo', 'mensaje', 'prioridad']);
+        });
+
         return Inertia::render('Home', [
             'prayerTimes' => HorarioService::getHorarioHoy(),
             'tiemposEspera' => $tiemposEspera,
+            'latestNews' => $latestNews,
+            'notificaciones' => $notificaciones,
         ]);
     }
 

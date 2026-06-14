@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonativoController;
 use App\Http\Controllers\FacturaController;
@@ -36,6 +37,7 @@ Route::get('/horarios', [HorarioController::class, 'horarios']);
 
 Route::get('/noticias', [NoticiasController::class, 'index']);
 Route::get('/noticias/{noticia}', [NoticiasController::class, 'show']);
+Route::post('/comentarios', [ComentarioController::class, 'store'])->middleware('throttle:10,1');
 
 Route::get('/contacto', [ContactController::class, 'create']);
 Route::post('/contacto', [ContactController::class, 'store'])

@@ -10,10 +10,12 @@ class NotificationObserver
     public function saved(Notification $notification): void
     {
         Cache::increment('notificaciones_version');
+        Cache::forget('home_notificaciones');
     }
 
     public function deleted(Notification $notification): void
     {
         Cache::increment('notificaciones_version');
+        Cache::forget('home_notificaciones');
     }
 }

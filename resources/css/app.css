@@ -6,8 +6,9 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Playfair Display', ui-serif, Georgia, serif;
 }
 
 /*
@@ -21,7 +22,7 @@
     left: 0;
     z-index: 9999;
     padding: 0.5rem 1rem;
-    background: #0F5132;
+    background: #0F3B2E;
     color: #fff;
     font-weight: 600;
     text-decoration: none;
@@ -33,7 +34,7 @@
 
 /* Visible focus ring for keyboard navigation only */
 *:focus-visible {
-    outline: 2px solid #0F5132;
+    outline: 2px solid #0F3B2E;
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -69,4 +70,292 @@ html {
 }
 .animate-slide-down {
     animation: slide-down 0.3s ease-out;
+}
+
+/* Scroll reveal animations */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fade-in-up {
+    animation: fade-in-up 0.7s ease-out forwards;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.animate-fade-in {
+    animation: fade-in 0.7s ease-out forwards;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.animate-shimmer {
+    animation: shimmer 8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(201, 162, 39, 0.15); }
+    50% { box-shadow: 0 0 40px rgba(201, 162, 39, 0.25); }
+}
+.animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Reveal classes (set by JS) */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* === PREMIUM NAVBAR ANIMATIONS === */
+
+@keyframes shimmer-btn {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+.animate-shimmer-btn {
+    background-size: 200% 100%;
+    animation: shimmer-btn 4s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+    0%, 100% { box-shadow: 0 0 20px rgba(201, 162, 39, 0.08); }
+    50% { box-shadow: 0 0 40px rgba(201, 162, 39, 0.18); }
+}
+.animate-pulse-soft {
+    animation: pulse-soft 4s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+.animate-float-slow {
+    animation: float-slow 3s ease-in-out infinite;
+}
+
+/* Navbar diamond indicator */
+.nav-diamond {
+    position: absolute;
+    bottom: 0;
+    width: 8px;
+    height: 8px;
+    background: #C9A646;
+    transform: rotate(45deg);
+    transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === PREMIUM FOOTER ANIMATIONS === */
+
+@keyframes rotate-border {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.animate-rotate-border {
+    animation: rotate-border 8s linear infinite;
+}
+
+@keyframes back-to-top-appear {
+    0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-btt-appear {
+    animation: back-to-top-appear 0.4s ease-out forwards;
+}
+
+@keyframes back-to-top-disappear {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(20px) scale(0.8); }
+}
+.animate-btt-disappear {
+    animation: back-to-top-disappear 0.3s ease-in forwards;
+}
+
+/* Footer glass card */
+.footer-glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+.footer-glass-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(201, 162, 39, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Footer geometric pattern overlay */
+.footer-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.025;
+    pointer-events: none;
+}
+.footer-pattern svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Link reveal arrow */
+.link-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    transform: translateX(-6px);
+}
+.group:hover .link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* === PREMIUM HOME ANIMATIONS === */
+
+@keyframes glow-text {
+    0%, 100% { text-shadow: 0 0 20px rgba(201, 162, 39, 0.3), 0 0 60px rgba(201, 162, 39, 0.1); }
+    50% { text-shadow: 0 0 40px rgba(201, 162, 39, 0.5), 0 0 80px rgba(201, 162, 39, 0.2); }
+}
+.animate-glow-text {
+    animation: glow-text 4s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+    0%, 100% { opacity: 1; transform: translateY(0); }
+    50% { opacity: 0.5; transform: translateY(6px); }
+}
+.animate-scroll-hint {
+    animation: scroll-hint 2.5s ease-in-out infinite;
+}
+
+@keyframes progress-fill {
+    from { width: 0%; }
+}
+.animate-progress-fill {
+    animation: progress-fill 1.2s ease-out forwards;
+}
+
+@keyframes float-spin {
+    0% { transform: rotate(0deg) translateY(0); }
+    33% { transform: rotate(5deg) translateY(-8px); }
+    66% { transform: rotate(-3deg) translateY(-4px); }
+    100% { transform: rotate(0deg) translateY(0); }
+}
+.animate-float-spin {
+    animation: float-spin 12s ease-in-out infinite;
+}
+
+@keyframes float-spin-reverse {
+    0% { transform: rotate(0deg) translateY(0) scaleX(-1); }
+    33% { transform: rotate(-5deg) translateY(-12px) scaleX(-1); }
+    66% { transform: rotate(3deg) translateY(-6px) scaleX(-1); }
+    100% { transform: rotate(0deg) translateY(0) scaleX(-1); }
+}
+.animate-float-spin-reverse {
+    animation: float-spin-reverse 15s ease-in-out infinite;
+}
+
+/* Section divider pattern */
+.section-divider {
+    position: relative;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.3), transparent);
+}
+.section-divider::before {
+    content: '◆';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    color: #C9A646;
+    opacity: 0.5;
+}
+
+/* Premium glass card for home sections */
+.home-glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 162, 39, 0.1);
+    border-radius: 20px;
+    transition: all 0.4s ease;
+}
+.home-glass-card:hover {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(201, 162, 39, 0.25);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(201, 162, 39, 0.08);
+}
+
+/* News card premium */
+.news-card-premium {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.news-card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(15, 81, 50, 0.12), 0 0 0 1px rgba(201, 162, 39, 0.15);
+}
+
+/* Prayer row progress bar */
+.prayer-progress {
+    height: 2px;
+    background: rgba(201, 162, 39, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.prayer-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #C9A646, #e8c84a);
+    border-radius: 2px;
+    transition: width 60s linear;
+}
+
+/* Notification glass bar */
+.notif-glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-left-width: 4px;
+    transition: all 0.3s ease;
+}
+.notif-glass:hover {
+    transform: translateX(4px);
+}
+
+/* Hero decorative shapes */
+.hero-shape {
+    position: absolute;
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    pointer-events: none;
+}
+
+/* Islamic tiled pattern overlay for home sections */
+.islamic-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+}
+.islamic-pattern svg {
+    width: 100%;
+    height: 100%;
 }

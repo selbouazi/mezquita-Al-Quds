@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { router } from '@inertiajs/react';
 import MainLayout from '../Layouts/MainLayout';
 import { useTranslation } from '../hooks/useTranslation';
+import { useReveal } from '../hooks/useReveal';
 
 const PRAYER_KEYS = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
@@ -42,9 +43,10 @@ const PrayerIcon = ({ name }) => {
 };
 
 export default function Horarios({ horariosMes, year, month }) {
-    const { t, locale } = useTranslation();
+    const { t, locale, isRTL } = useTranslation();
+    const calRef = useReveal();
+    const detailRef = useReveal();
 
-    // Meses y días vienen de los archivos de idioma — sin arrays hardcodeados
     const monthNames = t('horarios', 'months');
     const dayNames   = t('horarios', 'days');
 
@@ -93,56 +95,84 @@ export default function Horarios({ horariosMes, year, month }) {
         <MainLayout title={t('navbar', 'prayers')}
             description="Horarios de oración (salat) para la Mezquita Al‑Quds de El Vendrell. Consulta los tiempos de Fajr, Dhuhr, Asr, Maghrib e Isha."
             canonical="/horarios">
-            <section className="pt-28 pb-16 max-w-3xl mx-auto px-4 sm:px-6">
 
-                {/* ── CABECERA MES ── */}
-                <div className="flex items-center justify-between mb-6">
+            {/* === HERO === */}
+            <section className="relative pt-28 pb-16 sm:pb-20 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#0F3B2E] to-[#09291e]">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64615,transparent_60%)] pointer-events-none" />
+                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                    <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full border border-[#C9A646]/10 animate-float-spin" />
+                    <div className="absolute -bottom-16 -left-16 w-48 h-48 rotate-45 border border-[#C9A646]/8 animate-float-spin-reverse" style={{ animationDuration: '18s' }} />
+                </div>
+                <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
+                    <div className="inline-block px-4 py-1.5 mb-4 bg-white/10 backdrop-blur-sm rounded-full border border-white/10 text-sm sm:text-base text-[#C9A646] font-medium tracking-wider uppercase">
+                        {t('navbar', 'prayers')}
+                    </div>
+                    <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.2] mb-4">
+                        {Array.isArray(monthNames) ? monthNames[month - 1] : month} <span className="text-[#C9A646]">{year}</span>
+                    </h1>
+                    <p className="text-[#E8E8E8] text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+                        {t('footer', 'description')}
+                    </p>
+                </div>
+            </section>
+
+            {/* === CALENDAR SECTION === */}
+            <section ref={calRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F7F5F0] overflow-hidden">
+                <div className="footer-pattern">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                        <defs>
+                            <pattern id="girih-horarios" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+                                <polygon points="60,0 90,30 90,70 60,100 30,70 30,30" fill="none" stroke="#C9A646" strokeWidth="0.5" opacity="0.12" />
+                                <polygon points="60,20 80,40 80,60 60,80 40,60 40,40" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.08" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#girih-horarios)" />
+                    </svg>
+                </div>
+
+                {/* Month navigation */}
+                <div className={`relative max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between mb-8 sm:mb-10 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <button
                         onClick={() => goToMonth(year, month - 1)}
-                        className="w-9 h-9 flex items-center justify-center rounded-full
-                                   border border-[#C9A227]/40 text-[#0F5132]
-                                   hover:bg-[#0F5132] hover:text-white hover:border-[#0F5132]
-                                   transition-all duration-200 font-bold text-lg"
+                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[#C9A646]/20 text-[#0F3B2E] hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm hover:shadow-lg text-xl font-bold"
+                        aria-label={t('common', 'previous')}
                     >
-                        ‹
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
+                        </svg>
                     </button>
 
-                    <h1 className="text-xl font-bold text-[#0F5132] tracking-wide">
+                    <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0F3B2E] leading-[1.3]">
                         {Array.isArray(monthNames) ? monthNames[month - 1] : month} {year}
-                    </h1>
+                    </h2>
 
                     <button
                         onClick={() => goToMonth(year, month + 1)}
-                        className="w-9 h-9 flex items-center justify-center rounded-full
-                                   border border-[#C9A227]/40 text-[#0F5132]
-                                   hover:bg-[#0F5132] hover:text-white hover:border-[#0F5132]
-                                   transition-all duration-200 font-bold text-lg"
+                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[#C9A646]/20 text-[#0F3B2E] hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm hover:shadow-lg text-xl font-bold"
+                        aria-label={t('common', 'next')}
                     >
-                        ›
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
+                        </svg>
                     </button>
                 </div>
 
-                {/* ── CALENDARIO ── */}
-                <div className="bg-white rounded-2xl shadow-sm border border-[#C9A227]/20 overflow-hidden mb-5">
+                {/* Calendar */}
+                <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
+                    <div className="home-glass-card p-4 sm:p-6 lg:p-8">
+                        {/* Day headers */}
+                        <div className={`grid grid-cols-7 mb-2 ${isRTL ? 'grid-flow-dense' : ''}`}>
+                            {Array.isArray(dayNames) && dayNames.map((d, i) => (
+                                <div key={i} className={`text-center text-xs sm:text-sm font-semibold py-2 sm:py-3 ${i === 4 ? 'text-[#C9A646]' : 'text-gray-400'}`}>
+                                    {d}
+                                </div>
+                            ))}
+                        </div>
 
-                    {/* Cabecera días */}
-                    <div className="grid grid-cols-7 border-b border-gray-100">
-                        {Array.isArray(dayNames) && dayNames.map((d, i) => (
-                            <div key={i}
-                                 className={`text-center text-xs font-semibold py-3
-                                     ${i === 4 ? 'text-[#C9A227]' : 'text-gray-400'}`}>
-                                {d}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Filas */}
-                    {Array.from({ length: cells.length / 7 }, (_, row) => (
-                        <div key={row} className="grid grid-cols-7 border-b border-gray-50 last:border-0">
-                            {cells.slice(row * 7, row * 7 + 7).map((d, col) => {
-                                if (!d) return (
-                                    <div key={`e-${row}-${col}`} className="py-3 bg-[#F5F5F5]/40" />
-                                );
+                        {/* Day cells */}
+                        <div className="grid grid-cols-7">
+                            {cells.map((d, idx) => {
+                                if (!d) return <div key={`e-${idx}`} className="py-2 sm:py-3" />;
 
                                 const ds      = dateStr(d);
                                 const isToday = ds === todayStr;
@@ -157,24 +187,24 @@ export default function Horarios({ horariosMes, year, month }) {
                                         onClick={() => hasData && setSelected(ds)}
                                         disabled={!hasData}
                                         className={`
-                                            py-2.5 flex flex-col items-center gap-0.5
-                                            transition-all duration-150
-                                            ${!hasData ? 'opacity-20 cursor-default' : 'cursor-pointer'}
-                                            ${isSel ? 'bg-[#0F5132]' : 'hover:bg-[#F5F5F5]'}
+                                            py-2 sm:py-3 flex flex-col items-center gap-0.5 transition-all duration-200 relative
+                                            ${!hasData ? 'opacity-15 cursor-default' : 'cursor-pointer hover:bg-[#0F3B2E]/5'}
+                                            ${isSel ? 'bg-[#0F3B2E] rounded-lg' : 'rounded-lg'}
+                                            ${isToday && !isSel ? 'ring-2 ring-[#C9A646]/40 ring-inset' : ''}
                                         `}
                                     >
                                         <span className={`
-                                            w-7 h-7 flex items-center justify-center rounded-full text-sm font-semibold
-                                            ${isSel                        ? 'bg-white text-[#0F5132]'               : ''}
-                                            ${isToday && !isSel            ? 'ring-2 ring-[#0F5132] text-[#0F5132]'  : ''}
-                                            ${isFri && !isSel && !isToday  ? 'text-[#C9A227]'                        : ''}
-                                            ${!isSel && !isToday && !isFri ? 'text-gray-700'                         : ''}
+                                            w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-sm sm:text-base font-semibold transition-all
+                                            ${isSel                        ? 'bg-white text-[#0F3B2E] shadow-md' : ''}
+                                            ${isToday && !isSel            ? 'text-[#0F3B2E] font-bold' : ''}
+                                            ${isFri && !isSel && !isToday  ? 'text-[#C9A646]' : ''}
+                                            ${!isSel && !isToday && !isFri ? 'text-gray-700' : ''}
                                         `}>
                                             {d}
                                         </span>
                                         {hasData && (
-                                            <span className={`text-[9px] font-medium leading-none tabular-nums
-                                                ${isSel ? 'text-white/50' : 'text-gray-300'}`}>
+                                            <span className={`text-[8px] sm:text-[10px] font-medium leading-none tabular-nums
+                                                ${isSel ? 'text-white/60' : 'text-gray-300'}`}>
                                                 {dayData.fajr}
                                             </span>
                                         )}
@@ -182,53 +212,74 @@ export default function Horarios({ horariosMes, year, month }) {
                                 );
                             })}
                         </div>
-                    ))}
+                    </div>
                 </div>
+            </section>
 
-                {/* ── DETALLE DÍA ── */}
-                {selected && selectedData ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-[#C9A227]/20 overflow-hidden">
-                        <div className="px-5 py-4 flex items-center justify-between border-b border-gray-50">
-                            <div>
-                                <p className="font-semibold text-[#0F5132] text-sm capitalize">
-                                    {formatSelectedDate()}
-                                </p>
-                                {selectedData.fecha_hijri && (
-                                    <p className="text-xs text-gray-400 mt-0.5">{selectedData.fecha_hijri}</p>
+            {/* === DIAMOND SEPARATOR === */}
+            <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-gradient-to-b from-[#F7F5F0] to-[#F7F5F0]" aria-hidden="true">
+                {[0,1,2,3,4,5,6,7,8].map(i => (
+                    <span key={i} className={`block w-1 h-1 bg-[#C9A646]/${i % 2 === 0 ? '40' : '25'} rotate-45`} />
+                ))}
+            </div>
+
+            {/* === DAY DETAIL SECTION === */}
+            <section ref={detailRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-[#F7F5F0] to-white overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,#C9A64608,transparent_50%)] pointer-events-none" />
+
+                <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
+                    {selected && selectedData ? (
+                        <div className="home-glass-card p-0 overflow-hidden">
+                            {/* Header with date */}
+                            <div className={`px-5 sm:px-6 lg:px-8 py-4 sm:py-5 flex items-center justify-between border-b border-[#C9A646]/10 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                <div className={isRTL ? 'text-right' : ''}>
+                                    <p className="font-semibold text-[#0F3B2E] text-base sm:text-lg capitalize">
+                                        {formatSelectedDate()}
+                                    </p>
+                                    {selectedData.fecha_hijri && (
+                                        <p className="text-xs sm:text-sm text-[#C9A646]/70 mt-0.5 font-medium">{selectedData.fecha_hijri}</p>
+                                    )}
+                                </div>
+                                {selected === todayStr && (
+                                    <span className="text-xs font-bold bg-[#C9A646]/15 text-[#C9A646] px-3 py-1 rounded-full border border-[#C9A646]/20">
+                                        {t('horarios', 'today')}
+                                    </span>
                                 )}
                             </div>
-                            {selected === todayStr && (
-                                <span className="text-[11px] font-bold bg-[#0F5132]/10 text-[#0F5132] px-3 py-1 rounded-full">
-                                    {t('horarios', 'today')}
-                                </span>
-                            )}
-                        </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3">
-                            {PRAYER_KEYS.map((key) => (
-                                <div key={key}
-                                     className="flex flex-col items-center justify-center py-7 gap-2
-                                                border-b border-r border-gray-100
-                                                hover:bg-[#F5F5F5]/60 transition-colors duration-150">
-                                    <div className="text-[#198754]">
-                                        <PrayerIcon name={key} />
+                            {/* Prayer times grid */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                                {PRAYER_KEYS.map((key, idx) => (
+                                    <div key={key} className={`
+                                        flex flex-col items-center justify-center py-6 sm:py-8 gap-2 sm:gap-3
+                                        border-b sm:border-b-0 border-[#C9A646]/8
+                                        ${idx < (isRTL ? 4 : 2) ? 'border-r border-[#C9A646]/8' : ''}
+                                        ${idx >= (isRTL ? 4 : 2) && idx < 4 ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
+                                        ${idx < (isRTL ? 2 : 4) ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
+                                        hover:bg-[#0F3B2E]/3 transition-colors duration-200
+                                    `}>
+                                        <div className="text-[#C9A646]">
+                                            <PrayerIcon name={key} />
+                                        </div>
+                                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">
+                                            {prayerLabel(key)}
+                                        </span>
+                                        <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0F3B2E] tabular-nums tracking-tight">
+                                            {selectedData[key]}
+                                        </span>
                                     </div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                                        {prayerLabel(key)}
-                                    </span>
-                                    <span className="text-2xl font-bold text-[#0F5132] tabular-nums tracking-tight">
-                                        {selectedData[key]}
-                                    </span>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ) : selected && !selectedData ? (
-                    <div className="text-center text-gray-400 text-sm py-8 bg-white rounded-2xl border border-[#C9A227]/20">
-                        {t('horarios', 'no_data')}
-                    </div>
-                ) : null}
-
+                    ) : selected && !selectedData ? (
+                        <div className="home-glass-card p-8 sm:p-12 text-center">
+                            <svg className="w-12 h-12 mx-auto mb-4 text-[#C9A646]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <p className="text-gray-400 text-base sm:text-lg">{t('horarios', 'no_data')}</p>
+                        </div>
+                    ) : null}
+                </div>
             </section>
         </MainLayout>
     );

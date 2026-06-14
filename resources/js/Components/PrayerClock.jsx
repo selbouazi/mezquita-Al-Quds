@@ -64,15 +64,13 @@ export default function PrayerClock({ prayerTimes }) {
 
     return (
         <div className="relative reloj-container
-                        w-[340px] h-[340px] sm:w-[380px] sm:h-[380px]
-                        md:w-[460px] md:h-[460px] lg:w-[520px] lg:h-[520px]
-                        xl:w-[580px] xl:h-[580px]
-                        rounded-3xl bg-white shadow-xl
-                        hover:shadow-2xl hover:-translate-y-1 transition overflow-visible fade"
-             style={{ animation: 'floatClock 7s ease-in-out infinite' }}>
+                        w-[300px] h-[300px] sm:w-[320px] sm:h-[320px]
+                        md:w-[340px] md:h-[340px] lg:w-[350px] lg:h-[350px]
+                        xl:w-[360px] xl:h-[360px]
+                        rounded-3xl bg-white shadow-lg
+                        hover:shadow-xl transition overflow-visible fade">
 
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff,#f3f3f3)] rounded-3xl" />
-            <div className="absolute -inset-10 bg-[radial-gradient(circle_at_top,#C9A22722,transparent_70%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff,#fafafa)] rounded-3xl" />
 
             {/* Números del reloj */}
             {CLOCK_NUMBERS.map(({ hour, label }) => {
@@ -153,15 +151,11 @@ export default function PrayerClock({ prayerTimes }) {
             })}
 
             <style>{`
-                .reloj-container { --size: 340px; }
-                @media (min-width:640px)  { .reloj-container { --size: 380px; } }
-                @media (min-width:768px)  { .reloj-container { --size: 460px; } }
-                @media (min-width:1024px) { .reloj-container { --size: 520px; } }
-                @media (min-width:1280px) { .reloj-container { --size: 580px; } }
-                @keyframes floatClock {
-                    0%,100% { transform: translateY(0px); }
-                    50%     { transform: translateY(-6px); }
-                }
+                .reloj-container { --size: 300px; }
+                @media (min-width:640px)  { .reloj-container { --size: 320px; } }
+                @media (min-width:768px)  { .reloj-container { --size: 340px; } }
+                @media (min-width:1024px) { .reloj-container { --size: 350px; } }
+                @media (min-width:1280px) { .reloj-container { --size: 360px; } }
             `}</style>
         </div>
     );
