@@ -14,16 +14,13 @@ function toSeconds(str) {
     return h * 3600 + m * 60;
 }
 
-function fmtDiff(sec) {
-    if (sec === 0) return '+00min';
-    const abs = Math.abs(sec);
-    const totalMin = Math.floor(abs / 60);
+function fmtDuration(sec) {
+    if (sec <= 0) return '0min';
+    const totalMin = Math.floor(sec / 60);
     const h = Math.floor(totalMin / 60);
     const m = totalMin % 60;
-    const mm = String(m).padStart(2, '0');
-    const sign = sec > 0 ? '-' : '+';
-    if (h > 0) return `${sign}${h}:${mm}min`;
-    return `${sign}${mm}min`;
+    if (h > 0) return `${h}h ${m}min`;
+    return `${m}min`;
 }
 
 function prayerProgress(key, prayerTimes, tiemposEspera, nowSec) {
@@ -38,13 +35,14 @@ function prayerProgress(key, prayerTimes, tiemposEspera, nowSec) {
     return Math.min(100, Math.max(0, (elapsed / windowSec) * 100));
 }
 
-export default function Home({ prayerTimes, latestNews, notificaciones, tiemposEspera }) {
+export default function Home({ prayerTimes, latestNews, notificaciones, tiemposEspera, normas }) {
     const { t, locale, isRTL } = useTranslation();
     const [now, setNow] = useState(new Date());
     const notifRef = useReveal();
     const timesRef = useReveal();
     const aboutRef = useReveal();
     const newsRef = useReveal();
+    const normasRef = useReveal();
 
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 60000);
@@ -166,6 +164,14 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
 
             {/* ===== TODAY'S PRAYER TIMES ===== */}
             <section ref={timesRef} className="reveal relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-[#F7F5F0] overflow-hidden">
+                {/* Torre decorativa izquierda */}
+                <div className="absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 w-48 sm:w-72 lg:w-[32rem] pointer-events-none opacity-[0.35] select-none" aria-hidden="true">
+                    <img src="/img/torre.png" alt="" className="w-full h-auto object-contain" />
+                </div>
+                {/* Torre decorativa derecha */}
+                <div className="absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 w-48 sm:w-72 lg:w-[32rem] pointer-events-none opacity-[0.35] select-none scale-x-[-1]" aria-hidden="true">
+                    <img src="/img/torre.png" alt="" className="w-full h-auto object-contain" />
+                </div>
                 <div className="max-w-3xl mx-auto px-5 sm:px-8">
                     <div className="text-center mb-10 sm:mb-12 lg:mb-14">
                         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
@@ -176,7 +182,6 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                         <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0F3B2E] leading-[1.3]">
                             {t('navbar', 'prayers')}
                         </h2>
-                        <p className="text-[#E8E8E8] text-sm sm:text-base mt-2">{t('footer', 'description')}</p>
                     </div>
 
                     <div className="home-glass-card p-4 sm:p-6 lg:p-8">
@@ -230,13 +235,13 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                                 <span className={`text-right font-mono text-sm sm:text-base ${isRTL ? 'text-left' : 'text-right'}`}
                                                       style={{ minWidth: '5.5rem' }}>
                                                     {diff > 0 && (
-                                                        <span className="text-red-500 font-semibold whitespace-nowrap">{fmtDiff(diff)}</span>
+                                                        <span className="text-red-500 font-semibold whitespace-nowrap">{fmtDuration(diff)}</span>
                                                     )}
                                                     {diff <= 0 && past >= 0 && past < waitingSec && (
-                                                        <span className="text-orange-500 font-semibold whitespace-nowrap">{t('time', 'iqama')} {fmtDiff(waitingSec - past)}</span>
+                                                        <span className="text-orange-500 font-semibold whitespace-nowrap">{t('time', 'iqama')} {fmtDuration(waitingSec - past)}</span>
                                                     )}
                                                     {diff <= 0 && (!waiting || past >= waitingSec) && (
-                                                        <span className="text-green-600 font-semibold whitespace-nowrap">{fmtDiff(diff)}</span>
+                                                        <span className="text-green-600 font-semibold whitespace-nowrap">{fmtDuration(-diff)}</span>
                                                     )}
                                                 </span>
                                             </div>
@@ -266,6 +271,78 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     </div>
                 </div>
             </section>
+
+            {/* ===== NORMAS ===== */}
+            {normas?.length > 0 && (
+                <section ref={normasRef} className="reveal relative py-16 sm:py-20 lg:py-24 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0F3B2E] via-[#0a2b20] to-[#0F3B2E]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64612,transparent_60%)] pointer-events-none" />
+                    <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'url("/img/FONDOIMAGEN.png")', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                        <div className="absolute -top-40 -right-40 w-80 h-80 border border-[#C9A646]/10 rounded-full" />
+                        <div className="absolute -bottom-40 -left-40 w-80 h-80 border border-[#C9A646]/10 rounded-full" />
+                    </div>
+
+                    <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
+                        <div className="text-center mb-10 sm:mb-12 lg:mb-14">
+                            <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3">
+                                <span className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#C9A646]/60" />
+                                <span className="w-2 h-2 bg-[#C9A646] rotate-45" />
+                                <span className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#C9A646]/60" />
+                            </div>
+                            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-[1.3]">
+                                {t('normas', 'title')}
+                            </h2>
+                            <p className="text-[#E8E8E8]/70 text-base sm:text-lg mt-2 max-w-xl mx-auto">{t('normas', 'subtitle')}</p>
+                        </div>
+
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+                            {normas.map((norma, idx) => (
+                                <div
+                                    key={norma.id}
+                                    className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:bg-white/10 hover:border-[#C9A646]/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#C9A646]/10"
+                                    style={{ animation: `fade-in-up 0.6s ease-out ${idx * 0.1}s both` }}
+                                >
+                                    <div className="relative overflow-hidden h-36 sm:h-40">
+                                        {norma.imagen ? (
+                                            <>
+                                                <img
+                                                    src={norma.imagen}
+                                                    alt={norma.titulo}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                                                    loading="lazy"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#0F3B2E]/80 via-transparent to-transparent" />
+                                            </>
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-br from-[#C9A646]/20 to-[#C9A646]/5 flex items-center justify-center">
+                                                <svg className="w-16 h-16 text-[#C9A646]/30" viewBox="0 0 48 48" fill="none">
+                                                    <path d="M24 4L44 24L24 44L4 24L24 4Z" stroke="currentColor" strokeWidth="1"/>
+                                                    <path d="M24 14L34 24L24 34L14 24L24 14Z" stroke="currentColor" strokeWidth="0.8" opacity="0.5"/>
+                                                    <circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.3"/>
+                                                </svg>
+                                            </div>
+                                        )}
+                                        <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-[#C9A646] text-[#0F3B2E] flex items-center justify-center font-bold text-sm shadow-lg">
+                                            {idx + 1}
+                                        </div>
+                                    </div>
+                                    <div className={`p-4 sm:p-5 ${isRTL ? 'text-right' : ''}`}>
+                                        <h3 className="font-semibold text-white text-base sm:text-lg leading-snug mb-2 group-hover:text-[#C9A646] transition-colors duration-300">
+                                            {norma.titulo}
+                                        </h3>
+                                        {norma.descripcion && (
+                                            <p className="text-[#E8E8E8]/70 text-sm sm:text-base leading-relaxed">
+                                                {norma.descripcion}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* ——— Separador ——— */}
             <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-gradient-to-b from-[#F7F5F0] to-[#F7F5F0]" aria-hidden="true">
@@ -436,6 +513,7 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     </div>
                 </section>
             )}
+
         </MainLayout>
     );
 }

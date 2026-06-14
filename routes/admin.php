@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ImamController;
 use App\Http\Controllers\Admin\NoticiasController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ModuleStatusController;
+use App\Http\Controllers\Admin\NormasController;
 use App\Http\Controllers\Admin\TiemposEsperaController;
 use App\Http\Controllers\Admin\UbicacionController;
 use App\Http\Middleware\AdminMiddleware;
@@ -70,6 +71,12 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::put('/noticias/{noticia}', [NoticiasController::class, 'update']);
     Route::delete('/noticias/{noticia}', [NoticiasController::class, 'destroy']);
 
+    // Normas
+    Route::get('/normas', [NormasController::class, 'index']);
+    Route::post('/normas', [NormasController::class, 'store']);
+    Route::put('/normas/{norma}', [NormasController::class, 'update']);
+    Route::delete('/normas/{norma}', [NormasController::class, 'destroy']);
+
     // Comentarios
     Route::get('/comentarios', [ComentariosController::class, 'index']);
     Route::post('/comentarios/{comentario}/approve', [ComentariosController::class, 'approve']);
@@ -79,7 +86,8 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::get('/ubicacion', [UbicacionController::class, 'index']);
     Route::post('/ubicacion/guardar', [UbicacionController::class, 'guardar']);
 
-    // Horarios (tiempos de espera)
+    // Horarios (tiempos de espera + horario de hoy)
     Route::get('/horarios', [TiemposEsperaController::class, 'index']);
+    Route::post('/horarios/today', [TiemposEsperaController::class, 'updateToday']);
     Route::post('/horarios/{rezo}', [TiemposEsperaController::class, 'update']);
 });

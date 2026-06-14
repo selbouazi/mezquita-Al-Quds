@@ -145,7 +145,7 @@ export default function Horarios({ horariosMes, year, month }) {
                 <div className={`relative max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between mb-8 sm:mb-10 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <button
                         onClick={() => goToMonth(year, month - 1)}
-                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold"
+                        className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px]"
                         aria-label={t('common', 'previous')}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -159,7 +159,7 @@ export default function Horarios({ horariosMes, year, month }) {
 
                     <button
                         onClick={() => goToMonth(year, month + 1)}
-                        className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold"
+                        className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px]"
                         aria-label={t('common', 'next')}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">

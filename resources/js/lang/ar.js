@@ -50,7 +50,7 @@ const ar = {
     },
     prayers: {
         Fajr: 'الفجر', Sunrise: 'الشروق', Dhuhr: 'الظهر',
-        Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء', remaining: 'متبقي',
+        Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء', remaining: 'التالي',
         fajr: 'الفجر (الفجر)',
         sunrise: 'الشروق',
         dhuhr: 'الظهر (الظهر)',
@@ -247,6 +247,7 @@ const ar = {
         save: 'حفظ',
         saved: 'تم الحفظ بنجاح',
         preview: 'معاينة',
+        noInfo: 'لا توجد معلومات عن الإمام متاحة.',
     },
     ubicacion: {
         title: 'كيفية الوصول',
@@ -300,6 +301,7 @@ const ar = {
         subtitle: 'اختر وحدة',
     },
     adminModules: {
+        dashboard: 'الرئيسية',
         notifications: 'الإشعارات',
         news: 'الأخبار',
         activation: 'رمز الوصول',
@@ -311,6 +313,7 @@ const ar = {
         location: 'الموقع',
         contacts: 'الرسائل',
         messages: 'الرسائل',
+        normas: 'القواعد',
         comments: 'التعليقات',
     },
     adminDashboard: {
@@ -334,6 +337,8 @@ const ar = {
         currentMinutes: 'الدقائق الحالية',
         note: 'ملاحظة',
         noteDesc: 'مواقيت الصلاة تحسب تلقائياً. هذا الإعداد يؤثر فقط على أوقات الانتظار المعروضة.',
+        todayTimes: 'مواقيت الصلاة اليوم',
+        todayTimesDesc: 'تعديل مواقيت الصلاة لليوم.',
     },
     adminNoticias: {
         manageNews: 'إدارة الأخبار والإعلانات',
@@ -534,8 +539,9 @@ const ar = {
         clear: 'مسح',
         noData: 'لا توجد بيانات متاحة',
         processing: 'جارٍ المعالجة...',
-            active: 'نشط',
-            inactive: 'غير نشط',
+        back: 'رجوع',
+        active: 'نشط',
+        inactive: 'غير نشط',
     },
     comentarios: {
         title: 'التعليقات',
@@ -562,9 +568,43 @@ const ar = {
         deleted: 'تم حذف التعليق',
         confirmDelete: 'هل تريد حذف هذا التعليق؟ لا يمكن التراجع عن هذا الإجراء.',
     },
+    normas: {
+        title: 'قواعد المسجد',
+        subtitle: 'تعرف على القواعد والتوصيات للتعايش في المسجد.',
+        noNormas: 'لا توجد قواعد متاحة.',
+    },
+    adminNormas: {
+        title: 'القواعد',
+        subtitle: 'إدارة قواعد المسجد',
+        total: 'إجمالي القواعد',
+        active: 'نشطة',
+        inactive: 'غير نشطة',
+        tituloLabel: 'العنوان *',
+        descripcionLabel: 'الوصف',
+        imagenLabel: 'الصورة',
+        orderLabel: 'الترتيب',
+        state: 'الحالة',
+        actions: 'الإجراءات',
+        activoLabel: 'قاعدة نشطة',
+        addNew: 'قاعدة جديدة',
+        editTitle: 'تعديل القاعدة',
+        noNormas: 'لا توجد قواعد لعرضها',
+        save: 'حفظ',
+        cancel: 'إلغاء',
+        update: 'تحديث',
+        create: 'إنشاء',
+        confirmDelete: 'هل تريد حذف هذه القاعدة؟',
+    },
     modules: {
         disabledTitle: 'الوحدة معطلة مؤقتًا',
         disabledMessage: 'هذا القسم غير متاح حاليًا. يرجى المحاولة مرة أخرى لاحقًا.',
+    },
+    errors: {
+        '403': { title: 'وصول مرفوض', message: 'ليس لديك صلاحية للوصول إلى هذه الصفحة.' },
+        '404': { title: 'الصفحة غير موجودة', message: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.' },
+        '500': { title: 'خطأ داخلي', message: 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقًا.' },
+        '503': { title: 'الخدمة غير متاحة', message: 'الخدمة غير متاحة حاليًا.' },
+        goHome: 'العودة إلى الرئيسية',
     },
 };
 

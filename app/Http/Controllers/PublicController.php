@@ -54,6 +54,9 @@ class PublicController extends Controller
      */
     public function notifications(): Response
     {
+        if (!\moduleIsActive('notificaciones')) {
+            return Inertia::render('ModuleDisabled');
+        }
         $page = request('page', 1);
         $version = Cache::remember('notificaciones_version', 86400 * 30, fn() => 1);
         $notificaciones = Cache::remember('notificaciones_v' . $version . '_p' . $page, 3600, function () {
@@ -90,6 +93,9 @@ class PublicController extends Controller
      */
     public function apiImam(): JsonResponse
     {
+        if (!\moduleIsActive('imam')) {
+            return response()->json(null);
+        }
         $imam = Cache::remember('api_imam_data', 86400, function () {
             $imam = ImamSetting::first();
             if ($imam && $imam->foto) {
@@ -108,6 +114,9 @@ class PublicController extends Controller
      */
     public function apiNotificaciones(): JsonResponse
     {
+        if (!\moduleIsActive('notificaciones')) {
+            return response()->json([]);
+        }
         $notificaciones = Cache::remember('api_notificaciones_v' . Cache::remember('notificaciones_version', 86400 * 30, fn() => 1), 3600, function () {
             return Notification::activas()
                 ->ordenadas()

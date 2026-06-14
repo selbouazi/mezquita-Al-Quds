@@ -1,4 +1,4 @@
-import { usePage, useForm } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -7,24 +7,37 @@ import ModuleToggle from '../../Components/ModuleToggle';
 export default function Horarios() {
     const { t } = useTranslation();
     const { props } = usePage();
-    const { tiempos } = props;
+    const { tiempos, todayHorario } = props;
+    const rezos = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
-    const [values, setValues] = useState(() => {
+    const [waitValues, setWaitValues] = useState(() => {
         const initial = {};
-        ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'].forEach(rezo => {
-            initial[rezo] = tiempos?.[rezo]?.minutos ?? 15;
-        });
+        rezos.forEach(rezo => { initial[rezo] = tiempos?.[rezo]?.minutos ?? 15; });
         return initial;
     });
 
-    const form = useForm({});
+    const [todayValues, setTodayValues] = useState(() => {
+        const initial = {};
+        rezos.forEach(rezo => { initial[rezo] = todayHorario?.[rezo] ?? ''; });
+        return initial;
+    });
 
-    const rezos = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const [saving, setSaving] = useState(null);
+    const [savingToday, setSavingToday] = useState(false);
 
-    const handleSave = (rezo) => {
-        form.post(`/admin/horarios/${rezo}`, {
-            data: { minutos: values[rezo] },
-            onSuccess: () => form.setError(null),
+    const handleSaveWait = (rezo) => {
+        setSaving(rezo);
+        router.post(`/admin/horarios/${rezo}`, { minutos: waitValues[rezo] }, {
+            preserveScroll: true,
+            onFinish: () => setSaving(null),
+        });
+    };
+
+    const handleSaveToday = () => {
+        setSavingToday(true);
+        router.post('/admin/horarios/today', todayValues, {
+            preserveScroll: true,
+            onFinish: () => setSavingToday(false),
         });
     };
 
@@ -41,6 +54,39 @@ export default function Horarios() {
 
                 <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
                     <h2 className="text-lg font-medium text-[#0F5132] mb-4">
+                        {t('adminHorarios', 'todayTimes')}
+                    </h2>
+                    <p className="text-sm text-gray-600 mb-6">
+                        {t('adminHorarios', 'todayTimesDesc')}
+                    </p>
+
+                    <div className="space-y-3 mb-6">
+                        {rezos.map((rezo) => (
+                            <div key={rezo} className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg">
+                                <label className="font-medium text-gray-900 w-24 text-sm">
+                                    {t('prayers', rezo.charAt(0).toUpperCase() + rezo.slice(1))}
+                                </label>
+                                <input
+                                    type="time"
+                                    value={todayValues[rezo]}
+                                    onChange={(e) => setTodayValues(prev => ({ ...prev, [rezo]: e.target.value }))}
+                                    className="w-36 px-3 py-2 border rounded-lg text-sm"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={handleSaveToday}
+                        disabled={savingToday}
+                        className="px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] text-sm disabled:opacity-50"
+                    >
+                        {savingToday ? t('common', 'saving') : t('common', 'save')}
+                    </button>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+                    <h2 className="text-lg font-medium text-[#0F5132] mb-4">
                         {t('adminHorarios', 'defaultTimes')}
                     </h2>
                     <p className="text-sm text-gray-600 mb-6">
@@ -53,7 +99,7 @@ export default function Horarios() {
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-900">{t('prayers', rezo.charAt(0).toUpperCase() + rezo.slice(1))}</p>
                                     <p className="text-sm text-gray-500">
-                                        {values[rezo]} {t('adminHorarios', 'currentMinutes')}
+                                        {waitValues[rezo]} {t('adminHorarios', 'currentMinutes')}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -61,15 +107,16 @@ export default function Horarios() {
                                         type="number"
                                         min="0"
                                         max="120"
-                                        value={values[rezo]}
-                                        onChange={(e) => setValues(prev => ({ ...prev, [rezo]: parseInt(e.target.value) || 0 }))}
+                                        value={waitValues[rezo]}
+                                        onChange={(e) => setWaitValues(prev => ({ ...prev, [rezo]: parseInt(e.target.value) || 0 }))}
                                         className="w-20 px-3 py-2 border rounded-lg text-sm"
                                     />
                                     <button
-                                        onClick={() => handleSave(rezo)}
-                                        className="px-3 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] text-sm"
+                                        onClick={() => handleSaveWait(rezo)}
+                                        disabled={saving === rezo}
+                                        className="px-3 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] text-sm disabled:opacity-50"
                                     >
-                                        {t('common', 'save')}
+                                        {saving === rezo ? t('common', 'saving') : t('common', 'save')}
                                     </button>
                                 </div>
                             </div>

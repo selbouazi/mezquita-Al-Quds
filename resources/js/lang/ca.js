@@ -50,7 +50,7 @@ const ca = {
     },
     prayers: {
         Fajr: 'Fajr', Sunrise: 'Sortida del sol', Dhuhr: 'Dhuhr',
-        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
+        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Següent',
     },
     numbers: ['0','1','2','3','4','5','6','7','8','9'],
     home: {
@@ -258,9 +258,10 @@ const ca = {
         subtitle: 'Selecciona un mòdul',
     },
     adminModules: {
+        dashboard: 'Panell',
         notifications: 'Notificacions',
         news: 'Notícies',
-        activation: 'Clau d\u0027accés',
+        activation: 'Clau d\'accés',
         schedules: 'Horaris',
         donations: 'Donatius',
         invoices: 'Factures',
@@ -269,6 +270,7 @@ const ca = {
         location: 'Ubicació',
         contacts: 'Missatges',
         messages: 'Missatges',
+        normas: 'Normes',
         comments: 'Comentaris',
     },
     imam: {
@@ -284,6 +286,7 @@ const ca = {
         save: 'Guardar',
         saved: 'Guardat correctament',
         preview: 'Vista prèvia',
+        noInfo: 'No hi ha informació de l\'imam disponible.',
     },
     common: {
         saving: 'Guardant...',
@@ -303,8 +306,9 @@ const ca = {
         clear: 'Netejar',
         noData: 'No hi ha dades disponibles',
         processing: 'Processant...',
-            active: 'Actiu',
-            inactive: 'Inactiu',
+        back: 'Tornar',
+        active: 'Actiu',
+        inactive: 'Inactiu',
     },
     adminDashboard: {
         title: 'Panel d\u0027Administració',
@@ -327,6 +331,8 @@ const ca = {
         currentMinutes: 'minuts actuals',
         note: 'Nota',
         noteDesc: 'Els horaris de pregària es calculen automàticament. Aquesta configuració només afecta els temps despra visualitzats.',
+        todayTimes: 'Horari de pregària d\'avui',
+        todayTimesDesc: 'Edita els horaris de les pregàries per al dia d\'avui.',
     },
     adminNoticias: {
         manageNews: 'Gestionar notícies i anuncis',
@@ -533,9 +539,43 @@ const ca = {
         deleted: 'Comentari eliminat',
         confirmDelete: 'Eliminar aquest comentari? Aquesta acció no es pot desfer.',
     },
+    normas: {
+        title: 'Normes de la Mesquita',
+        subtitle: 'Coneix les normes i recomanacions per a la convivència a la mesquita.',
+        noNormas: 'No hi ha normes disponibles.',
+    },
+    adminNormas: {
+        title: 'Normes',
+        subtitle: 'Gestionar normes de la mesquita',
+        total: 'Total normes',
+        active: 'Actives',
+        inactive: 'Inactives',
+        tituloLabel: 'Títol *',
+        descripcionLabel: 'Descripció',
+        imagenLabel: 'Imatge',
+        orderLabel: 'Ordre',
+        state: 'Estat',
+        actions: 'Accions',
+        activoLabel: 'Norma activa',
+        addNew: 'Nova norma',
+        editTitle: 'Editar Norma',
+        noNormas: 'No hi ha normes per mostrar',
+        save: 'Guardar',
+        cancel: 'Cancel·lar',
+        update: 'Actualitzar',
+        create: 'Crear',
+        confirmDelete: 'Eliminar aquesta norma?',
+    },
     modules: {
         disabledTitle: 'Mòdul temporalment desactivat',
         disabledMessage: 'Aquesta secció no està disponible en aquests moments. Torna a intentar-ho més tard.',
+    },
+    errors: {
+        '403': { title: 'Accés denegat', message: 'No tens permisos per accedir a aquesta pàgina.' },
+        '404': { title: 'Pàgina no trobada', message: 'La pàgina que busques no existeix o ha estat moguda.' },
+        '500': { title: 'Error intern', message: 'Ha ocorregut un error inesperat. Torna a intentar-ho més tard.' },
+        '503': { title: 'Servei no disponible', message: 'El servei no està disponible en aquests moments.' },
+        goHome: 'Tornar a l\'inici',
     },
 };
 

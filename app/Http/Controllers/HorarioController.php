@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Norma;
 use App\Models\Noticia;
 use App\Models\Notification;
 use App\Services\HorarioService;
@@ -33,11 +34,16 @@ class HorarioController extends Controller
                 ->get(['id', 'titulo', 'mensaje', 'prioridad']);
         });
 
+        $normas = Cache::remember('home_normas', 3600, function () {
+            return Norma::activo()->ordenado()->get(['id', 'titulo', 'descripcion', 'imagen', 'orden']);
+        });
+
         return Inertia::render('Home', [
             'prayerTimes' => HorarioService::getHorarioHoy(),
             'tiemposEspera' => $tiemposEspera,
             'latestNews' => $latestNews,
             'notificaciones' => $notificaciones,
+            'normas' => $normas,
         ]);
     }
 

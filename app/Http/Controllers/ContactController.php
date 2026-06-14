@@ -17,6 +17,9 @@ class ContactController extends Controller
      */
     public function create(): Response
     {
+        if (!\moduleIsActive('contacto')) {
+            return inertia('ModuleDisabled');
+        }
         return inertia('Contacto');
     }
 
@@ -28,6 +31,9 @@ class ContactController extends Controller
      */
     public function store(ContactRequest $request): RedirectResponse
     {
+        if (!\moduleIsActive('contacto')) {
+            return back()->with('error', 'Módulo desactivado.');
+        }
         $validated = $request->validated();
 
         ContactMessage::create([

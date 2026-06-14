@@ -1,18 +1,25 @@
 import { Link } from '@inertiajs/react';
 import MainLayout from '../../Layouts/MainLayout';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function ServerError() {
+    const { t } = useTranslation();
+    const err = t('errors', '500');
     return (
-        <MainLayout title="Error del servidor" noindex>
-            <section className="pt-28 pb-16 max-w-md mx-auto px-6">
-                <div className="bg-white rounded-2xl shadow-sm border border-red-200 p-8 text-center">
+        <MainLayout title={err.title} noindex>
+            <section className="pt-28 pb-16 max-w-md mx-auto px-6 relative">
+                <svg className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs><pattern id="g500" width="40" height="40" patternUnits="userSpaceOnUse"><polygon points="20,0 40,20 20,40 0,20" fill="none" stroke="#0F3B2E" strokeWidth="0.5"/></pattern></defs>
+                    <rect width="100%" height="100%" fill="url(#g500)"/>
+                </svg>
+                <div className="bg-white rounded-2xl shadow-sm border border-red-200 p-8 text-center relative">
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span className="text-3xl font-bold text-red-600">500</span>
                     </div>
-                    <h1 className="text-2xl font-bold text-red-600 mb-4">Error del servidor</h1>
-                    <p className="text-gray-600 mb-6">Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.</p>
-                    <Link href="/" className="inline-block bg-[#0F5132] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#0c3f27] transition">
-                        Volver al inicio
+                    <h1 className="text-2xl font-bold text-red-600 mb-4">{err.title}</h1>
+                    <p className="text-gray-600 mb-6">{err.message}</p>
+                    <Link href="/" className="inline-block bg-[#0F3B2E] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#0a2d22] transition">
+                        {t('errors', 'goHome')}
                     </Link>
                 </div>
             </section>

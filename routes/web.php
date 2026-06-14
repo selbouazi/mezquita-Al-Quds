@@ -12,6 +12,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
@@ -49,6 +50,11 @@ Route::get('/notifications', [PublicController::class, 'notifications']);
 
 Route::get('/api/imam', [PublicController::class, 'apiImam']);
 Route::get('/api/notificaciones', [PublicController::class, 'apiNotificaciones']);
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+Route::get('/robots.txt', function () {
+    return response("User-agent: *\nAllow: /\nSitemap: " . url('/sitemap.xml') . "\n", 200, ['Content-Type' => 'text/plain']);
+});
 
 Route::get('/lang/{lang}', [PublicController::class, 'switchLang'])->name('lang.switch');
 

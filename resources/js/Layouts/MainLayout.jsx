@@ -4,12 +4,12 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { useTranslation } from '../hooks/useTranslation';
 
-export default function MainLayout({ title, meta: pageMeta, description: directDesc, noindex, image, children }) {
+export default function MainLayout({ title, meta: pageMeta, description: directDesc, noindex, image, canonical: directCanonical, children }) {
     const { t, locale, isRTL } = useTranslation();
 
     const metaTitle = pageMeta?.title || title || t('meta.home.title');
     const metaDescription = pageMeta?.description || directDesc || t('meta', 'description');
-    const canonical = (pageMeta?.canonical || window.location.pathname).replace(/\/+$/, '') || '/';
+    const canonical = (pageMeta?.canonical || directCanonical || window.location.pathname).replace(/\/+$/, '') || '/';
     const metaImage = image || '/img/mezquitaAlquds_logo.png';
 
     useEffect(() => {

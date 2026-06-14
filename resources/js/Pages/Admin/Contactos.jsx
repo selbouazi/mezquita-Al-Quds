@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
+import AdminTable from '../../Components/AdminTable';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function Contactos() {
@@ -15,14 +16,14 @@ export default function Contactos() {
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-        if (diffHours < 1) return 'Hace un momento';
-        if (diffHours < 24) return `Hace ${diffHours}h`;
-        if (diffDays < 7) return `Hace ${diffDays}d`;
+        if (diffHours < 1) return t('adminContactos', 'momentsAgo') || 'Hace un momento';
+        if (diffHours < 24) return t('adminContactos', 'hoursAgo')?.replace('{h}', diffHours) || `Hace ${diffHours}h`;
+        if (diffDays < 7) return t('adminContactos', 'daysAgo')?.replace('{d}', diffDays) || `Hace ${diffDays}d`;
         return date.toLocaleDateString(locale);
     };
 
     const { contactos, sinLeer } = props;
-    
+
     const getTipoLabel = (tipo) => {
         const tipos = {
             'general': t('adminContactos', 'general') || 'General',
@@ -34,6 +35,63 @@ export default function Contactos() {
         return tipos[tipo] || t('adminContactos', 'general') || 'General';
     };
 
+    const columns = [
+        { label: t('adminContactos', 'name') },
+        { label: t('adminContactos', 'tipo') },
+        { label: t('adminContactos', 'date') },
+        { label: t('adminContactos', 'status'), align: 'center' },
+        { label: t('adminContactos', 'actions'), align: 'right' },
+    ];
+
+    const renderRow = (contacto) => (
+        <>
+            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(contacto)}>
+                <p className="font-medium text-gray-900">{contacto.nombre}</p>
+                <p className="text-xs text-gray-500">{contacto.email}</p>
+            </td>
+            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(contacto)}>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(contacto.tipo)}</span>
+            </td>
+            <td className="px-4 py-3 text-sm text-gray-500 cursor-pointer" onClick={() => setSelected(contacto)}>
+                {formatFecha(contacto.created_at)}
+            </td>
+            <td className="px-4 py-3 text-center cursor-pointer" onClick={() => setSelected(contacto)}>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${contacto.leido ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {contacto.leido ? t('adminContactos', 'read') : t('adminContactos', 'new')}
+                </span>
+            </td>
+            <td className="px-4 py-3 text-right">
+                <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                    {!contacto.leido && (
+                        <Link href={`/admin/contactos/${contacto.id}/leido`} method="post" className="px-2 py-1 text-xs text-blue-600 rounded-lg hover:bg-blue-50 min-h-[32px]">{t('adminContactos', 'markRead')}</Link>
+                    )}
+                    <Link href={`/admin/contactos/${contacto.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded-lg hover:bg-red-50 min-h-[32px]">{t('common', 'delete')}</Link>
+                </div>
+            </td>
+        </>
+    );
+
+    const renderMobileCard = (contacto) => (
+        <div onClick={() => setSelected(contacto)}>
+            <div className="flex items-start justify-between mb-2">
+                <div className="min-w-0 flex-1 mr-2">
+                    <div className="flex items-center gap-2">
+                        <p className="font-semibold text-gray-900 text-sm">{contacto.nombre}</p>
+                        {!contacto.leido && <span className="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></span>}
+                    </div>
+                    <p className="text-xs text-gray-500">{contacto.email}</p>
+                </div>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${contacto.leido ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {contacto.leido ? t('adminContactos', 'read') : t('adminContactos', 'new')}
+                </span>
+            </div>
+            <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{getTipoLabel(contacto.tipo)}</span>
+                <span>{formatFecha(contacto.created_at)}</span>
+            </div>
+        </div>
+    );
+
     return (
         <AdminLayout title={t('adminModules', 'messages')}>
             <div className="px-2 sm:px-0">
@@ -42,12 +100,12 @@ export default function Contactos() {
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'messages')}</h1>
                         <p className="text-gray-600 text-sm hidden sm:block">{t('adminContactos', 'subtitle')}</p>
                     </div>
-                    <div className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                    <div className="px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
                         {sinLeer} {t('adminContactos', 'unread').toLowerCase()}
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">
                         <p className="text-2xl font-bold text-[#0F5132]">{contactos.total}</p>
                         <p className="text-sm text-gray-600">{t('adminContactos', 'total')}</p>
@@ -62,104 +120,29 @@ export default function Contactos() {
                     </div>
                 </div>
 
-                {/* Desktop table */}
-                <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'name')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'tipo')}</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'date')}</th>
-                                    <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'status')}</th>
-                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{t('adminContactos', 'actions')}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {contactos.data.length === 0 ? (
-                                    <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">{t('adminContactos', 'noMessages')}</td></tr>
-                                ) : (
-                                    contactos.data.map((contacto) => (
-                                        <tr key={contacto.id}
-                                            className={`hover:bg-gray-50 cursor-pointer ${!contacto.leido ? 'bg-yellow-50/50' : ''}`}
-                                            onClick={() => setSelected(contacto)}
-                                        >
-                                            <td className="px-4 py-3">
-                                                <p className="font-medium text-gray-900">{contacto.nombre}</p>
-                                                <p className="text-xs text-gray-500">{contacto.email}</p>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(contacto.tipo)}</span>
-                                            </td>
-                                            <td className="px-4 py-3 text-sm text-gray-500">{formatFecha(contacto.created_at)}</td>
-                                            <td className="px-4 py-3 text-center">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${contacto.leido ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                                    {contacto.leido ? t('adminContactos', 'read') : t('adminContactos', 'new')}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-right">
-                                                <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-                                                    {!contacto.leido && (
-                                                        <Link href={`/admin/contactos/${contacto.id}/leido`} method="post" className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('adminContactos', 'markRead')}</Link>
-                                                    )}
-                                                    <Link href={`/admin/contactos/${contacto.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <AdminTable
+                    columns={columns}
+                    rows={contactos.data}
+                    renderRow={renderRow}
+                    renderMobileCard={renderMobileCard}
+                    emptyMessage={t('adminContactos', 'noMessages')}
+                    emptyColspan={5}
+                />
 
-                {/* Mobile cards */}
-                {contactos.data.length === 0 ? (
-                    <div className="md:hidden bg-white rounded-xl shadow-sm border p-8 text-center text-gray-500">{t('adminContactos', 'noMessages')}</div>
-                ) : (
-                    <div className="md:hidden space-y-3">
-                        {contactos.data.map((contacto) => (
-                            <div key={contacto.id} className={`bg-white rounded-xl shadow-sm border p-4 ${!contacto.leido ? 'border-yellow-300 bg-yellow-50/30' : ''}`}>
-                                <div className="flex items-start justify-between mb-2">
-                                    <div className="min-w-0 flex-1 mr-2">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-semibold text-gray-900 text-sm">{contacto.nombre}</p>
-                                            {!contacto.leido && <span className="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></span>}
-                                        </div>
-                                        <p className="text-xs text-gray-500">{contacto.email}</p>
-                                    </div>
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${contacto.leido ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                        {contacto.leido ? t('adminContactos', 'read') : t('adminContactos', 'new')}
-                                    </span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{getTipoLabel(contacto.tipo)}</span>
-                                    <span>{formatFecha(contacto.created_at)}</span>
-                                </div>
-                                <div className="flex gap-2 pt-3 border-t border-gray-100">
-                                    {!contacto.leido && (
-                                        <Link href={`/admin/contactos/${contacto.id}/leido`} method="post" className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px] text-center block">
-                                            {t('adminContactos', 'markRead')}
-                                        </Link>
-                                    )}
-                                    <Link href={`/admin/contactos/${contacto.id}`} method="delete" className={`px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block ${!contacto.leido ? 'flex-1' : 'w-full'}`}>
-                                        {t('common', 'delete')}
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Pagination */}
                 {contactos.last_page > 1 && (
-                    <div className="flex justify-center gap-2 mt-4 flex-wrap">
+                    <div className="flex justify-center gap-2 py-6">
                         {contactos.prev_page_url && (
-                            <Link href={contactos.prev_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">← {t('common', 'previous')}</Link>
+                            <Link href={contactos.prev_page_url} className="px-4 py-2.5 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center shadow-sm">
+                                ← {t('common', 'previous')}
+                            </Link>
                         )}
-                        <span className="px-4 py-3 text-gray-600 text-sm flex items-center">{contactos.current_page} / {contactos.last_page}</span>
+                        <span className="px-4 py-2.5 text-gray-600 text-sm flex items-center">
+                            {contactos.current_page} / {contactos.last_page}
+                        </span>
                         {contactos.next_page_url && (
-                            <Link href={contactos.next_page_url} className="px-4 py-3 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center">{t('common', 'next')} →</Link>
+                            <Link href={contactos.next_page_url} className="px-4 py-2.5 bg-white border rounded-xl hover:bg-gray-50 text-sm min-h-[44px] flex items-center shadow-sm">
+                                {t('common', 'next')} →
+                            </Link>
                         )}
                     </div>
                 )}
@@ -167,16 +150,20 @@ export default function Contactos() {
 
             {selected && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelected(null)}>
-                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                    <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-lg sm:text-xl font-bold text-[#0F5132]">{selected.nombre}</h2>
-                            <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+                            <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 p-1">
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
 
                         <div className="space-y-3 text-sm">
                             <div className="flex gap-2">
                                 <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'email')}:</span>
-                                <a href={`mailto:${selected.email}`} className="text-blue-600 hover:underline">{selected.email}</a>
+                                <a href={`mailto:${selected.email}`} className="text-[#C9A646] hover:underline">{selected.email}</a>
                             </div>
                             <div className="flex gap-2">
                                 <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'tipo')}:</span>
@@ -189,12 +176,12 @@ export default function Contactos() {
                             {selected.telefono && (
                                 <div className="flex gap-2">
                                     <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'telefono') || 'Teléfono'}:</span>
-                                    <a href={`tel:${selected.telefono}`} className="text-blue-600 hover:underline">{selected.telefono}</a>
+                                    <a href={`tel:${selected.telefono}`} className="text-[#C9A646] hover:underline">{selected.telefono}</a>
                                 </div>
                             )}
                             <div className="pt-3 border-t">
                                 <p className="font-medium text-gray-700 mb-2">{t('adminContactos', 'mensaje')}:</p>
-                                <p className="text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3">{selected.mensaje}</p>
+                                <p className="text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-4 leading-relaxed">{selected.mensaje}</p>
                             </div>
                         </div>
                     </div>

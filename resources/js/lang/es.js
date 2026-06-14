@@ -50,7 +50,7 @@ const es = {
     },
     prayers: {
         Fajr: 'Fajr', Sunrise: 'Amanecer', Dhuhr: 'Dhuhr',
-        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Falta',
+        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Siguiente',
     },
     numbers: ['0','1','2','3','4','5','6','7','8','9'],
     home: {
@@ -222,6 +222,7 @@ const es = {
         location: 'Ubicación',
         contacts: 'Mensajes',
         messages: 'Mensajes',
+        normas: 'Normas',
         comments: 'Comentarios',
     },
     facturas: {
@@ -298,6 +299,7 @@ const es = {
         save: 'Guardar',
         saved: 'Guardado correctamente',
         preview: 'Vista previa',
+        noInfo: 'No hay información del imam disponible.',
     },
     common: {
         saving: 'Guardando...',
@@ -317,8 +319,10 @@ const es = {
         clear: 'Limpiar',
         noData: 'No hay datos disponibles',
         processing: 'Procesando...',
-            active: 'Activo',
-            inactive: 'Inactivo',
+        read: 'Leer',
+        back: 'Volver',
+        active: 'Activo',
+        inactive: 'Inactivo',
     },
     adminDashboard: {
         title: 'Panel de Administración',
@@ -341,6 +345,8 @@ const es = {
         currentMinutes: 'minutos actuales',
         note: 'Nota',
         noteDesc: 'Los horarios de oración se calculan automáticamente. Esta configuración solo afecta los tiempos de espera visualizados.',
+        todayTimes: 'Horario de oración de hoy',
+        todayTimesDesc: 'Edita los horarios de las oraciones para el día de hoy.',
     },
     adminNoticias: {
         manageNews: 'Gestionar noticias y anuncios',
@@ -545,9 +551,43 @@ const es = {
         deleted: 'Comentario eliminado',
         confirmDelete: '¿Eliminar este comentario? Esta acción no se puede deshacer.',
     },
+    normas: {
+        title: 'Normas de la Mezquita',
+        subtitle: 'Conoce las normas y recomendaciones para la convivencia en la mezquita.',
+        noNormas: 'No hay normas disponibles.',
+    },
+    adminNormas: {
+        title: 'Normas',
+        subtitle: 'Gestionar normas de la mezquita',
+        total: 'Total normas',
+        active: 'Activas',
+        inactive: 'Inactivas',
+        tituloLabel: 'Título *',
+        descripcionLabel: 'Descripción',
+        imagenLabel: 'Imagen',
+        orderLabel: 'Orden',
+        state: 'Estado',
+        actions: 'Acciones',
+        activoLabel: 'Norma activa',
+        addNew: 'Nueva norma',
+        editTitle: 'Editar Norma',
+        noNormas: 'No hay normas para mostrar',
+        save: 'Guardar',
+        cancel: 'Cancelar',
+        update: 'Actualizar',
+        create: 'Crear',
+        confirmDelete: '¿Eliminar esta norma?',
+    },
     modules: {
         disabledTitle: 'Módulo temporalmente desactivado',
         disabledMessage: 'Esta sección no está disponible en estos momentos. Vuelve a intentarlo más tarde.',
+    },
+    errors: {
+        '403': { title: 'Acceso denegado', message: 'No tienes permisos para acceder a esta página.' },
+        '404': { title: 'Página no encontrada', message: 'La página que buscas no existe o ha sido movida.' },
+        '500': { title: 'Error interno', message: 'Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.' },
+        '503': { title: 'Servicio no disponible', message: 'El servicio no está disponible en estos momentos.' },
+        goHome: 'Volver al inicio',
     },
 };
 

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             Horarios2026Seeder::class,
             UbicacionSeeder::class,
             ModuleStatusSeeder::class,
+            NormaSeeder::class,
         ]);
     }
 }
