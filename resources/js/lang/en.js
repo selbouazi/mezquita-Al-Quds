@@ -51,7 +51,8 @@ const en = {
     },
     prayers: {
         Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr',
-        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', remaining: 'Next',
+        Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha', Jumuah: 'Jumu\'ah',
+        remaining: 'Next',
         fajr: 'Fajr ',
         sunrise: 'Sunrise',
         dhuhr: 'Dhuhr ',

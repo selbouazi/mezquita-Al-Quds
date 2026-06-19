@@ -20,7 +20,14 @@ export default function PrayerHeader({ prayerTimes, compact }) {
     }
 
     function getWaitingTime(prayerName) {
+        if (prayerName === 'dhuhr' && prayerTimes?.jumuah) {
+            return Number(prayerTimes?.khutbah_minutos) || 10;
+        }
         return Number(tiemposEspera?.[prayerName?.toLowerCase()]) || 10;
+    }
+
+    function displayName(name) {
+        return name === 'dhuhr' && prayerTimes?.jumuah ? 'Jumu\'ah' : name;
     }
 
     useEffect(() => {
@@ -29,7 +36,7 @@ export default function PrayerHeader({ prayerTimes, compact }) {
             const nowMin = now.getHours() * 60 + now.getMinutes();
             const nowSec = now.getSeconds();
 
-            const entries = Object.entries(prayerTimes);
+            const entries = Object.entries(prayerTimes).filter(([k]) => k !== 'jumuah' && k !== 'khutbah_minutos' && k !== 'fecha_hijri');
 
             let nextName = null, nextTime = null;
             let lastName = null, lastTime = null;
@@ -75,22 +82,25 @@ export default function PrayerHeader({ prayerTimes, compact }) {
             const remaining = t('time', 'remaining');
             const iqama = t('time', 'iqama');
 
+            const lastDisp = displayName(lastName);
+            const nextDisp = displayName(nextName);
+
             let newTitle, newWaiting;
 
             if (diffPast < lastWaiting * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
                 newTitle = locale === 'en'
-                    ? `${lastName} · ${m}:${String(s).padStart(2,'0')} ${mins} ${ago}`
-                    : `${lastName} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`;
+                    ? `${lastDisp} · ${m}:${String(s).padStart(2,'0')} ${mins} ${ago}`
+                    : `${lastDisp} · ${ago} ${m}:${String(s).padStart(2,'0')} ${mins}`;
                 newWaiting = `${wait} ${remaining}: ${lastWaiting - m} ${mins}`;
             } else if (diffPast < (lastWaiting + IQAMA_WINDOW) * 60) {
                 const m = Math.floor(diffPast / 60);
                 const s = diffPast % 60;
                 const iqamaM = m - lastWaiting;
                 newTitle = locale === 'en'
-                    ? `${lastName} · ${m} ${mins} ${ago}`
-                    : `${lastName} · ${ago} ${m} ${mins}`;
+                    ? `${lastDisp} · ${m} ${mins} ${ago}`
+                    : `${lastDisp} · ${ago} ${m} ${mins}`;
                 newWaiting = locale === 'en'
                     ? `${iqama} · ${iqamaM}:${String(s).padStart(2,'0')} ${mins} ${ago}`
                     : `${iqama} · ${ago} ${iqamaM}:${String(s).padStart(2,'0')} ${mins}`;
@@ -98,7 +108,7 @@ export default function PrayerHeader({ prayerTimes, compact }) {
                 const h = Math.floor(diffFuture / 3600);
                 const m = Math.floor((diffFuture % 3600) / 60);
                 const s = diffFuture % 60;
-                newTitle = `${nextName} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                newTitle = `${nextDisp} ${inWord} ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
                 newWaiting = `${wait}: ${nextWaiting} ${mins}`;
             }
 
@@ -132,7 +142,7 @@ export default function PrayerHeader({ prayerTimes, compact }) {
                 <div className="text-4xl font-semibold text-[#0F5132] tracking-tight mb-3 drop-shadow-sm">
                     {display.title}
                 </div>
-                <div className="inline-block px-7 py-3 bg-white border border-[#E5C76B] rounded-xl text-[#8A6D00] font-semibold text-base shadow-[0_2px_8px_rgba(0,0,0,0.08)] tracking-wide">
+                <div className="inline-block px-7 py-3 bg-white border border-[#E5C76B] rounded-xl text-[#8A6D00] font-semibold text-base shadow-[0_2px_8px rgba(0,0,0,0.08)] tracking-wide">
                     {display.waiting}
                 </div>
             </div>

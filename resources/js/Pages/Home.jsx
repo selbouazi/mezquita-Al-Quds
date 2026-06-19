@@ -187,18 +187,20 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     <div className="home-glass-card p-4 sm:p-6 lg:p-8">
                         <div className="space-y-1 sm:space-y-2">
                             {PRAYER_ORDER.map((key, idx) => {
-                                const labelKey = key.charAt(0).toUpperCase() + key.slice(1);
+                                const isJumuah = key === 'dhuhr' && prayerTimes?.jumuah;
+                                const labelKey = isJumuah ? 'Jumuah' : (key.charAt(0).toUpperCase() + key.slice(1));
                                 const time = prayerTimes[key];
                                 const prayerSec = toSeconds(time);
                                 const diff = prayerSec - nowSec;
-                                const waiting = tiemposEspera?.[key] ?? 0;
+                                const waiting = isJumuah ? (prayerTimes?.khutbah_minutos ?? 0) : (tiemposEspera?.[key] ?? 0);
                                 const past = nowSec - prayerSec;
                                 const waitingSec = waiting * 60;
                                 const isNext = diff > 0 && PRAYER_ORDER.every(k => {
-                                    const pt = toSeconds(prayerTimes[k]);
+                                    const pk = k === 'dhuhr' && prayerTimes?.jumuah ? 'dhuhr' : k;
+                                    const pt = toSeconds(prayerTimes[pk]);
                                     return pt < 0 || pt <= nowSec || pt >= prayerSec;
                                 });
-                                const progress = prayerProgress(key, prayerTimes, tiemposEspera, nowSec);
+                                const progress = isJumuah ? 0 : prayerProgress(key, prayerTimes, tiemposEspera, nowSec);
 
                                 return (
                                     <div
@@ -218,7 +220,7 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                                 )}
                                                 {!isNext && <span className="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0" />}
                                                 <span className={`text-base sm:text-lg font-medium ${isNext ? 'text-[#0F3B2E] font-semibold' : 'text-gray-700'}`}>
-                                                    {t('prayers', labelKey)}
+                                                    {isJumuah ? 'Jumu\'ah' : t('prayers', labelKey)}
                                                 </span>
                                             </div>
 
@@ -246,7 +248,7 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                                 </span>
                                             </div>
                                         </div>
-                                        {waiting > 0 && (
+                                        {waiting > 0 && !isJumuah && (
                                             <div className="prayer-progress mx-2 sm:mx-3 mb-1">
                                                 <div
                                                     className="prayer-progress-bar animate-progress-fill"

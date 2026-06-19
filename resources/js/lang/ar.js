@@ -51,7 +51,8 @@ const ar = {
     },
     prayers: {
         Fajr: 'الفجر', Sunrise: 'الشروق', Dhuhr: 'الظهر',
-        Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء', remaining: 'التالي',
+        Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء', Jumuah: 'الجمعة',
+        remaining: 'التالي',
         fajr: 'الفجر (الفجر)',
         sunrise: 'الشروق',
         dhuhr: 'الظهر (الظهر)',

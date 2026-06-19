@@ -31,10 +31,17 @@ class TiemposEsperaController extends Controller
         }
 
         $todayHorario = Horario::whereDate('fecha', today())->first();
+        $isFriday = now()->isFriday();
+        $jumuahConfig = $isFriday ? \App\Models\JumuahConfig::activo()
+            ->where('fecha_inicio', '<=', today()->toDateString())
+            ->where('fecha_fin', '>=', today()->toDateString())
+            ->first() : null;
 
         return inertia('Admin/Horarios', [
             'tiempos' => $tiempos,
             'todayHorario' => $todayHorario,
+            'isFriday' => $isFriday,
+            'jumuahKhutbah' => $jumuahConfig?->khutbah_minutos ?? 0,
         ]);
     }
 

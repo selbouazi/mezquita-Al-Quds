@@ -7,7 +7,7 @@ import ModuleToggle from '../../Components/ModuleToggle';
 export default function Horarios() {
     const { t } = useTranslation();
     const { props } = usePage();
-    const { tiempos, todayHorario } = props;
+    const { tiempos, todayHorario, isFriday, jumuahKhutbah } = props;
     const rezos = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
     const [waitValues, setWaitValues] = useState(() => {
@@ -64,7 +64,9 @@ export default function Horarios() {
                         {rezos.map((rezo) => (
                             <div key={rezo} className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg">
                                 <label className="font-medium text-gray-900 w-24 text-sm">
-                                    {t('prayers', rezo.charAt(0).toUpperCase() + rezo.slice(1))}
+                                    {rezo === 'dhuhr' && isFriday
+                                        ? 'Jumu\'ah' + (jumuahKhutbah ? ` (khutbah ${jumuahKhutbah}min)` : '')
+                                        : t('prayers', rezo.charAt(0).toUpperCase() + rezo.slice(1))}
                                 </label>
                                 <input
                                     type="time"
@@ -129,6 +131,19 @@ export default function Horarios() {
                     <p className="text-sm text-blue-700">
                         {t('adminHorarios', 'noteDesc')}
                     </p>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border p-6 mt-6">
+                    <h2 className="text-lg font-medium text-[#0F5132] mb-2">Jumu'ah (Friday Prayer)</h2>
+                    <p className="text-sm text-gray-600 mb-4">
+                        Configure date ranges with Jumu'ah time and khutbah duration. Automatically replaces Dhuhr on Fridays.
+                    </p>
+                    <a
+                        href="/admin/horarios/jumuah"
+                        className="inline-flex items-center px-4 py-2 bg-[#C9A646] text-white rounded-lg hover:bg-[#b89330] text-sm font-medium"
+                    >
+                        Manage Jumu'ah
+                    </a>
                 </div>
             </div>
         </AdminLayout>

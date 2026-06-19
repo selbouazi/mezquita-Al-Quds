@@ -133,14 +133,16 @@ export default function PrayerClock({ prayerTimes }) {
                  style={{ left: '50%', top: '50%', width: 'calc(var(--size) * 0.07)', height: 'calc(var(--size) * 0.07)', transform: 'translate(-50%,-50%)' }} />
 
             {/* Rezos */}
-            {Object.entries(prayerTimes).map(([key, time]) => {
-                const label = t('prayers', key.charAt(0).toUpperCase() + key.slice(1));
+            {Object.entries(prayerTimes).filter(([key]) => !['jumuah', 'khutbah_minutos', 'fecha_hijri'].includes(key)).map(([key, time]) => {
+                const isJumuahLabel = key === 'dhuhr' && prayerTimes?.jumuah;
+                const label = isJumuahLabel ? 'Jumu\'ah' : t('prayers', key.charAt(0).toUpperCase() + key.slice(1));
                 const [h, m] = time.split(':').map(Number);
                 const angle  = ((h * 60 + m) / 1440) * 360;
                 return (
                     <PrayerItem
                         key={key}
                         label={label}
+                        isJumuah={isJumuahLabel}
                         time={time}
                         localTime={`${localizeNumber(h)}:${localizeNumber(String(m).padStart(2,'0'))}`}
                         angle={angle}

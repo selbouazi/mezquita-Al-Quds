@@ -3,53 +3,86 @@
 namespace App\Services;
 
 use App\Models\Horario;
+use App\Models\JumuahConfig;
 use Illuminate\Support\Facades\Cache;
 
 class HorarioService
 {
-    /**
-     * Obtener horario de hoy con caching.
-     */
+    public static function getJumuahForDate(\Carbon\Carbon $date): ?JumuahConfig
+    {
+        if (!$date->isFriday()) {
+            return null;
+        }
+
+        $key = 'jumuah_' . $date->toDateString();
+
+        return Cache::remember($key, now()->addDay(), function () use ($date) {
+            return JumuahConfig::activo()
+                ->where('fecha_inicio', '<=', $date->toDateString())
+                ->where('fecha_fin', '>=', $date->toDateString())
+                ->first();
+        });
+    }
+
     public static function getHorarioHoy(): array
     {
         $key = 'horario_hoy_' . now()->toDateString();
-        
+
         return Cache::remember($key, now()->endOfDay(), function () {
             $horario = Horario::whereDate('fecha', today())->first();
-            
+
             if (!$horario) {
                 return self::emptyTimes();
             }
-            
+
             $formatted = self::formatHorario($horario);
             unset($formatted['fecha_hijri']);
+
+            $jumuah = self::getJumuahForDate(now());
+            if ($jumuah) {
+                $formatted['dhuhr'] = substr($jumuah->hora_jumuah, 0, 5);
+            }
+            if (now()->isFriday()) {
+                $formatted['jumuah'] = true;
+                $formatted['khutbah_minutos'] = $jumuah?->khutbah_minutos ?? 0;
+            }
+
             return $formatted;
         });
     }
-    
-    /**
-     * Obtener horarios de un mes específico.
-     */
+
     public static function getHorariosMes(int $year, int $month): \Illuminate\Support\Collection
     {
         $key = "horarios_mes_{$year}_{$month}";
-        
+
         return Cache::remember($key, now()->endOfDay(), function () use ($year, $month) {
             return Horario::whereYear('fecha', $year)
                 ->whereMonth('fecha', $month)
                 ->orderBy('fecha')
                 ->get(['fecha', 'fecha_hijri', 'fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'])
                 ->keyBy(fn($h) => $h->fecha->format('Y-m-d'))
-                ->map(fn($h) => self::formatHorario($h));
+                ->map(function ($h) {
+                    $formatted = self::formatHorario($h);
+
+                    $jumuah = self::getJumuahForDate($h->fecha);
+                    if ($jumuah) {
+                        $formatted['dhuhr'] = substr($jumuah->hora_jumuah, 0, 5);
+                    }
+                    if ($h->fecha->isFriday()) {
+                        $formatted['jumuah'] = true;
+                        $formatted['khutbah_minutos'] = $jumuah?->khutbah_minutos ?? 0;
+                    }
+
+                    return $formatted;
+                });
         });
     }
-    
-    /**
-     * Limpiar caché de horarios.
-     */
+
     public static function clearCache(?int $year = null): void
     {
-        Cache::forget('horario_hoy_' . now()->toDateString());
+        $today = now()->toDateString();
+        Cache::forget('horario_hoy_' . $today);
+        Cache::forget('jumuah_' . $today);
 
         $year = $year ?? now()->year;
 
@@ -59,10 +92,7 @@ class HorarioService
             }
         }
     }
-    
-    /**
-     * Formatear un modelo Horario a array.
-     */
+
     private static function formatHorario(Horario $horario): array
     {
         return [
@@ -75,10 +105,7 @@ class HorarioService
             'isha'        => substr($horario->isha,    0, 5),
         ];
     }
-    
-    /**
-     * Array de horarios vacíos.
-     */
+
     private static function emptyTimes(): array
     {
         return ['fajr'=>'--:--','sunrise'=>'--:--','dhuhr'=>'--:--','asr'=>'--:--','maghrib'=>'--:--','isha'=>'--:--'];

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DonativosController;
 use App\Http\Controllers\Admin\FacturasController;
 use App\Http\Controllers\Admin\ImamController;
+use App\Http\Controllers\Admin\JumuahConfigController;
 use App\Http\Controllers\Admin\NoticiasController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ModuleStatusController;
@@ -88,6 +89,14 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
 
     // Horarios (tiempos de espera + horario de hoy)
     Route::get('/horarios', [TiemposEsperaController::class, 'index']);
+
+    // Jumu'ah config (must be before /horarios/{rezo})
+    Route::get('/horarios/jumuah', [JumuahConfigController::class, 'index'])->name('admin.jumuah.index');
+    Route::post('/horarios/jumuah', [JumuahConfigController::class, 'store']);
+    Route::put('/horarios/jumuah/{jumuahConfig}', [JumuahConfigController::class, 'update']);
+    Route::delete('/horarios/jumuah/{jumuahConfig}', [JumuahConfigController::class, 'destroy']);
+    Route::post('/horarios/jumuah/{jumuahConfig}/toggle', [JumuahConfigController::class, 'toggle']);
+
     Route::post('/horarios/today', [TiemposEsperaController::class, 'updateToday']);
     Route::post('/horarios/{rezo}', [TiemposEsperaController::class, 'update']);
 });

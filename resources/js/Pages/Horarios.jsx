@@ -191,6 +191,7 @@ export default function Horarios({ horariosMes, year, month }) {
                                 const hasData = !!horariosMes[ds];
                                 const isFri   = new Date(year, month - 1, d).getDay() === 5;
                                 const dayData = horariosMes[ds];
+                                const isJumuah = dayData?.jumuah;
 
                                 return (
                                     <button
@@ -204,6 +205,9 @@ export default function Horarios({ horariosMes, year, month }) {
                                             ${isToday && !isSel ? 'ring-2 ring-[#C9A646]/40 ring-inset' : ''}
                                         `}
                                     >
+                                        {isJumuah && (
+                                            <span className="absolute -top-0.5 right-0.5 text-[7px] font-bold text-[#C9A646]">J</span>
+                                        )}
                                         <span className={`
                                             w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-sm sm:text-base font-semibold transition-all
                                             ${isSel                        ? 'bg-white text-[#0F3B2E] shadow-md' : ''}
@@ -216,7 +220,7 @@ export default function Horarios({ horariosMes, year, month }) {
                                         {hasData && (
                                             <span className={`text-[8px] sm:text-[10px] font-medium leading-none tabular-nums
                                                 ${isSel ? 'text-white/60' : 'text-gray-300'}`}>
-                                                {dayData.fajr}
+                                                {isJumuah ? dayData.dhuhr : dayData.fajr}
                                             </span>
                                         )}
                                     </button>
@@ -259,26 +263,40 @@ export default function Horarios({ horariosMes, year, month }) {
 
                             {/* Prayer times grid */}
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-                                {PRAYER_KEYS.map((key, idx) => (
+                                {PRAYER_KEYS.map((key, idx) => {
+                                    const isJumuah = key === 'dhuhr' && selectedData?.jumuah;
+                                    return (
                                     <div key={key} className={`
                                         flex flex-col items-center justify-center py-6 sm:py-8 gap-2 sm:gap-3
                                         border-b sm:border-b-0 border-[#C9A646]/8
                                         ${idx < (isRTL ? 4 : 2) ? 'border-r border-[#C9A646]/8' : ''}
                                         ${idx >= (isRTL ? 4 : 2) && idx < 4 ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
                                         ${idx < (isRTL ? 2 : 4) ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
-                                        hover:bg-[#0F3B2E]/3 transition-colors duration-200
+                                        ${isJumuah ? 'bg-[#C9A646]/5' : 'hover:bg-[#0F3B2E]/3'}
+                                        transition-colors duration-200 relative
                                     `}>
-                                        <div className="text-[#C9A646]">
+                                        {isJumuah && (
+                                            <span className="absolute top-2 text-[9px] font-bold uppercase tracking-wider text-[#C9A646]">
+                                                Jumu'ah
+                                            </span>
+                                        )}
+                                        <div className={`${isJumuah ? 'text-[#C9A646]' : 'text-[#C9A646]'}`}>
                                             <PrayerIcon name={key} />
                                         </div>
                                         <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">
-                                            {prayerLabel(key)}
+                                            {isJumuah ? 'Jumu\'ah' : prayerLabel(key)}
                                         </span>
                                         <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0F3B2E] tabular-nums tracking-tight">
                                             {selectedData[key]}
                                         </span>
+                                        {isJumuah && selectedData.khutbah_minutos && (
+                                            <span className="text-[10px] text-[#C9A646] font-medium">
+                                                Khutbah: {selectedData.khutbah_minutos} min
+                                            </span>
+                                        )}
                                     </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ) : selected && !selectedData ? (
