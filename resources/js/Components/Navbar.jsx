@@ -82,7 +82,7 @@ export default function Navbar() {
         return !mod || (modules?.[mod] ?? true);
     });
 
-    const isLoggedIn = auth?.user !== null;
+    const isLoggedIn = !!auth?.user;
     const isAdmin = auth?.user?.is_admin === true;
 
     const allUserLinks = isLoggedIn ? [
