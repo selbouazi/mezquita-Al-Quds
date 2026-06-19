@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { usePage, Link, useForm } from '@inertiajs/react';
+import { usePage, router, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import AdminTable from '../../Components/AdminTable';
 import FormModal from '../../Components/FormModal';
 import FormField from '../../Components/FormField';
 import { useTranslation } from '../../hooks/useTranslation';
 import ModuleToggle from '../../Components/ModuleToggle';
+import ConfirmDialog from '../../Components/ConfirmDialog';
 
 export default function Noticias() {
     const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function Noticias() {
     const [showModal, setShowModal] = useState(false);
     const [editando, setEditando] = useState(null);
     const [imagenPreview, setImagenPreview] = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const formData = useForm({
         titulo: '',
@@ -114,9 +116,9 @@ export default function Noticias() {
                     <button onClick={() => openEdit(noticia)} className="px-2 py-1 text-xs text-blue-600 rounded-lg hover:bg-blue-50 min-h-[32px]">
                         {t('common', 'edit')}
                     </button>
-                    <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded-lg hover:bg-red-50 min-h-[32px] flex items-center">
+                    <button onClick={() => setConfirmDelete(noticia)} className="px-2 py-1 text-xs text-red-600 rounded-lg hover:bg-red-50 min-h-[32px] flex items-center">
                         {t('common', 'delete')}
-                    </Link>
+                    </button>
                 </div>
             </td>
         </>
@@ -150,9 +152,9 @@ export default function Noticias() {
                 <button onClick={() => openEdit(noticia)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
                     {t('common', 'edit')}
                 </button>
-                <Link href={`/admin/noticias/${noticia.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                <button onClick={() => setConfirmDelete(noticia)} className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
                     {t('common', 'delete')}
-                </Link>
+                </button>
             </div>
         </>
     );
@@ -160,6 +162,21 @@ export default function Noticias() {
     return (
         <AdminLayout title={t('adminModules', 'news')}>
             <div className="px-2 sm:px-0">
+
+                {confirmDelete && (
+                    <ConfirmDialog
+                        variant="danger"
+                        title={t('common', 'confirm')}
+                        message={t('common', 'confirmMessage')}
+                        confirmLabel={t('common', 'delete')}
+                        cancelLabel={t('common', 'cancel')}
+                        onConfirm={() => {
+                            router.delete(`/admin/noticias/${confirmDelete.id}`);
+                            setConfirmDelete(null);
+                        }}
+                        onCancel={() => setConfirmDelete(null)}
+                    />
+                )}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'news')}</h1>

@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { Link, useForm } from '@inertiajs/react';
+import { usePage, router, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import AdminTable from '../../Components/AdminTable';
 import FormModal from '../../Components/FormModal';
 import FormField from '../../Components/FormField';
 import { useTranslation } from '../../hooks/useTranslation';
 import ModuleToggle from '../../Components/ModuleToggle';
+import ConfirmDialog from '../../Components/ConfirmDialog';
 
 export default function Notificaciones({ notificaciones, filtros }) {
     const { t } = useTranslation();
     const [showModal, setShowModal] = useState(false);
     const [editando, setEditando] = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const form = useForm({
         titulo: '',
@@ -106,9 +108,9 @@ export default function Notificaciones({ notificaciones, filtros }) {
                     <Link href={`/admin/notificaciones/${notif.id}/toggle`} method="post" className="px-2 py-1 text-xs text-orange-600 rounded-lg hover:bg-orange-50 min-h-[32px]">
                         {notif.activa ? t('notifications', 'deactivate') : t('notifications', 'activate')}
                     </Link>
-                    <Link href={`/admin/notificaciones/${notif.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded-lg hover:bg-red-50 min-h-[32px] flex items-center">
+                    <button onClick={() => setConfirmDelete(notif)} className="px-2 py-1 text-xs text-red-600 rounded-lg hover:bg-red-50 min-h-[32px] flex items-center">
                         {t('notifications', 'delete')}
-                    </Link>
+                    </button>
                 </div>
             </td>
         </>
@@ -138,15 +140,30 @@ export default function Notificaciones({ notificaciones, filtros }) {
                 <Link href={`/admin/notificaciones/${notif.id}/toggle`} method="post" className="flex-1 px-3 py-3 text-sm font-medium text-orange-700 border border-orange-200 rounded-xl hover:bg-orange-50 min-h-[44px] text-center block">
                     {notif.activa ? t('notifications', 'deactivate') : t('notifications', 'activate')}
                 </Link>
-                <Link href={`/admin/notificaciones/${notif.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                <button onClick={() => setConfirmDelete(notif)} className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
                     {t('notifications', 'delete')}
-                </Link>
+                </button>
             </div>
         </>
     );
 
     return (
         <AdminLayout title={t('notifications', 'title')}>
+
+            {confirmDelete && (
+                <ConfirmDialog
+                    variant="danger"
+                    title={t('common', 'confirm')}
+                    message={t('common', 'confirmMessage')}
+                    confirmLabel={t('notifications', 'delete')}
+                    cancelLabel={t('common', 'cancel')}
+                    onConfirm={() => {
+                        router.delete(`/admin/notificaciones/${confirmDelete.id}`);
+                        setConfirmDelete(null);
+                    }}
+                    onCancel={() => setConfirmDelete(null)}
+                />
+            )}
             <div className="px-2 sm:px-0">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>

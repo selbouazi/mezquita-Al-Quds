@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { usePage, Link, useForm } from '@inertiajs/react';
+import { usePage, router, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import AdminTable from '../../Components/AdminTable';
 import FormModal from '../../Components/FormModal';
 import FormField from '../../Components/FormField';
 import { useTranslation } from '../../hooks/useTranslation';
 import ModuleToggle from '../../Components/ModuleToggle';
+import ConfirmDialog from '../../Components/ConfirmDialog';
 
 export default function Clases() {
     const { t } = useTranslation();
@@ -24,6 +25,8 @@ export default function Clases() {
         requisitos: '',
         activo: true,
     });
+
+    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const openCreate = () => {
         formData.reset();
@@ -97,7 +100,7 @@ export default function Clases() {
             <td className="px-4 py-3 text-right">
                 <div className="flex justify-end gap-2">
                     <button onClick={() => openEdit(clase)} className="px-2 py-1 text-xs text-blue-600 rounded hover:bg-blue-50">{t('common', 'edit')}</button>
-                    <Link href={`/admin/clases/${clase.id}`} method="delete" className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</Link>
+                    <button onClick={() => setConfirmDelete(clase)} className="px-2 py-1 text-xs text-red-600 rounded hover:bg-red-50">{t('common', 'delete')}</button>
                 </div>
             </td>
         </>
@@ -123,9 +126,9 @@ export default function Clases() {
                 <button onClick={() => openEdit(clase)} className="flex-1 px-3 py-3 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 min-h-[44px]">
                     {t('common', 'edit')}
                 </button>
-                <Link href={`/admin/clases/${clase.id}`} method="delete" className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
+                <button onClick={() => setConfirmDelete(clase)} className="flex-1 px-3 py-3 text-sm font-medium text-red-700 border border-red-200 rounded-xl hover:bg-red-50 min-h-[44px] text-center block">
                     {t('common', 'delete')}
-                </Link>
+                </button>
             </div>
         </>
     );
@@ -133,6 +136,21 @@ export default function Clases() {
     return (
         <AdminLayout title={t('adminModules', 'classes')}>
             <div className="px-2 sm:px-0">
+
+                {confirmDelete && (
+                    <ConfirmDialog
+                        variant="danger"
+                        title={t('common', 'confirm')}
+                        message={t('common', 'confirmMessage')}
+                        confirmLabel={t('common', 'delete')}
+                        cancelLabel={t('common', 'cancel')}
+                        onConfirm={() => {
+                            router.delete(`/admin/clases/${confirmDelete.id}`);
+                            setConfirmDelete(null);
+                        }}
+                        onCancel={() => setConfirmDelete(null)}
+                    />
+                )}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'classes')}</h1>

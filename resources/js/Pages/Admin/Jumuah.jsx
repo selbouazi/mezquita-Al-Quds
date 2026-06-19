@@ -2,6 +2,7 @@ import { usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { useTranslation } from '../../hooks/useTranslation';
+import ConfirmDialog from '../../Components/ConfirmDialog';
 
 export default function Jumuah() {
     const { t } = useTranslation();
@@ -10,6 +11,7 @@ export default function Jumuah() {
 
     const [showModal, setShowModal] = useState(false);
     const [editing, setEditing] = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(null);
     const [form, setForm] = useState({
         fecha_inicio: '',
         fecha_fin: '',
@@ -49,9 +51,7 @@ export default function Jumuah() {
     };
 
     const handleDelete = (cfg) => {
-        if (confirm(t('common', 'confirmMessage'))) {
-            router.delete(`/admin/horarios/jumuah/${cfg.id}`, { preserveScroll: true });
-        }
+        setConfirmDelete(cfg);
     };
 
     const handleToggle = (cfg) => {
@@ -200,6 +200,21 @@ export default function Jumuah() {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {confirmDelete && (
+                    <ConfirmDialog
+                        variant="danger"
+                        title={t('common', 'confirm')}
+                        message={t('common', 'confirmMessage')}
+                        confirmLabel={t('common', 'delete')}
+                        cancelLabel={t('common', 'cancel')}
+                        onConfirm={() => {
+                            router.delete(`/admin/horarios/jumuah/${confirmDelete.id}`, { preserveScroll: true });
+                            setConfirmDelete(null);
+                        }}
+                        onCancel={() => setConfirmDelete(null)}
+                    />
                 )}
             </div>
         </AdminLayout>

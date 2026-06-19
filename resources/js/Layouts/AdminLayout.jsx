@@ -1,6 +1,7 @@
 import { Link, usePage, Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
+import Alert from '../Components/Alert';
 
 const LANGUAGES = [
     { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -42,9 +43,17 @@ const Icons = {
 
 export default function AdminLayout({ title, children }) {
     const { t, locale } = useTranslation();
-    const { auth } = usePage().props;
+    const { auth, flash } = usePage().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [langOpen, setLangOpen] = useState(false);
+    const [alert, setAlert] = useState(null);
+
+    useEffect(() => {
+        if (flash?.success) setAlert({ type: 'success', message: flash.success });
+        else if (flash?.error) setAlert({ type: 'error', message: flash.error });
+    }, [flash]);
+
+    const closeAlert = () => setAlert(null);
 
     return (
         <>
@@ -170,6 +179,16 @@ export default function AdminLayout({ title, children }) {
                 />
             )}
         </div>
+
+        {alert && (
+            <Alert
+                type={alert.type}
+                message={alert.message}
+                onClose={closeAlert}
+                autoDismiss={true}
+                autoDismissTimeout={4000}
+            />
+        )}
         </>
     );
 }
