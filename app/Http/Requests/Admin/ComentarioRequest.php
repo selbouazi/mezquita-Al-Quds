@@ -16,7 +16,7 @@ class ComentarioRequest extends FormRequest
         return [
             'noticia_id' => 'required|exists:noticias,id',
             'contenido' => 'required|string|min:2|max:2000',
-            'nombre' => 'required_without:anonimo|string|max:255',
+            'nombre' => 'required_if:anonimo,false|string|max:255',
             'anonimo' => 'boolean',
         ];
     }
@@ -24,7 +24,7 @@ class ComentarioRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nombre.required_without' => 'Debes proporcionar un nombre o marcar como anónimo.',
+            'nombre.required_if' => 'Debes proporcionar un nombre o marcar como anónimo.',
         ];
     }
 }

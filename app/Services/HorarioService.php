@@ -47,12 +47,17 @@ class HorarioService
     /**
      * Limpiar caché de horarios.
      */
-    public static function clearCache(): void
+    public static function clearCache(?int $year = null): void
     {
         Cache::forget('horario_hoy_' . now()->toDateString());
-        Cache::forget('horarios_mes_' . now()->year . '_' . now()->month);
-        Cache::forget('horarios_mes_' . now()->subMonth()->year . '_' . now()->subMonth()->month);
-        Cache::forget('horarios_mes_' . now()->addMonth()->year . '_' . now()->addMonth()->month);
+
+        $year = $year ?? now()->year;
+
+        for ($y = $year - 1; $y <= $year + 1; $y++) {
+            for ($m = 1; $m <= 12; $m++) {
+                Cache::forget("horarios_mes_{$y}_{$m}");
+            }
+        }
     }
     
     /**

@@ -41,8 +41,8 @@ class ImamController extends Controller
 
         if ($request->hasFile('foto')) {
             try {
-                if ($imam->foto) {
-                    Storage::disk('public')->delete($imam->foto);
+                if ($imam->getRawOriginal('foto')) {
+                    Storage::disk('public')->delete($imam->getRawOriginal('foto'));
                 }
                 $validated['foto'] = $request->file('foto')->store('imam', 'public');
             } catch (\Exception $e) {

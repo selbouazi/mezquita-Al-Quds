@@ -14,5 +14,15 @@ class ContactMessage extends Model
         'phone',
         'ip_address',
         'user_agent',
+        'leido',
     ];
+
+    protected $casts = [
+        'leido' => 'boolean',
+    ];
+
+    public function scopeNoLeidos($query)
+    {
+        return $query->where('leido', false);
+    }
 }

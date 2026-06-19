@@ -26,11 +26,8 @@ export default function Contactos() {
 
     const getTipoLabel = (tipo) => {
         const tipos = {
-            'general': t('adminContactos', 'general') || 'General',
-            'donativo': t('adminContactos', 'donation') || 'Donativo',
-            'clase': t('adminContactos', 'class') || 'Clase',
-            'voluntario': t('adminContactos', 'volunteer') || 'Voluntario',
-            'otro': t('adminContactos', 'other') || 'Otro',
+            'web': t('adminContactos', 'web') || 'Web',
+            'phone': t('adminContactos', 'phone') || 'Teléfono',
         };
         return tipos[tipo] || t('adminContactos', 'general') || 'General';
     };
@@ -46,11 +43,11 @@ export default function Contactos() {
     const renderRow = (contacto) => (
         <>
             <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(contacto)}>
-                <p className="font-medium text-gray-900">{contacto.nombre}</p>
+                <p className="font-medium text-gray-900">{contacto.name}</p>
                 <p className="text-xs text-gray-500">{contacto.email}</p>
             </td>
             <td className="px-4 py-3 cursor-pointer" onClick={() => setSelected(contacto)}>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(contacto.tipo)}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(contacto.type)}</span>
             </td>
             <td className="px-4 py-3 text-sm text-gray-500 cursor-pointer" onClick={() => setSelected(contacto)}>
                 {formatFecha(contacto.created_at)}
@@ -76,7 +73,7 @@ export default function Contactos() {
             <div className="flex items-start justify-between mb-2">
                 <div className="min-w-0 flex-1 mr-2">
                     <div className="flex items-center gap-2">
-                        <p className="font-semibold text-gray-900 text-sm">{contacto.nombre}</p>
+                        <p className="font-semibold text-gray-900 text-sm">{contacto.name}</p>
                         {!contacto.leido && <span className="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></span>}
                     </div>
                     <p className="text-xs text-gray-500">{contacto.email}</p>
@@ -86,7 +83,7 @@ export default function Contactos() {
                 </span>
             </div>
             <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{getTipoLabel(contacto.tipo)}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{getTipoLabel(contacto.type)}</span>
                 <span>{formatFecha(contacto.created_at)}</span>
             </div>
         </div>
@@ -152,7 +149,7 @@ export default function Contactos() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelected(null)}>
                     <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-start justify-between mb-4">
-                            <h2 className="text-lg sm:text-xl font-bold text-[#0F5132]">{selected.nombre}</h2>
+                            <h2 className="text-lg sm:text-xl font-bold text-[#0F5132]">{selected.name}</h2>
                             <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 p-1">
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -167,21 +164,21 @@ export default function Contactos() {
                             </div>
                             <div className="flex gap-2">
                                 <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'tipo')}:</span>
-                                <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(selected.tipo)}</span>
+                                <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs">{getTipoLabel(selected.type)}</span>
                             </div>
                             <div className="flex gap-2">
                                 <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'date')}:</span>
                                 <span className="text-gray-700">{formatFecha(selected.created_at)}</span>
                             </div>
-                            {selected.telefono && (
+                            {selected.phone && (
                                 <div className="flex gap-2">
                                     <span className="font-medium text-gray-600 min-w-20">{t('adminContactos', 'telefono') || 'Teléfono'}:</span>
-                                    <a href={`tel:${selected.telefono}`} className="text-[#C9A646] hover:underline">{selected.telefono}</a>
+                                    <a href={`tel:${selected.phone}`} className="text-[#C9A646] hover:underline">{selected.phone}</a>
                                 </div>
                             )}
                             <div className="pt-3 border-t">
                                 <p className="font-medium text-gray-700 mb-2">{t('adminContactos', 'mensaje')}:</p>
-                                <p className="text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-4 leading-relaxed">{selected.mensaje}</p>
+                                <p className="text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-4 leading-relaxed">{selected.message}</p>
                             </div>
                         </div>
                     </div>

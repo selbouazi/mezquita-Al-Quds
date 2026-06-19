@@ -64,8 +64,8 @@ class NoticiasController extends Controller
 
         if ($request->hasFile('imagen')) {
             try {
-                if ($noticia->imagen) {
-                    Storage::disk('public')->delete($noticia->imagen);
+                if ($noticia->getRawOriginal('imagen')) {
+                    Storage::disk('public')->delete($noticia->getRawOriginal('imagen'));
                 }
                 $path = $request->file('imagen')->store('noticias', 'public');
                 $validated['imagen'] = $path;
@@ -89,8 +89,8 @@ class NoticiasController extends Controller
     public function destroy(Noticia $noticia): RedirectResponse
     {
         try {
-            if ($noticia->imagen) {
-                Storage::disk('public')->delete($noticia->imagen);
+            if ($noticia->getRawOriginal('imagen')) {
+                Storage::disk('public')->delete($noticia->getRawOriginal('imagen'));
             }
         } catch (\Exception $e) {
             Log::error('Error al eliminar imagen de noticia: ' . $e->getMessage());

@@ -19,7 +19,7 @@ class ContactoAdminTest extends TestCase
     /** @test */
     public function it_lists_contact_messages()
     {
-        Contacto::create(['nombre' => 'Sender', 'email' => 'a@b.com', 'mensaje' => 'Hello', 'tipo' => 'web']);
+        Contacto::create(['name' => 'Sender', 'email' => 'a@b.com', 'message' => 'Hello', 'type' => 'web']);
 
         $response = $this->actingAs($this->admin())->get('/admin/contactos');
 
@@ -30,7 +30,7 @@ class ContactoAdminTest extends TestCase
     /** @test */
     public function it_marks_message_as_read()
     {
-        $msg = Contacto::create(['nombre' => 'Sender', 'email' => 'a@b.com', 'mensaje' => 'Hello', 'tipo' => 'web']);
+        $msg = Contacto::create(['name' => 'Sender', 'email' => 'a@b.com', 'message' => 'Hello', 'type' => 'web']);
 
         $response = $this->actingAs($this->admin())->post('/admin/contactos/'.$msg->id.'/leido');
 
@@ -41,11 +41,11 @@ class ContactoAdminTest extends TestCase
     /** @test */
     public function it_deletes_contact_message()
     {
-        $msg = Contacto::create(['nombre' => 'Sender', 'email' => 'a@b.com', 'mensaje' => 'Hello', 'tipo' => 'web']);
+        $msg = Contacto::create(['name' => 'Sender', 'email' => 'a@b.com', 'message' => 'Hello', 'type' => 'web']);
 
         $response = $this->actingAs($this->admin())->delete('/admin/contactos/'.$msg->id);
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('contactos', ['id' => $msg->id]);
+        $this->assertDatabaseMissing('contact_messages', ['id' => $msg->id]);
     }
 }

@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): \Inertia\Response
     {
         $query = Notification::query()->orderBy('created_at', 'desc');
 
@@ -36,7 +36,7 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'nullable|string|max:255',
@@ -57,7 +57,7 @@ class NotificationController extends Controller
             ->with('success', 'Notificación creada correctamente');
     }
 
-    public function update(Request $request, Notification $notification)
+    public function update(Request $request, Notification $notification): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'titulo' => 'nullable|string|max:255',
@@ -74,7 +74,7 @@ class NotificationController extends Controller
             ->with('success', 'Notificación actualizada correctamente');
     }
 
-    public function destroy(Notification $notification)
+    public function destroy(Notification $notification): \Illuminate\Http\RedirectResponse
     {
         $notification->delete();
 
@@ -82,11 +82,12 @@ class NotificationController extends Controller
             ->with('success', 'Notificación eliminada correctamente');
     }
 
-    public function toggle(Notification $notification)
+    public function toggle(Notification $notification): \Illuminate\Http\RedirectResponse
     {
-        $notification->update(['activa' => !$notification->activa]);
+        $nuevoEstado = !$notification->activa;
+        $notification->update(['activa' => $nuevoEstado]);
 
-        $estado = $notification->activa ? 'activada' : 'desactivada';
+        $estado = $nuevoEstado ? 'activada' : 'desactivada';
 
         return back()->with('success', "Notificación {$estado}");
     }

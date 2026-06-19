@@ -39,11 +39,7 @@ class RegisterController extends Controller
             'codigo_activacion' => ['required', 'string', 'max:100'],
         ]);
 
-        $codigo = ActivationCode::where('codigo', strtoupper($request->codigo_activacion))
-            ->where('activo', true)
-            ->first();
-
-        if (!$codigo) {
+        if (!ActivationCode::validar($request->codigo_activacion)) {
             return back()->withErrors([
                 'codigo_activacion' => 'El código de activación no es válido o está inactivo.',
             ])->withInput();

@@ -35,6 +35,15 @@ class SitemapController extends Controller
             $xml .= "  </url>\n";
         }
 
+        foreach ($noticias as $noticia) {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>" . url('/noticias/' . $noticia->id) . "</loc>\n";
+            $xml .= "    <lastmod>" . ($noticia->updated_at?->toDateString() ?? $noticia->fecha_publicacion?->toDateString() ?? now()->toDateString()) . "</lastmod>\n";
+            $xml .= "    <changefreq>monthly</changefreq>\n";
+            $xml .= "    <priority>0.6</priority>\n";
+            $xml .= "  </url>\n";
+        }
+
         $xml .= '</urlset>';
 
         return response($xml, 200, ['Content-Type' => 'application/xml']);

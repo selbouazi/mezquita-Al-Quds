@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class DonativosController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): \Inertia\Response
     {
         $year = $request->get('año', date('Y'));
         $search = $request->get('search', '');
@@ -54,7 +54,7 @@ class DonativosController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'nombre_arabe' => 'nullable|string|max:255',
@@ -70,7 +70,7 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo creado correctamente');
     }
 
-    public function update(Request $request, Donativo $donativo)
+    public function update(Request $request, Donativo $donativo): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'nombre_arabe' => 'nullable|string|max:255',
@@ -86,17 +86,18 @@ class DonativosController extends Controller
         return redirect()->back()->with('success', 'Donativo actualizado');
     }
 
-    public function destroy(Donativo $donativo)
+    public function destroy(Donativo $donativo): \Illuminate\Http\RedirectResponse
     {
         $donativo->delete();
 
         return redirect()->back()->with('success', 'Donativo eliminado');
     }
 
-    public function togglePagado(Donativo $donativo)
+    public function togglePagado(Donativo $donativo): \Illuminate\Http\RedirectResponse
     {
-        $donativo->update(['pagado' => ! $donativo->pagado]);
+        $nuevoEstado = !$donativo->pagado;
+        $donativo->update(['pagado' => $nuevoEstado]);
 
-        return redirect()->back()->with('success', $donativo->pagado ? 'Marcado como pagado' : 'Marcado como pendiente');
+        return redirect()->back()->with('success', $nuevoEstado ? 'Marcado como pagado' : 'Marcado como pendiente');
     }
 }

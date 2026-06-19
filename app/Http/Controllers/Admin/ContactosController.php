@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contacto;
+use App\Models\ContactMessage;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
@@ -16,8 +16,8 @@ class ContactosController extends Controller
      */
     public function index(): Response
     {
-        $contactos = Contacto::orderBy('created_at', 'desc')->paginate(20);
-        $sinLeer = Contacto::noLeidos()->count();
+        $contactos = ContactMessage::orderBy('created_at', 'desc')->paginate(20);
+        $sinLeer = ContactMessage::noLeidos()->count();
 
         return inertia('Admin/Contactos', [
             'contactos' => $contactos,
@@ -28,10 +28,10 @@ class ContactosController extends Controller
     /**
      * Marca un mensaje como leído.
      *
-     * @param Contacto $contacto
+     * @param ContactMessage $contacto
      * @return RedirectResponse
      */
-    public function marcarLeido(Contacto $contacto): RedirectResponse
+    public function marcarLeido(ContactMessage $contacto): RedirectResponse
     {
         $contacto->update(['leido' => true]);
 
@@ -41,10 +41,10 @@ class ContactosController extends Controller
     /**
      * Elimina un mensaje de contacto.
      *
-     * @param Contacto $contacto
+     * @param ContactMessage $contacto
      * @return RedirectResponse
      */
-    public function destroy(Contacto $contacto): RedirectResponse
+    public function destroy(ContactMessage $contacto): RedirectResponse
     {
         $contacto->delete();
 

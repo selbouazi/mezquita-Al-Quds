@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\ActivationCodeController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ImamController;
-use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ContactController;
@@ -28,10 +24,6 @@ Fortify::registerView(function () {
 Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::post('/register', [RegisterController::class, 'register'])
     ->middleware('throttle:5,1');
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-});
 
 Route::get('/', [HorarioController::class, 'home']);
 Route::get('/horarios', [HorarioController::class, 'horarios']);

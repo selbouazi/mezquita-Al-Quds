@@ -69,15 +69,4 @@ class HorarioController extends Controller
         ]);
     }
 
-    /**
-     * Cambiar idioma.
-     */
-    public function switchLang(Request $request, $lang)
-    {
-        if (in_array($lang, ['es', 'ca', 'ar', 'en'])) {
-            $request->session()->put('locale', $lang);
-        }
-
-        return back();
-    }
 }
