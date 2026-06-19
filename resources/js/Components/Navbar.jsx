@@ -96,6 +96,7 @@ export default function Navbar() {
     });
 
     return (
+        <>
         <nav ref={navRef} className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out
             ${scrolled
                 ? 'py-1.5 bg-white/85 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] border-b border-[#C9A646]/15'
@@ -199,114 +200,115 @@ export default function Navbar() {
                     </svg>
                 </button>
             </div>
+        </nav>
 
-            {/* MOBILE MENU */}
-            <div className={`fixed inset-0 z-40 md:hidden transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeMobile} />
+        {/* MOBILE MENU (outside nav to avoid backdrop-filter containing block bug) */}
+        <div className={`fixed inset-0 z-40 md:hidden transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeMobile} />
 
-                <div ref={mobilePanelRef}
-                     className={`absolute top-0 ${isRTL ? 'left-0' : 'right-0'} h-full w-80 max-w-[85vw] overflow-y-auto transition-transform duration-300 ease-out
-                         ${mobileOpen ? 'translate-x-0' : isRTL ? '-translate-x-full' : 'translate-x-full'}`}>
+            <div ref={mobilePanelRef}
+                 className={`absolute top-0 ${isRTL ? 'left-0' : 'right-0'} h-full w-80 max-w-[85vw] overflow-y-auto transition-transform duration-300 ease-out
+                     ${mobileOpen ? 'translate-x-0' : isRTL ? '-translate-x-full' : 'translate-x-full'}`}>
 
-                    {/* Glass panel with geometric decoration */}
-                    <div className="relative h-full bg-white/95 backdrop-blur-2xl shadow-2xl border-l border-white/20">
-                        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-                            <div className="absolute -top-20 -right-20 w-40 h-40 border border-[#C9A646]/8 rounded-full" />
-                            <div className="absolute -bottom-20 -left-20 w-40 h-40 border border-[#C9A646]/8 rounded-full" />
-                            <div className="absolute top-1/3 right-0 w-32 h-px bg-gradient-to-l from-[#C9A646]/10 to-transparent" />
-                            <div className="absolute bottom-1/3 left-0 w-32 h-px bg-gradient-to-r from-[#C9A646]/10 to-transparent" />
-                            <svg className="absolute top-1/4 left-6 w-12 h-12 text-[#C9A646]/5" viewBox="0 0 48 48" fill="none">
-                                <path d="M24 4L44 24L24 44L4 24L24 4Z" stroke="currentColor" strokeWidth="1" />
-                                <path d="M24 12L36 24L24 36L12 24L24 12Z" stroke="currentColor" strokeWidth="0.8" />
-                            </svg>
-                            <svg className="absolute bottom-1/4 right-6 w-10 h-10 text-[#C9A646]/5" viewBox="0 0 48 48" fill="none">
-                                <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="1" />
-                                <circle cx="24" cy="24" r="10" stroke="currentColor" strokeWidth="0.8" />
-                            </svg>
+                {/* Glass panel with geometric decoration */}
+                    <div className="relative min-h-full bg-white/95 backdrop-blur-2xl shadow-2xl border-l border-white/20">
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                        <div className="absolute -top-20 -right-20 w-40 h-40 border border-[#C9A646]/8 rounded-full" />
+                        <div className="absolute -bottom-20 -left-20 w-40 h-40 border border-[#C9A646]/8 rounded-full" />
+                        <div className="absolute top-1/3 right-0 w-32 h-px bg-gradient-to-l from-[#C9A646]/10 to-transparent" />
+                        <div className="absolute bottom-1/3 left-0 w-32 h-px bg-gradient-to-r from-[#C9A646]/10 to-transparent" />
+                        <svg className="absolute top-1/4 left-6 w-12 h-12 text-[#C9A646]/5" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 4L44 24L24 44L4 24L24 4Z" stroke="currentColor" strokeWidth="1" />
+                            <path d="M24 12L36 24L24 36L12 24L24 12Z" stroke="currentColor" strokeWidth="0.8" />
+                        </svg>
+                        <svg className="absolute bottom-1/4 right-6 w-10 h-10 text-[#C9A646]/5" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="1" />
+                            <circle cx="24" cy="24" r="10" stroke="currentColor" strokeWidth="0.8" />
+                        </svg>
+                    </div>
+
+                    <div className="relative pt-20 pb-8 px-4 sm:px-6">
+                        {/* Navigation links */}
+                        <div className="space-y-0.5 mb-6">
+                            <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]">{t('navbar', 'menu')}</p>
+                            {navLinks.map((link, i) => (
+                                <Link key={link.href} href={link.href}
+                                      className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 min-h-[48px]
+                                          ${activeIndex === i
+                                              ? 'text-[#0F3B2E] bg-[#0F3B2E]/8 font-semibold'
+                                              : 'text-gray-700 hover:text-[#0F3B2E] hover:bg-[#0F3B2E]/5'}`}
+                                      onClick={closeMobile}>
+                                    <span className={`w-1.5 h-1.5 ${activeIndex === i ? 'bg-[#C9A646]' : 'bg-[#C9A646]/40'} rotate-45 shrink-0`} />
+                                    {link.label}
+                                </Link>
+                            ))}
                         </div>
 
-                        <div className="relative pt-20 pb-8 px-4 sm:px-6">
-                            {/* Navigation links */}
+                        {/* User-only links */}
+                        {userLinks.length > 0 && (
                             <div className="space-y-0.5 mb-6">
-                                <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]">{t('navbar', 'menu')}</p>
-                                {navLinks.map((link, i) => (
+                                <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]/60">{t('adminModules', 'invoices')}</p>
+                                {userLinks.map(link => (
                                     <Link key={link.href} href={link.href}
-                                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 min-h-[48px]
-                                              ${activeIndex === i
-                                                  ? 'text-[#0F3B2E] bg-[#0F3B2E]/8 font-semibold'
-                                                  : 'text-gray-700 hover:text-[#0F3B2E] hover:bg-[#0F3B2E]/5'}`}
+                                          className="flex items-center gap-3 px-4 py-3.5 text-gray-700 hover:text-[#0F3B2E] hover:bg-[#0F3B2E]/5 rounded-xl transition-all duration-200 min-h-[48px]"
                                           onClick={closeMobile}>
-                                        <span className={`w-1.5 h-1.5 ${activeIndex === i ? 'bg-[#C9A646]' : 'bg-[#C9A646]/40'} rotate-45 shrink-0`} />
+                                        <span className="w-1.5 h-1.5 bg-[#C9A646]/40 rotate-45 shrink-0" />
                                         {link.label}
                                     </Link>
                                 ))}
                             </div>
+                        )}
 
-                            {/* User-only links */}
-                            {userLinks.length > 0 && (
-                                <div className="space-y-0.5 mb-6">
-                                    <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]/60">{t('adminModules', 'invoices')}</p>
-                                    {userLinks.map(link => (
-                                        <Link key={link.href} href={link.href}
-                                              className="flex items-center gap-3 px-4 py-3.5 text-gray-700 hover:text-[#0F3B2E] hover:bg-[#0F3B2E]/5 rounded-xl transition-all duration-200 min-h-[48px]"
-                                              onClick={closeMobile}>
-                                            <span className="w-1.5 h-1.5 bg-[#C9A646]/40 rotate-45 shrink-0" />
-                                            {link.label}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Notifications */}
+                        {/* Notifications */}
                             <div className="px-4 mb-6">
-                                <NotificationBell notifications={notifications} />
+                                <NotificationBell notifications={notifications} inMobile />
                             </div>
 
-                            {/* Language selector */}
-                            <div className="px-4 mb-6">
-                                <p className="pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]/60">{t('navbar', 'selectLang')}</p>
-                                <div className={`flex flex-wrap gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                    {LANGUAGES.map(l => (
-                                        <a key={l.code} href={`/lang/${l.code}`}
-                                           className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl text-xs transition-all duration-200 min-h-[44px]
-                                               ${l.code === locale
-                                                   ? 'bg-[#0F3B2E] text-white border-[#0F3B2E] shadow-md'
-                                                   : 'bg-white/60 text-gray-600 border-gray-200/60 hover:bg-white hover:border-[#C9A646]/30 hover:shadow-sm'}`}>
-                                            <img src={`/img/lang/${l.code}.png`} className="h-4 w-4 rounded-sm" alt={l.code} loading="lazy" />
-                                            <span className="font-medium">{l.label}</span>
-                                        </a>
-                                    ))}
-                                </div>
+                        {/* Language selector */}
+                        <div className="px-4 mb-6">
+                            <p className="pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]/60">{t('navbar', 'selectLang')}</p>
+                            <div className={`flex flex-wrap gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                {LANGUAGES.map(l => (
+                                    <a key={l.code} href={`/lang/${l.code}`}
+                                       className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl text-xs transition-all duration-200 min-h-[44px]
+                                           ${l.code === locale
+                                               ? 'bg-[#0F3B2E] text-white border-[#0F3B2E] shadow-md'
+                                               : 'bg-white/60 text-gray-600 border-gray-200/60 hover:bg-white hover:border-[#C9A646]/30 hover:shadow-sm'}`}>
+                                        <img src={`/img/lang/${l.code}.png`} className="h-4 w-4 rounded-sm" alt={l.code} loading="lazy" />
+                                        <span className="font-medium">{l.label}</span>
+                                    </a>
+                                ))}
                             </div>
+                        </div>
 
-                            {/* Login/Logout button */}
-                            <div className="px-4 pt-2">
-                                {isLoggedIn ? (
-                                    isAdmin ? (
-                                        <Link href="/admin"
-                                              className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[#C9A646] to-[#b88a36] text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px]"
-                                              onClick={closeMobile}>
-                                            {t('admin', 'manage')}
-                                        </Link>
-                                    ) : (
-                                        <Link href="/logout" method="post" as="button"
-                                              className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px] w-full"
-                                              onClick={closeMobile}>
-                                            {t('auth', 'logout')}
-                                        </Link>
-                                    )
-                                ) : (
-                                    <Link href="/login"
-                                          className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[#0F3B2E] to-[#09291e] text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px]"
+                        {/* Login/Logout button */}
+                        <div className="px-4 pt-2">
+                            {isLoggedIn ? (
+                                isAdmin ? (
+                                    <Link href="/admin"
+                                          className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[#C9A646] to-[#b88a36] text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px]"
                                           onClick={closeMobile}>
-                                        {t('auth', 'login')}
+                                        {t('admin', 'manage')}
                                     </Link>
-                                )}
-                            </div>
+                                ) : (
+                                    <Link href="/logout" method="post" as="button"
+                                          className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px] w-full"
+                                          onClick={closeMobile}>
+                                        {t('auth', 'logout')}
+                                    </Link>
+                                )
+                            ) : (
+                                <Link href="/login"
+                                      className="flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[#0F3B2E] to-[#09291e] text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 min-h-[48px]"
+                                      onClick={closeMobile}>
+                                    {t('auth', 'login')}
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
+        </>
     );
 }

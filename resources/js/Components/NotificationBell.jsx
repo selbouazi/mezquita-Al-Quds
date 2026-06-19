@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import { useTranslation } from '../hooks/useTranslation';
 
-export default function NotificationBell({ notifications = [] }) {
+export default function NotificationBell({ notifications = [], inMobile = false }) {
     const { t, locale } = useTranslation();
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -56,7 +56,7 @@ export default function NotificationBell({ notifications = [] }) {
             </button>
 
             {open && (
-                <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white border border-[#C9A227]/20 rounded-xl shadow-lg overflow-hidden z-50">
+                <div className={`absolute left-0 sm:left-auto sm:right-0 mt-2 ${inMobile ? 'w-full' : 'w-[calc(100vw-2rem)]'} sm:w-80 bg-white border border-[#C9A227]/20 rounded-xl shadow-lg overflow-hidden z-50`}>
                     <div className="px-4 py-3 border-b border-[#C9A227]/20 bg-[#F8F8F8]">
                         <h3 className="font-semibold text-[#0F5132]">
                             {t('notifications', 'title')}
