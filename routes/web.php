@@ -33,8 +33,6 @@ Route::get('/noticias/{noticia}', [NoticiasController::class, 'show']);
 Route::post('/comentarios', [ComentarioController::class, 'store'])->middleware('throttle:10,1');
 
 Route::get('/contacto', [ContactController::class, 'create']);
-Route::post('/contacto', [ContactController::class, 'store'])
-    ->middleware('throttle:5,1');
 
 Route::get('/ubicacion', [PublicController::class, 'ubicacion']);
 Route::get('/imam', [PublicController::class, 'imam']);

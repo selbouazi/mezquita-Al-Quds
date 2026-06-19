@@ -20,7 +20,6 @@ const ADMIN_MODULES = [
     { key: 'clases', label: 'classes', href: '/admin/clases' },
     { key: 'imam', label: 'imam', href: '/admin/imam' },
     { key: 'ubicacion', label: 'location', href: '/admin/ubicacion' },
-    { key: 'contactos', label: 'contacts', href: '/admin/contactos' },
     { key: 'normas', label: 'normas', href: '/admin/normas' },
     { key: 'comentarios', label: 'comments', href: '/admin/comentarios' },
 ];

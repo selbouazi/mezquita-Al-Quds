@@ -231,7 +231,7 @@ export default function Navbar() {
                         {/* Navigation links */}
                         <div className="space-y-0.5 mb-6">
                             <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]">{t('navbar', 'menu')}</p>
-                            {navLinks.map((link, i) => (
+                            {[...navLinks, ...userLinks].map((link, i) => (
                                 <Link key={link.href} href={link.href}
                                       className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 min-h-[48px]
                                           ${activeIndex === i
@@ -243,21 +243,6 @@ export default function Navbar() {
                                 </Link>
                             ))}
                         </div>
-
-                        {/* User-only links */}
-                        {userLinks.length > 0 && (
-                            <div className="space-y-0.5 mb-6">
-                                <p className="px-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A646]/60">{t('adminModules', 'invoices')}</p>
-                                {userLinks.map(link => (
-                                    <Link key={link.href} href={link.href}
-                                          className="flex items-center gap-3 px-4 py-3.5 text-gray-700 hover:text-[#0F3B2E] hover:bg-[#0F3B2E]/5 rounded-xl transition-all duration-200 min-h-[48px]"
-                                          onClick={closeMobile}>
-                                        <span className="w-1.5 h-1.5 bg-[#C9A646]/40 rotate-45 shrink-0" />
-                                        {link.label}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
 
                         {/* Notifications */}
                             <div className="px-4 mb-6">

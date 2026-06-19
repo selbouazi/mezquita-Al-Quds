@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\ActivationCodeController;
 use App\Http\Controllers\Admin\ClasesController;
 use App\Http\Controllers\Admin\ComentariosController;
-use App\Http\Controllers\Admin\ContactosController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DonativosController;
 use App\Http\Controllers\Admin\FacturasController;
@@ -60,11 +59,6 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::post('/clases', [ClasesController::class, 'store']);
     Route::put('/clases/{clase}', [ClasesController::class, 'update']);
     Route::delete('/clases/{clase}', [ClasesController::class, 'destroy']);
-
-    // Contactos
-    Route::get('/contactos', [ContactosController::class, 'index']);
-    Route::post('/contactos/{contacto}/leido', [ContactosController::class, 'marcarLeido']);
-    Route::delete('/contactos/{contacto}', [ContactosController::class, 'destroy']);
 
     // Noticias
     Route::get('/noticias', [NoticiasController::class, 'index']);
