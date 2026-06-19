@@ -609,6 +609,7 @@ const en = {
         '500': { title: 'Internal error', message: 'An unexpected error occurred. Please try again later.' },
         '503': { title: 'Service unavailable', message: 'The service is not available right now.' },
         goHome: 'Go home',
+        maintenanceMsg: 'We will be back soon',
     },
 };
 

@@ -577,6 +577,7 @@ const ca = {
         '500': { title: 'Error intern', message: 'Ha ocorregut un error inesperat. Torna a intentar-ho més tard.' },
         '503': { title: 'Servei no disponible', message: 'El servei no està disponible en aquests moments.' },
         goHome: 'Tornar a l\'inici',
+        maintenanceMsg: 'Tornarem aviat',
     },
 };
 

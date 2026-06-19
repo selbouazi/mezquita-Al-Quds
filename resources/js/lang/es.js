@@ -588,6 +588,7 @@ const es = {
         '500': { title: 'Error interno', message: 'Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.' },
         '503': { title: 'Servicio no disponible', message: 'El servicio no está disponible en estos momentos.' },
         goHome: 'Volver al inicio',
+        maintenanceMsg: 'Volveremos pronto',
     },
 };
 
