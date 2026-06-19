@@ -6,7 +6,7 @@ export default function NotFound() {
     const { t } = useTranslation();
     const err = t('errors', '404');
     return (
-        <MainLayout title={err.title} noindex>
+        <MainLayout title={err.title} noindex simpleNav hideFooter>
             <section className="pt-28 pb-16 max-w-md mx-auto px-6 relative">
                 <svg className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <defs><pattern id="g404" width="40" height="40" patternUnits="userSpaceOnUse"><polygon points="20,0 40,20 20,40 0,20" fill="none" stroke="#0F3B2E" strokeWidth="0.5"/></pattern></defs>

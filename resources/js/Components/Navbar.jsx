@@ -19,7 +19,7 @@ const MODULE_MAP = {
     '/donativos': 'donativos',
 };
 
-export default function Navbar() {
+export default function Navbar({ simple }) {
     const { t, locale, isRTL } = useTranslation();
     const { auth, modules } = usePage().props;
     const [scrolled, setScrolled] = useState(false);
@@ -30,6 +30,20 @@ export default function Navbar() {
     const navRef = useRef(null);
     const mobilePanelRef = useRef(null);
     const langBtnRef = useRef(null);
+
+    const allNavLinks = [
+        { href: '/', label: t('navbar', 'home') },
+        { href: '/horarios', label: t('navbar', 'prayers') },
+        { href: '/noticias', label: t('adminModules', 'news') },
+        { href: '/imam', label: t('navbar', 'imam') },
+        { href: '/ubicacion', label: t('navbar', 'location') },
+        { href: '/contacto', label: t('navbar', 'contact') },
+    ];
+
+    const navLinks = allNavLinks.filter(link => {
+        const mod = MODULE_MAP[link.href];
+        return !mod || (modules?.[mod] ?? true);
+    });
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 50);
@@ -68,19 +82,21 @@ export default function Navbar() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [langOpen]);
 
-    const allNavLinks = [
-        { href: '/', label: t('navbar', 'home') },
-        { href: '/horarios', label: t('navbar', 'prayers') },
-        { href: '/noticias', label: t('adminModules', 'news') },
-        { href: '/imam', label: t('navbar', 'imam') },
-        { href: '/ubicacion', label: t('navbar', 'location') },
-        { href: '/contacto', label: t('navbar', 'contact') },
-    ];
-
-    const navLinks = allNavLinks.filter(link => {
-        const mod = MODULE_MAP[link.href];
-        return !mod || (modules?.[mod] ?? true);
-    });
+    if (simple) {
+        return (
+            <nav className="fixed top-0 left-0 w-full z-50 py-3 bg-white/85 backdrop-blur-2xl shadow-sm border-b border-[#C9A646]/15">
+                <div className={`max-w-7xl mx-auto px-5 flex items-center justify-center ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <img src="/img/mezquitaAlquds_logo2.png" className="h-10 sm:h-11 group-hover:scale-105 transition-all duration-500" alt="Logo" loading="lazy" />
+                        <div>
+                            <p className="text-xs text-gray-400 font-medium leading-tight">{t('navbar', 'subtitle')}</p>
+                            <p className="font-bold text-[#0F3B2E] tracking-wide text-xl">{t('navbar', 'title')}</p>
+                        </div>
+                    </Link>
+                </div>
+            </nav>
+        );
+    }
 
     const isLoggedIn = !!auth?.user;
     const isAdmin = auth?.user?.is_admin === true;

@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { useTranslation } from '../hooks/useTranslation';
 
-export default function MainLayout({ title, meta: pageMeta, description: directDesc, noindex, image, canonical: directCanonical, children }) {
+export default function MainLayout({ title, meta: pageMeta, description: directDesc, noindex, image, canonical: directCanonical, hideFooter, simpleNav, children }) {
     const { t, locale, isRTL } = useTranslation();
 
     const metaTitle = pageMeta?.title || title || t('meta.home.title');
@@ -49,11 +49,11 @@ export default function MainLayout({ title, meta: pageMeta, description: directD
                     color: '#1a1a1a',
                 }}
             >
-                <Navbar />
+                <Navbar simple={simpleNav} />
                 <main className="pt-24">
                     {children}
                 </main>
-                <Footer />
+                {!hideFooter && <Footer />}
             </div>
         </>
     );
