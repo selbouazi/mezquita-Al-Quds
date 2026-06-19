@@ -35,40 +35,32 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $shareAuth = function () {
-            $request = request();
-            Inertia::share('auth', [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'is_admin' => $request->user()->rol === 'admin',
-                ] : null,
-            ]);
+        $shareInertiaGlobals = function () {
+            Inertia::share('locale', session('locale', 'es'));
         };
 
-        $exceptions->render(function (NotFoundHttpException $e) use ($shareAuth) {
-            $shareAuth();
+        $exceptions->render(function (NotFoundHttpException $e) use ($shareInertiaGlobals) {
+            $shareInertiaGlobals();
             return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
         });
 
-        $exceptions->render(function (AccessDeniedHttpException $e) use ($shareAuth) {
-            $shareAuth();
+        $exceptions->render(function (AccessDeniedHttpException $e) use ($shareInertiaGlobals) {
+            $shareInertiaGlobals();
             return Inertia::render('Errors/403')->toResponse(request())->setStatusCode(403);
         });
 
-        $exceptions->render(function (HttpException $e) use ($shareAuth) {
+        $exceptions->render(function (HttpException $e) use ($shareInertiaGlobals) {
             $status = $e->getStatusCode();
             if (in_array($status, [500, 503])) {
-                $shareAuth();
+                $shareInertiaGlobals();
                 return Inertia::render("Errors/{$status}")->toResponse(request())->setStatusCode($status);
             }
             if ($status === 403) {
-                $shareAuth();
+                $shareInertiaGlobals();
                 return Inertia::render('Errors/403')->toResponse(request())->setStatusCode(403);
             }
             if ($status === 404) {
-                $shareAuth();
+                $shareInertiaGlobals();
                 return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
             }
         });
