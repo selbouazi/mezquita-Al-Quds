@@ -35,23 +35,40 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (NotFoundHttpException $e) {
+        $shareAuth = function () {
+            $request = request();
+            Inertia::share('auth', [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'is_admin' => $request->user()->rol === 'admin',
+                ] : null,
+            ]);
+        };
+
+        $exceptions->render(function (NotFoundHttpException $e) use ($shareAuth) {
+            $shareAuth();
             return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
         });
 
-        $exceptions->render(function (AccessDeniedHttpException $e) {
+        $exceptions->render(function (AccessDeniedHttpException $e) use ($shareAuth) {
+            $shareAuth();
             return Inertia::render('Errors/403')->toResponse(request())->setStatusCode(403);
         });
 
-        $exceptions->render(function (HttpException $e) {
+        $exceptions->render(function (HttpException $e) use ($shareAuth) {
             $status = $e->getStatusCode();
             if (in_array($status, [500, 503])) {
+                $shareAuth();
                 return Inertia::render("Errors/{$status}")->toResponse(request())->setStatusCode($status);
             }
             if ($status === 403) {
+                $shareAuth();
                 return Inertia::render('Errors/403')->toResponse(request())->setStatusCode(403);
             }
             if ($status === 404) {
+                $shareAuth();
                 return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
             }
         });
