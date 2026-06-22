@@ -320,6 +320,7 @@ const ca = {
         imamDesc: 'Biografia i dades',
         clasesDesc: 'Àrab i Alcorà',
         ubicacionDesc: 'Adreça i mapa',
+        comentariosDesc: 'Gestionar comentaris',
         contactosDesc: 'Veure missatges de contacte',
         codigosDesc: 'Gestionar registres',
     },

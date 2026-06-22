@@ -182,10 +182,7 @@ export default function Donativos() {
             )}
             <div className="px-2 sm:px-0">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'donations')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminDonativos', 'description')}</p>
-                    </div>
+                    <p className="text-gray-600 text-sm hidden sm:block">{t('adminDonativos', 'description')}</p>
                     <div className="flex items-center gap-3">
                         <ModuleToggle module="donativos" />
                         <button

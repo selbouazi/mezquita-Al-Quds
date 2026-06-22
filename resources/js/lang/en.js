@@ -352,6 +352,7 @@ const en = {
         imamDesc: 'Biography and details',
         clasesDesc: 'Arabic and Quran',
         ubicacionDesc: 'Address and map',
+        comentariosDesc: 'Manage comments',
         contactosDesc: 'View contact messages',
         codigosDesc: 'Manage registrations',
     },

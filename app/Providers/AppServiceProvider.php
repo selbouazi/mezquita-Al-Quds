@@ -29,6 +29,17 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
+        \Illuminate\Support\Facades\RateLimiter::for('api', function (\Illuminate\Http\Request $request) {
+            $user = $request->user();
+            $key = $user ? 'api:' . $user->id : 'api:' . $request->ip();
+            $limit = $user && $user->rol === 'admin' ? 120 : 60;
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute($limit)->by($key);
+        });
+
+        \Illuminate\Support\Facades\RateLimiter::for('auth', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->ip());
+        });
+
         Noticia::observe(NoticiaObserver::class);
         ImamSetting::observe(ImamSettingObserver::class);
         Notification::observe(NotificationObserver::class);

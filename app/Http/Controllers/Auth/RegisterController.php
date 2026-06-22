@@ -3,33 +3,23 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Mail\VerificationCode;
 use App\Models\ActivationCode;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Response;
 
 class RegisterController extends Controller
 {
-    /**
-     * Muestra el formulario de registro.
-     *
-     * @return Response
-     */
     public function showRegistrationForm(): Response
     {
         return inertia('Auth/Register');
     }
 
-    /**
-     * Maneja la solicitud de registro de usuario.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function register(Request $request): RedirectResponse
     {
         $request->validate([
@@ -52,8 +42,12 @@ class RegisterController extends Controller
             'rol' => 'user',
         ]);
 
-        Auth::login($user);
+        $code = $user->generateVerificationCode();
 
-        return redirect('/');
+        Mail::to($user->email)->queue(new VerificationCode($user, $code));
+
+        session(['pending_verification_user_id' => $user->id]);
+
+        return redirect('/verify-email')->with('success', 'Te hemos enviado un código de verificación a tu correo.');
     }
 }

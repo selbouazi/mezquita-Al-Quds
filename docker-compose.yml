@@ -1,0 +1,78 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mezquita-alquds/app
+    container_name: alquds-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    volumes:
+      - storage_data:/app/storage
+      - ./public:/app/public:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - alquds
+
+  queue:
+    image: mezquita-alquds/app
+    container_name: alquds-queue
+    restart: unless-stopped
+    command: php /app/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    env_file:
+      - .env
+    volumes:
+      - storage_data:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - alquds
+
+  scheduler:
+    image: mezquita-alquds/app
+    container_name: alquds-scheduler
+    restart: unless-stopped
+    command: php /app/artisan schedule:work
+    env_file:
+      - .env
+    volumes:
+      - storage_data:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - alquds
+
+  db:
+    image: mysql:8.0
+    container_name: alquds-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: alquds
+      MYSQL_USER: alquds
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root_secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - alquds
+
+networks:
+  alquds:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  storage_data:

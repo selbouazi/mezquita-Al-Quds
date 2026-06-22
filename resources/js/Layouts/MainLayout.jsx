@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Head } from '@inertiajs/react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
@@ -6,6 +6,7 @@ import { useTranslation } from '../hooks/useTranslation';
 
 export default function MainLayout({ title, meta: pageMeta, description: directDesc, noindex, image, canonical: directCanonical, hideFooter, simpleNav, children }) {
     const { t, locale, isRTL } = useTranslation();
+    const [loaded, setLoaded] = useState(false);
 
     const metaTitle = pageMeta?.title || title || t('meta.home.title');
     const metaDescription = pageMeta?.description || directDesc || t('meta', 'description');
@@ -13,6 +14,11 @@ export default function MainLayout({ title, meta: pageMeta, description: directD
     const metaImage = image || '/img/mezquitaAlquds_logo.png';
 
     useEffect(() => {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        setLoaded(true);
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('show');
@@ -49,8 +55,22 @@ export default function MainLayout({ title, meta: pageMeta, description: directD
                     color: '#1a1a1a',
                 }}
             >
+                {/* Fixed geometric background pattern */}
+                <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+                    <svg className="w-full h-full opacity-[0.015]" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                            <pattern id="globalBg" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                                <polygon points="40,3 77,40 40,77 3,40" fill="none" stroke="#0F3B2E" strokeWidth="0.5" />
+                                <polygon points="40,15 65,40 40,65 15,40" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.5" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#globalBg)" />
+                    </svg>
+                </div>
+
                 <Navbar simple={simpleNav} />
-                <main className="pt-24">
+                <div aria-live="polite" aria-atomic="true" className="sr-only" id="announcements" />
+                <main className={`pt-24 relative z-10 ${loaded ? 'animate-page-enter' : 'opacity-0'}`}>
                     {children}
                 </main>
                 {!hideFooter && <Footer />}

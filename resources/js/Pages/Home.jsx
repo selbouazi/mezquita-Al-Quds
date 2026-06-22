@@ -52,10 +52,10 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
     const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
     const PRIORITY_CONFIG = {
-        muy_alta: { border: 'border-red-500', dot: 'bg-red-500' },
-        alta: { border: 'border-orange-500', dot: 'bg-orange-500' },
-        normal: { border: 'border-blue-500', dot: 'bg-blue-500' },
-        baja: { border: 'border-gray-400', dot: 'bg-gray-400' },
+        muy_alta: { border: 'border-red-500', dot: 'bg-red-500', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z' },
+        alta: { border: 'border-orange-500', dot: 'bg-orange-500', icon: 'M12 9v3.75m-3.75 3.75h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        normal: { border: 'border-blue-500', dot: 'bg-blue-500', icon: 'M12 9v.01m0 6.99h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+        baja: { border: 'border-gray-400', dot: 'bg-gray-400', icon: 'M12 8.25V12m0 3.75h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
     };
 
     return (
@@ -66,14 +66,30 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
         >
             {/* ===== HERO ===== */}
             <section className="relative min-h-[90vh] sm:min-h-screen flex items-center overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/img/FONDOIMAGEN.png')] bg-cover bg-center" />
-                <div className="absolute inset-0" style={{ background: 'rgba(15, 59, 46, 0.7)' }} />
+                <div className="absolute inset-0 bg-[url('/img/Home.png')] bg-cover bg-center bg-no-repeat" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,59,46,0.75), rgba(15,59,46,0.45))' }} />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64610,transparent_60%)] pointer-events-none" />
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
                 </div>
 
-                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true" />
+                {/* Floating 8-pointed geometric stars */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                    <svg className="absolute top-[10%] left-[8%] w-16 h-16 text-[#C9A646]/8 animate-float-drift" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.8" />
+                        <path d="M24 8L28 20L40 24L28 28L24 40L20 28L8 24L20 20Z" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
+                    </svg>
+                    <svg className="absolute bottom-[15%] right-[10%] w-12 h-12 text-[#C9A646]/6 animate-glow-spin-reverse" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.6" />
+                    </svg>
+                    <svg className="absolute top-[30%] right-[5%] w-10 h-10 text-white/[0.04] animate-float-drift" style={{ animationDuration: '11s' }} viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="1" />
+                        <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="0.4" opacity="0.5" />
+                    </svg>
+                    <svg className="absolute bottom-[30%] left-[5%] w-8 h-8 text-[#C9A646]/5 animate-glow-spin" style={{ animationDuration: '18s' }} viewBox="0 0 48 48" fill="none">
+                        <path d="M24 4L28 20L44 24L28 28L24 44L20 28L4 24L20 20Z" stroke="currentColor" strokeWidth="0.5" />
+                    </svg>
+                </div>
 
                 <div className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-24 lg:py-32">
                     <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-14 items-center">
@@ -113,12 +129,16 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                         </div>
 
                         <div className="w-full max-w-sm mx-auto lg:mx-0">
-                            <div className="home-glass-card p-4 sm:p-6 lg:p-8 w-fit mx-auto animate-pulse-soft">
+                            <div className="home-glass-card p-4 sm:p-6 lg:p-8 w-fit mx-auto animate-pulse-soft relative overflow-hidden">
+                                {/* Small decorative star in corner */}
+                                <svg className="absolute top-2 right-2 w-6 h-6 text-[#C9A646]/10" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 1L15 9L23 12L15 15L12 23L9 15L1 12L9 9Z" stroke="currentColor" strokeWidth="0.5" />
+                                </svg>
                                 <div className="scale-[0.7] sm:scale-[0.8] lg:scale-90 origin-center">
                                     <PrayerClock prayerTimes={prayerTimes} />
                                 </div>
                             </div>
-                            <div className="mt-4 sm:mt-6 w-full mx-auto">
+                            <div className="mt-4 sm:mt-6 w-full mx-auto relative">
                                 <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 px-4 sm:px-5 py-3">
                                     <PrayerHeader compact prayerTimes={prayerTimes} />
                                 </div>
@@ -127,7 +147,13 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                     </div>
                 </div>
 
-
+                {/* Scroll-down indicator */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+                    <span className="text-[#C9A646]/40 text-[10px] font-medium uppercase tracking-[0.2em] hidden sm:block">Scroll</span>
+                    <svg className="w-5 h-5 text-[#C9A646]/50 animate-scroll-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
             </section>
 
             {/* ===== NOTIFICACIONES ===== */}
@@ -139,8 +165,13 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                             return (
                                 <div
                                     key={n.id}
-                                    className={`notif-glass rounded-2xl px-4 sm:px-5 py-3.5 border-l-4 ${cfg.border} bg-white/70 shadow-sm`}
-                                    style={{ animation: `slide-in 0.4s ease-out ${idx * 0.1}s both` }}
+                                    className={`notif-glass rounded-2xl px-4 sm:px-5 py-3.5 border-l-4 ${cfg.border}`}
+                                    style={{
+                                        background: 'rgba(255,255,255,0.75)',
+                                        backdropFilter: 'blur(12px)',
+                                        animation: `slide-in 0.4s ease-out ${idx * 0.1}s both`,
+                                        boxShadow: '0 2px 12px rgba(0,0,0,0.03)',
+                                    }}
                                 >
                                     <style>{`
                                         @keyframes slide-in {
@@ -149,7 +180,11 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                         }
                                     `}</style>
                                     <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                        <span className={`w-2.5 h-2.5 rounded-full ${cfg.dot} mt-1.5 shrink-0`} />
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${cfg.dot}`}>
+                                            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d={cfg.icon} />
+                                            </svg>
+                                        </div>
                                         <div className="flex-1 min-w-0">
                                             {n.titulo && <p className="font-semibold text-base text-gray-800 mb-0.5">{n.titulo}</p>}
                                             <p className="text-base text-gray-600 leading-relaxed">{n.mensaje}</p>
@@ -209,12 +244,13 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                         className={`animate-fade-in-up ${idx > 0 ? 'border-t border-[#C9A646]/8' : ''}`}
                                     >
                                         <div className={`flex flex-wrap items-center justify-between py-3 sm:py-4 px-2 sm:px-3 rounded-xl transition-all duration-300 ${isNext
-                                            ? 'bg-gradient-to-r from-[#0F3B2E]/8 via-[#0F3B2E]/5 to-transparent shadow-sm -mx-1 px-3 sm:px-4'
+                                            ? 'bg-gradient-to-r from-[#0F3B2E]/8 via-[#0F3B2E]/5 to-transparent shadow-sm -mx-1 px-3 sm:px-4 ring-1 ring-[#C9A646]/20'
                                             : 'hover:bg-white/40'}`}>
                                             <div className={`flex items-center gap-2 sm:gap-3 min-w-0 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                                 {isNext && (
                                                     <span className="flex items-center gap-1.5 text-[#C9A646]">
-                                                        <span className="w-2 h-2 bg-[#C9A646] rotate-45 shrink-0" />
+                                                        <span className={`w-2.5 h-2.5 bg-[#C9A646] rotate-45 shrink-0 animate-ping absolute top-0 left-0`} style={{ animationDuration: '2s' }} />
+                                                        <span className="w-2.5 h-2.5 bg-[#C9A646] rotate-45 shrink-0 relative" />
                                                         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider hidden sm:inline">{t('prayers', 'remaining')}</span>
                                                     </span>
                                                 )}
@@ -302,9 +338,20 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                             {normas.map((norma, idx) => (
                                 <div
                                     key={norma.id}
-                                    className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:bg-white/10 hover:border-[#C9A646]/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#C9A646]/10"
+                                    className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:bg-white/10 hover:border-[#C9A646]/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#C9A646]/10 relative"
                                     style={{ animation: `fade-in-up 0.6s ease-out ${idx * 0.1}s both` }}
                                 >
+                                    {/* Geometric pattern overlay on hover */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                        <svg className="w-full h-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+                                            <defs>
+                                                <pattern id={`norma-pattern-${norma.id}`} x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                                    <polygon points="20,1 39,20 20,39 1,20" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.15" />
+                                                </pattern>
+                                            </defs>
+                                            <rect width="100%" height="100%" fill={`url(#norma-pattern-${norma.id})`} />
+                                        </svg>
+                                    </div>
                                     <div className="relative overflow-hidden h-36 sm:h-40">
                                         {norma.imagen ? (
                                             <>
@@ -346,11 +393,19 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                 </section>
             )}
 
-            {/* ——— Separador ——— */}
-            <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-gradient-to-b from-[#F7F5F0] to-[#F7F5F0]" aria-hidden="true">
-                {[0,1,2,3,4,5,6,7,8].map(i => (
-                    <span key={i} className={`block w-1 h-1 bg-[#C9A646]/${i % 2 === 0 ? '40' : '25'} rotate-45`} />
-                ))}
+            {/* ——— Separador con diamantes conectados ——— */}
+            <div className="relative py-5 bg-gradient-to-b from-[#F7F5F0] to-[#F7F5F0]" aria-hidden="true">
+                <div className="flex items-center justify-center">
+                    <svg width="180" height="20" viewBox="0 0 180 20" fill="none" className="opacity-60">
+                        <line x1="0" y1="10" x2="40" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.3" />
+                        <rect x="40" y="6" width="8" height="8" fill="#C9A646" opacity="0.3" transform="rotate(45 44 10)" />
+                        <line x1="48" y1="10" x2="72" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.4" />
+                        <rect x="72" y="4" width="12" height="12" fill="#C9A646" opacity="0.4" transform="rotate(45 78 10)" />
+                        <line x1="84" y1="10" x2="96" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.4" />
+                        <rect x="96" y="6" width="8" height="8" fill="#C9A646" opacity="0.3" transform="rotate(45 100 10)" />
+                        <line x1="104" y1="10" x2="140" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.3" />
+                    </svg>
+                </div>
             </div>
 
             {/* ===== ABOUT ===== */}
@@ -393,13 +448,17 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 sm:p-7 text-center border border-[#C9A646]/15 mb-6 sm:mb-8">
-                            <div className="text-[#C9A646]/20 text-2xl sm:text-3xl mb-3 font-serif leading-none select-none">﷽</div>
-                            <div className="w-8 h-px bg-[#C9A646]/20 mx-auto mb-4" />
-                            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                                "Y hemos hecho de vosotros una comunidad moderada para que seáis testigos ante los hombres."
-                            </p>
-                            <p className="text-xs sm:text-sm text-[#C9A646] mt-3 font-medium tracking-wide">— Corán 2:143</p>
+                        <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-5 sm:p-7 text-center border border-[#C9A646]/15 mb-6 sm:mb-8 overflow-hidden">
+                            {/* Quran background image */}
+                            <div className="absolute inset-0 bg-[url('/img/Corán.png')] bg-cover bg-center opacity-[0.06] pointer-events-none" />
+                            <div className="relative z-10">
+                                <div className="text-[#C9A646]/20 text-2xl sm:text-3xl mb-3 font-serif leading-none select-none">﷽</div>
+                                <div className="w-8 h-px bg-[#C9A646]/20 mx-auto mb-4" />
+                                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                                    "Y hemos hecho de vosotros una comunidad moderada para que seáis testigos ante los hombres."
+                                </p>
+                                <p className="text-xs sm:text-sm text-[#C9A646] mt-3 font-medium tracking-wide">— Corán 2:143</p>
+                            </div>
                         </div>
                         <div className="text-center">
                             <Link
@@ -416,11 +475,19 @@ export default function Home({ prayerTimes, latestNews, notificaciones, tiemposE
                 </div>
             </section>
 
-            {/* ——— Separador ——— */}
-            <div className="flex items-center justify-center gap-1.5 py-3 sm:py-4 bg-white" aria-hidden="true">
-                {[0,1,2,3,4,5,6,7,8].map(i => (
-                    <span key={i} className={`block w-1 h-1 bg-[#C9A646]/${i % 2 === 0 ? '40' : '25'} rotate-45`} />
-                ))}
+            {/* ——— Separador con diamantes conectados ——— */}
+            <div className="relative py-5 bg-white" aria-hidden="true">
+                <div className="flex items-center justify-center">
+                    <svg width="180" height="20" viewBox="0 0 180 20" fill="none" className="opacity-60">
+                        <line x1="0" y1="10" x2="40" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.3" />
+                        <rect x="40" y="6" width="8" height="8" fill="#C9A646" opacity="0.3" transform="rotate(45 44 10)" />
+                        <line x1="48" y1="10" x2="72" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.4" />
+                        <rect x="72" y="4" width="12" height="12" fill="#C9A646" opacity="0.4" transform="rotate(45 78 10)" />
+                        <line x1="84" y1="10" x2="96" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.4" />
+                        <rect x="96" y="6" width="8" height="8" fill="#C9A646" opacity="0.3" transform="rotate(45 100 10)" />
+                        <line x1="104" y1="10" x2="140" y2="10" stroke="#C9A646" strokeWidth="0.5" opacity="0.3" />
+                    </svg>
+                </div>
             </div>
 
             {/* ===== LATEST NEWS ===== */}

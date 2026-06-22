@@ -13,11 +13,19 @@ export default function Noticias({ noticias }) {
             canonical="/noticias">
 
             {/* === HERO === */}
-            <section className="relative pt-28 pb-16 sm:pb-20 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#0F3B2E] to-[#09291e]">
+            <section className="relative pt-28 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/img/noticias.png')] bg-cover bg-center bg-no-repeat" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,59,46,0.75), rgba(15,59,46,0.4))' }} />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64615,transparent_60%)] pointer-events-none" />
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
                     <div className="absolute top-[10%] -left-12 w-40 h-40 rounded-full border border-[#C9A646]/10 animate-float-spin" />
                     <div className="absolute bottom-[20%] -right-16 w-32 h-32 rotate-45 border border-[#C9A646]/8 animate-float-spin-reverse" style={{ animationDuration: '14s' }} />
+                    <svg className="absolute top-[15%] right-[12%] w-10 h-10 text-[#C9A646]/10 animate-float-drift" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.6" />
+                    </svg>
+                    <svg className="absolute bottom-[25%] left-[8%] w-8 h-8 text-white/[0.06] animate-glow-spin-reverse" style={{ animationDuration: '20s' }} viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.5" />
+                    </svg>
                 </div>
                 <div className="relative max-w-6xl mx-auto px-5 sm:px-8 text-center">
                     <div className="inline-block px-4 py-1.5 mb-4 bg-white/10 backdrop-blur-sm rounded-full border border-white/10 text-sm sm:text-base text-[#C9A646] font-medium tracking-wider uppercase">
@@ -48,11 +56,25 @@ export default function Noticias({ noticias }) {
 
                 <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
                     {noticias.data.length === 0 ? (
-                        <div className="home-glass-card p-8 sm:p-12 text-center">
-                            <svg className="w-12 h-12 mx-auto mb-4 text-[#C9A646]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            <p className="text-gray-400 text-base sm:text-lg">{t('noticias', 'noNoticias')}</p>
+                        <div className="home-glass-card p-8 sm:p-12 text-center relative overflow-hidden">
+                            <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+                                <svg className="w-full h-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+                                    <defs>
+                                        <pattern id="empty-news-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                            <polygon points="20,1 39,20 20,39 1,20" fill="none" stroke="#C9A646" strokeWidth="0.5" />
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#empty-news-pattern)" />
+                                </svg>
+                            </div>
+                            <div className="relative">
+                                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#C9A646]/10 flex items-center justify-center">
+                                    <svg className="w-8 h-8 text-[#C9A646]/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                </div>
+                                <p className="text-gray-400 text-base sm:text-lg">{t('noticias', 'noNoticias')}</p>
+                            </div>
                         </div>
                     ) : (
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8">
@@ -67,9 +89,20 @@ export default function Noticias({ noticias }) {
                                     <Link
                                         key={noticia.id}
                                         href={`/noticias/${noticia.id}`}
-                                        className="news-card-premium group block bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl"
+                                        className="news-card-premium group block bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl relative"
                                         style={{ animation: `fade-in-up 0.6s ease-out ${idx * 0.08}s both` }}
                                     >
+                                        {/* Geometric pattern overlay on hover */}
+                                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
+                                            <svg className="w-full h-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+                                                <defs>
+                                                    <pattern id={`news-pattern-${noticia.id}`} x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                                        <polygon points="20,1 39,20 20,39 1,20" fill="none" stroke="#C9A646" strokeWidth="0.3" opacity="0.12" />
+                                                    </pattern>
+                                                </defs>
+                                                <rect width="100%" height="100%" fill={`url(#news-pattern-${noticia.id})`} />
+                                            </svg>
+                                        </div>
                                         <div className="relative overflow-hidden">
                                             {noticia.imagen ? (
                                                 <>
@@ -90,18 +123,18 @@ export default function Noticias({ noticias }) {
                                                 </div>
                                             )}
                                             {dateStr && (
-                                                <div className={`absolute top-3 ${isRTL ? 'right-3' : 'left-3'} bg-white/90 backdrop-blur-sm rounded-lg px-2.5 py-1.5 text-sm sm:text-base text-gray-600 font-medium shadow-sm flex items-center gap-1.5`}>
+                                                <div className={`absolute top-3 ${isRTL ? 'right-3' : 'left-3'} bg-white/90 backdrop-blur-sm rounded-lg px-2.5 py-1.5 text-sm sm:text-base text-gray-600 font-medium shadow-sm flex items-center gap-1.5 z-20`}>
                                                     <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C9A646] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                                                     </svg>
                                                     <span className="truncate">{dateStr}</span>
                                                 </div>
                                             )}
-                                            <div className={`absolute top-3 ${isRTL ? 'left-3' : 'right-3'} bg-[#0F3B2E]/80 backdrop-blur-sm text-white text-xs sm:text-sm font-bold px-2.5 py-1 rounded-md uppercase tracking-wider`}>
+                                            <div className={`absolute top-3 ${isRTL ? 'left-3' : 'right-3'} bg-[#0F3B2E]/80 backdrop-blur-sm text-white text-xs sm:text-sm font-bold px-2.5 py-1 rounded-md uppercase tracking-wider z-20`}>
                                                 {t('noticias', 'title')}
                                             </div>
                                         </div>
-                                        <div className={`p-4 sm:p-5 ${isRTL ? 'text-right' : ''}`}>
+                                        <div className={`p-4 sm:p-5 relative z-10 ${isRTL ? 'text-right' : ''}`}>
                                             <h3 className="font-display text-lg sm:text-xl font-semibold text-[#0F3B2E] group-hover:text-[#C9A646] transition-colors duration-300 mb-2 leading-snug">
                                                 {noticia.titulo}
                                             </h3>
@@ -119,27 +152,27 @@ export default function Noticias({ noticias }) {
                         </div>
                     )}
 
-                    {/* Pagination */}
+                    {/* Pagination — premium pill design */}
                     {noticias.last_page > 1 && (
                         <div className="flex justify-center items-center gap-3 mt-10 sm:mt-12 flex-wrap">
                             {noticias.prev_page_url && (
                                 <Link href={noticias.prev_page_url}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full border border-[#C9A646]/20 text-[#0F3B2E] text-sm sm:text-base font-medium hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    className="group/pag inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full border border-[#C9A646]/20 text-[#0F3B2E] text-sm sm:text-base font-medium hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] hover:-translate-y-0.5 transition-all duration-300 shadow-sm hover:shadow-lg active:scale-[0.97]">
+                                    <svg className="w-4 h-4 transform group-hover/pag:-translate-x-0.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
                                     </svg>
-                                    {t('common', 'previous')}
+                                    <span className="hidden sm:inline">{t('common', 'previous')}</span>
                                 </Link>
                             )}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 sm:gap-2 bg-white/80 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1.5 shadow-sm border border-gray-100">
                                 {Array.from({ length: noticias.last_page }, (_, i) => i + 1).map(page => (
                                     <Link
                                         key={page}
                                         href={`/noticias?page=${page}`}
                                         className={`w-9 h-9 flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${
                                             page === noticias.current_page
-                                                ? 'bg-[#0F3B2E] text-white shadow-md'
-                                                : 'bg-white text-gray-500 border border-gray-200 hover:border-[#C9A646]/40 hover:text-[#0F3B2E]'
+                                                ? 'bg-gradient-to-br from-[#0F3B2E] to-[#1a5a43] text-white shadow-md scale-110'
+                                                : 'text-gray-500 hover:bg-[#C9A646]/10 hover:text-[#0F3B2E] hover:scale-105'
                                         }`}
                                     >
                                         {page}
@@ -148,9 +181,9 @@ export default function Noticias({ noticias }) {
                             </div>
                             {noticias.next_page_url && (
                                 <Link href={noticias.next_page_url}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full border border-[#C9A646]/20 text-[#0F3B2E] text-sm sm:text-base font-medium hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] transition-all duration-300 shadow-sm">
-                                    {t('common', 'next')}
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    className="group/pag inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full border border-[#C9A646]/20 text-[#0F3B2E] text-sm sm:text-base font-medium hover:bg-[#0F3B2E] hover:text-white hover:border-[#0F3B2E] hover:-translate-y-0.5 transition-all duration-300 shadow-sm hover:shadow-lg active:scale-[0.97]">
+                                    <span className="hidden sm:inline">{t('common', 'next')}</span>
+                                    <svg className="w-4 h-4 transform group-hover/pag:translate-x-0.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
                                     </svg>
                                 </Link>

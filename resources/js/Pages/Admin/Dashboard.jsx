@@ -11,7 +11,7 @@ const MODULES = [
     { key: 'imam', label: 'imam', desc: 'imamDesc' },
     { key: 'clases', label: 'classes', desc: 'clasesDesc' },
     { key: 'ubicacion', label: 'location', desc: 'ubicacionDesc' },
-    { key: 'contactos', label: 'contacts', desc: 'contactosDesc' },
+    { key: 'comentarios', label: 'comments', desc: 'comentariosDesc' },
     { key: 'codigos', label: 'activation', desc: 'codigosDesc' },
 ];
 
@@ -33,21 +33,29 @@ export default function Dashboard() {
 
     return (
         <AdminLayout title={t('adminDashboard', 'title')}>
-            <h1 className="text-3xl font-bold text-[#0F5132] mb-2">{t('adminDashboard', 'title')}</h1>
             <p className="text-gray-600 mb-8">{t('adminDashboard', 'subtitle')}</p>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {MODULES.map(module => (
                     <Link key={module.key}
                           href={`/admin/${module.key}`}
-                          className="bg-white rounded-xl shadow-sm border border-gray-200 p-4
-                                     hover:shadow-lg hover:border-[#0F5132]/30 hover:-translate-y-1
-                                     transition-all duration-200 group flex flex-col items-center text-center">
-                        <div className="text-[#0F5132] mb-2">{Icons[module.key]}</div>
-                        <h2 className="text-sm font-semibold text-gray-800 mb-1">
+                          className="rounded-xl backdrop-blur-sm border p-5
+                                     hover:shadow-xl hover:-translate-y-1.5
+                                     transition-all duration-300 group flex flex-col items-center text-center"
+                          style={{
+                              background: 'rgba(255,255,255,0.85)',
+                              borderColor: 'rgba(201,166,70,0.1)',
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(201,166,70,0.3)'; e.currentTarget.style.background = 'rgba(255,255,255,0.95)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(201,166,70,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.85)'; }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-all duration-300 group-hover:scale-110"
+                            style={{ background: 'linear-gradient(135deg, rgba(15,59,46,0.08), rgba(201,166,70,0.08))', color: '#0F3B2E' }}>
+                            {Icons[module.key]}
+                        </div>
+                        <h2 className="text-sm font-semibold text-[#0F3B2E] mb-1">
                             {t('adminModules', module.label)}
                         </h2>
-                        <p className="text-xs text-gray-500">{t('adminDashboard', module.desc)}</p>
+                        <p className="text-xs" style={{ color: '#8a7a5a' }}>{t('adminDashboard', module.desc)}</p>
                     </Link>
                 ))}
             </div>

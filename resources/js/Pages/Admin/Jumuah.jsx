@@ -59,13 +59,10 @@ export default function Jumuah() {
     };
 
     return (
-        <AdminLayout title="Jumu'ah Config">
+        <AdminLayout title="Jumu'ah">
             <div className="px-2 sm:px-0">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">Jumu'ah</h1>
-                        <p className="text-gray-600 text-sm">Date ranges where Jumu'ah replaces Dhuhr on Fridays</p>
-                    </div>
+                    <p className="text-gray-600 text-sm">Date ranges where Jumu'ah replaces Dhuhr on Fridays</p>
                     <button
                         onClick={openCreate}
                         className="px-4 py-2 bg-[#C9A646] text-white rounded-lg hover:bg-[#b89330] text-sm font-medium"

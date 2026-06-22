@@ -36,12 +36,13 @@ class RegistrationTest extends TestCase
             'codigo_activacion' => 'TEST123',
         ]);
 
-        $response->assertRedirect('/');
-        $this->assertAuthenticated();
+        $response->assertRedirect('/verify-email');
+        $this->assertGuest();
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
             'rol' => 'user',
         ]);
+        $this->assertNotNull(session('pending_verification_user_id'));
     }
 
     /** @test */

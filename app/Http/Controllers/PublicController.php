@@ -12,12 +12,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use OpenApi\Attributes as OA;
 
 class PublicController extends Controller
 {
-    /**
-     * Muestra la página de ubicación.
-     */
+    #[OA\Get(path: '/ubicacion', summary: 'Obtener ubicación', tags: ['Público'], responses: [new OA\Response(response: 200, description: 'Página de ubicación')])]
     public function ubicacion(): Response
     {
         if (!\moduleIsActive('ubicacion')) {
@@ -33,9 +32,7 @@ class PublicController extends Controller
         ]);
     }
 
-    /**
-     * Muestra la página del imam.
-     */
+    #[OA\Get(path: '/imam', summary: 'Obtener información del imam', tags: ['Público'], responses: [new OA\Response(response: 200, description: 'Página del imam')])]
     public function imam(): Response
     {
         if (!\moduleIsActive('imam')) {
@@ -49,9 +46,7 @@ class PublicController extends Controller
         return Inertia::render('Imam', ['imam' => $imam]);
     }
 
-    /**
-     * Muestra las notificaciones públicas.
-     */
+    #[OA\Get(path: '/notificaciones', summary: 'Listar notificaciones públicas', tags: ['Público'], parameters: [new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer'))], responses: [new OA\Response(response: 200, description: 'Lista paginada de notificaciones')])]
     public function notifications(): Response
     {
         if (!\moduleIsActive('notificaciones')) {

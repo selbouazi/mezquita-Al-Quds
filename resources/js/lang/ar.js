@@ -325,6 +325,7 @@ const ar = {
         imamDesc: 'السيرة الذاتية والبيانات',
         clasesDesc: 'اللغة العربية والقرآن',
         ubicacionDesc: 'العنوان والخريطة',
+        comentariosDesc: 'إدارة التعليقات',
         contactosDesc: 'عرض رسائل الاتصال',
         codigosDesc: 'إدارة التسجيل',
     },

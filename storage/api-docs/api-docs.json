@@ -1,0 +1,226 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mezquita Al-Quds API",
+        "description": "API pública y administrativa de la Mezquita Al-Quds. Horarios de oración, noticias, eventos y donativos.",
+        "contact": {
+            "email": "info@mezquita-alquds.cat"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://mezquita-alquds.cat/api/v1",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/comentarios": {
+            "post": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Enviar comentario en noticia",
+                "operationId": "5188d2f4ddf53e54ebb3ece298cd4eaf",
+                "parameters": [
+                    {
+                        "name": "noticia_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "contenido",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "nombre",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "anonimo",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirección con mensaje"
+                    },
+                    "422": {
+                        "description": "Validación fallida"
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Página principal con horario de hoy",
+                "operationId": "bbbec956b85d2ec71672f5d55b6eaa07",
+                "responses": {
+                    "200": {
+                        "description": "Home page"
+                    }
+                }
+            }
+        },
+        "/horarios": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Calendario mensual de horarios",
+                "operationId": "f4492bfa3f0c93afab9e9f61bddc6b87",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "month",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Calendario de horarios"
+                    }
+                }
+            }
+        },
+        "/noticias": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Listar noticias publicadas",
+                "operationId": "ec806f2451daeafe13d20ffcee0702d4",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de noticias"
+                    }
+                }
+            }
+        },
+        "/noticias/{noticia}": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Ver detalle de noticia",
+                "operationId": "3348019c010ec99cc0c621cf4a1b9e17",
+                "parameters": [
+                    {
+                        "name": "noticia",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Noticia con comentarios"
+                    }
+                }
+            }
+        },
+        "/ubicacion": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Obtener ubicación",
+                "operationId": "423ed0f4d263f06a6edbf6c9439839e9",
+                "responses": {
+                    "200": {
+                        "description": "Página de ubicación"
+                    }
+                }
+            }
+        },
+        "/imam": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Obtener información del imam",
+                "operationId": "bc8115ba698cd62a0e12ca8b47157eec",
+                "responses": {
+                    "200": {
+                        "description": "Página del imam"
+                    }
+                }
+            }
+        },
+        "/notificaciones": {
+            "get": {
+                "tags": [
+                    "Público"
+                ],
+                "summary": "Listar notificaciones públicas",
+                "operationId": "8bdadb939cedc06a446876ca2001e330",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de notificaciones"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter Bearer token",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Público",
+            "description": "Público"
+        }
+    ]
+}

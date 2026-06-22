@@ -166,10 +166,7 @@ export default function Notificaciones({ notificaciones, filtros }) {
             )}
             <div className="px-2 sm:px-0">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('notifications', 'title')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">{t('notifications', 'subtitle')}</p>
-                    </div>
+                    <p className="text-gray-600 text-sm hidden sm:block">{t('notifications', 'subtitle')}</p>
                     <div className="flex items-center gap-3">
                         <ModuleToggle module="notificaciones" />
                         <button onClick={openCreate} className="px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm">

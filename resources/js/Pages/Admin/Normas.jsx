@@ -209,10 +209,7 @@ export default function Normas() {
                     />
                 )}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'normas')}</h1>
-                        <p className="text-gray-600 text-sm hidden sm:block">{t('adminNormas', 'subtitle')}</p>
-                    </div>
+                    <p className="text-gray-600 text-sm hidden sm:block">{t('adminNormas', 'subtitle')}</p>
                     <button
                         onClick={openCreate}
                         className="w-full sm:w-auto px-4 py-2 bg-[#0F5132] text-white rounded-lg hover:bg-[#0c3f27] transition text-sm"

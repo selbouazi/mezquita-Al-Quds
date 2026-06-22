@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\UbicacionController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', AdminMiddleware::class])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 

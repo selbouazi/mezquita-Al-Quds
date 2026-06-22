@@ -153,10 +153,7 @@ export default function Comentarios({ comentarios }) {
             <div className="px-2 sm:px-0">
                 {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-                <div className="mb-6">
-                    <h1 className="text-xl sm:text-2xl font-bold text-[#0F5132]">{t('adminModules', 'comments')}</h1>
-                    <p className="text-gray-600 text-sm mt-1">{t('adminComentarios', 'subtitle') || ''}</p>
-                </div>
+                <p className="text-gray-600 text-sm mb-6">{t('adminComentarios', 'subtitle') || ''}</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded-xl shadow-sm border">

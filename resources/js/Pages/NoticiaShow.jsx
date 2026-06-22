@@ -45,8 +45,18 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
             image={noticia.imagen || undefined}>
 
             {/* === HERO === */}
-            <section className="relative pt-28 pb-12 sm:pb-16 lg:pb-20 overflow-hidden bg-gradient-to-b from-[#0F3B2E] to-[#09291e]">
+            <section className="relative pt-28 pb-12 sm:pb-16 lg:pb-20 overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/img/noticias.png')] bg-cover bg-center bg-no-repeat" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15,59,46,0.75), rgba(15,59,46,0.4))' }} />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64615,transparent_60%)] pointer-events-none" />
+                <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                    <svg className="absolute top-[15%] right-[8%] w-9 h-9 text-[#C9A646]/10 animate-float-drift" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.6" />
+                    </svg>
+                    <svg className="absolute bottom-[20%] left-[5%] w-7 h-7 text-white/[0.06] animate-glow-spin-reverse" style={{ animationDuration: '20s' }} viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.5" />
+                    </svg>
+                </div>
                 <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
                     <Link href="/noticias"
                         className="inline-flex items-center gap-2 text-sm sm:text-base text-[#C9A646]/80 hover:text-[#C9A646] transition mb-6 group">
@@ -81,7 +91,14 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                 </div>
 
                 <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
-                    <div className="home-glass-card p-0 overflow-hidden">
+                    <div className="home-glass-card p-0 overflow-hidden relative">
+                        {/* Decorative corners */}
+                        <svg className="absolute -top-4 -right-4 w-20 h-20 text-[#C9A646]/8 pointer-events-none rotate-45" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.4" />
+                        </svg>
+                        <svg className="absolute -bottom-4 -left-4 w-20 h-20 text-[#C9A646]/8 pointer-events-none" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.4" />
+                        </svg>
                         {noticia.imagen && (
                             <div className="relative overflow-hidden">
                                 <img
@@ -95,7 +112,7 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                             </div>
                         )}
 
-                        <div className={`p-6 sm:p-8 lg:p-10 ${isRTL ? 'text-right' : ''}`}>
+                        <div className={`p-6 sm:p-8 lg:p-10 relative z-10 ${isRTL ? 'text-right' : ''}`}>
                             <div className="flex items-center gap-3 text-sm text-gray-400 mb-6">
                                 <svg className="w-4 h-4 text-[#C9A646]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
@@ -109,8 +126,8 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
 
                             <div className={`mt-10 pt-6 border-t border-[#C9A646]/10 flex ${isRTL ? 'justify-start' : 'justify-between'} items-center`}>
                                 <Link href="/noticias"
-                                    className="inline-flex items-center gap-2 text-sm sm:text-base text-[#C9A646] hover:text-[#b88a36] transition font-medium group">
-                                    <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    className="group/back inline-flex items-center gap-2 text-sm sm:text-base text-[#C9A646] hover:text-[#b88a36] transition font-medium">
+                                    <svg className="w-4 h-4 group-hover/back:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
                                     </svg>
                                     {t('common', 'back')}
@@ -136,9 +153,9 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                         {comentarios.length > 0 ? (
                             <div className="space-y-4 sm:space-y-5 mb-8 sm:mb-10">
                                 {comentarios.map((comentario) => (
-                                    <div key={comentario.id} className="home-glass-card p-4 sm:p-6">
+                                    <div key={comentario.id} className="home-glass-card p-4 sm:p-6 group/comment hover:-translate-y-0.5 transition-all duration-300">
                                         <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <div className="w-8 h-8 rounded-full bg-[#C9A646]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                            <div className="w-8 h-8 rounded-full bg-[#C9A646]/10 flex items-center justify-center shrink-0 mt-0.5 group-hover/comment:bg-[#C9A646]/20 group-hover/comment:scale-110 transition-all duration-300">
                                                 <svg className="w-4 h-4 text-[#C9A646]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                                 </svg>
@@ -162,25 +179,49 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="home-glass-card p-6 sm:p-8 text-center mb-8 sm:mb-10">
-                                <p className="text-gray-400 text-sm sm:text-base">{t('comentarios', 'noComments')}</p>
+                            <div className="home-glass-card p-6 sm:p-8 text-center mb-8 sm:mb-10 relative overflow-hidden">
+                                <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+                                    <svg className="w-full h-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+                                        <defs>
+                                            <pattern id="comments-empty-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                                <polygon points="20,1 39,20 20,39 1,20" fill="none" stroke="#C9A646" strokeWidth="0.5" />
+                                            </pattern>
+                                        </defs>
+                                        <rect width="100%" height="100%" fill="url(#comments-empty-pattern)" />
+                                    </svg>
+                                </div>
+                                <div className="relative">
+                                    <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#C9A646]/10 flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-[#C9A646]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-gray-400 text-sm sm:text-base">{t('comentarios', 'noComments')}</p>
+                                </div>
                             </div>
                         )}
 
                         {/* Comment form */}
-                        <div className="home-glass-card p-5 sm:p-7">
-                            <h3 className="font-semibold text-base sm:text-lg text-[#0F3B2E] mb-4">{t('comentarios', 'addComment')}</h3>
+                        <div className="home-glass-card p-5 sm:p-7 relative overflow-hidden">
+                            {/* Decorative corners */}
+                            <svg className="absolute -top-4 -right-4 w-16 h-16 text-[#C9A646]/6 pointer-events-none rotate-45" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.4" />
+                            </svg>
+                            <svg className="absolute -bottom-4 -left-4 w-16 h-16 text-[#C9A646]/6 pointer-events-none" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.4" />
+                            </svg>
+                            <h3 className="font-semibold text-base sm:text-lg text-[#0F3B2E] mb-4 relative z-10">{t('comentarios', 'addComment')}</h3>
 
                             {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('comentarios', 'comment')}</label>
                                     <textarea
                                         value={data.contenido}
                                         onChange={e => setData('contenido', e.target.value)}
                                         rows={4}
-                                        className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm sm:text-base focus:ring-2 focus:ring-[#C9A646]/30 focus:border-[#C9A646] transition outline-none resize-y"
+                                        className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm sm:text-base focus:ring-2 focus:ring-[#C9A646]/30 focus:border-[#C9A646] transition outline-none resize-y hover:border-[#C9A646]/30"
                                         placeholder={t('comentarios', 'commentPlaceholder')}
                                     />
                                     {errors.contenido && <p className="text-red-500 text-xs mt-1">{errors.contenido}</p>}
@@ -195,7 +236,7 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                                                 value={data.nombre}
                                                 onChange={e => setData('nombre', e.target.value)}
                                                 disabled={data.anonimo}
-                                                className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C9A646]/30 focus:border-[#C9A646] transition outline-none ${data.anonimo ? 'bg-gray-50 border-gray-200 text-gray-400' : 'border-gray-200'}`}
+                                                className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C9A646]/30 focus:border-[#C9A646] transition outline-none hover:border-[#C9A646]/30 ${data.anonimo ? 'bg-gray-50 border-gray-200 text-gray-400' : 'border-gray-200'}`}
                                                 placeholder={t('comentarios', 'namePlaceholder')}
                                             />
                                             {errors.nombre && <p className="text-red-500 text-xs mt-1">{errors.nombre}</p>}
@@ -219,10 +260,10 @@ export default function NoticiaShow({ noticia, comentarios = [] }) {
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0F3B2E] to-[#09291e] text-white px-6 py-3 rounded-full text-sm sm:text-base font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+                                        className="group/submit inline-flex items-center gap-2 bg-gradient-to-r from-[#0F3B2E] to-[#09291e] text-white px-6 py-3 rounded-full text-sm sm:text-base font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] active:scale-[0.97]"
                                     >
                                         {processing ? t('common', 'saving') : t('comentarios', 'send')}
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <svg className="w-4 h-4 transform group-hover/submit:translate-x-0.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                             <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
                                         </svg>
                                     </button>

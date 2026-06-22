@@ -333,6 +333,7 @@ const es = {
         imamDesc: 'Biografía y datos',
         clasesDesc: 'Árabe y Corán',
         ubicacionDesc: 'Dirección y mapa',
+        comentariosDesc: 'Gestionar comentarios',
         contactosDesc: 'Ver mensajes de contacto',
         codigosDesc: 'Gestionar registros',
     },

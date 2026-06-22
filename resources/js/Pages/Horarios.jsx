@@ -102,6 +102,14 @@ export default function Horarios({ horariosMes, year, month }) {
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
                     <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full border border-[#C9A646]/10 animate-float-spin" />
                     <div className="absolute -bottom-16 -left-16 w-48 h-48 rotate-45 border border-[#C9A646]/8 animate-float-spin-reverse" style={{ animationDuration: '18s' }} />
+                    {/* Floating stars */}
+                    <svg className="absolute top-[15%] left-[10%] w-12 h-12 text-[#C9A646]/10 animate-float-drift" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.6" />
+                    </svg>
+                    <svg className="absolute bottom-[20%] right-[8%] w-10 h-10 text-white/[0.06] animate-glow-spin-reverse" style={{ animationDuration: '22s' }} viewBox="0 0 48 48" fill="none">
+                        <path d="M24 2L30 18L46 24L30 30L24 46L18 30L2 24L18 18Z" stroke="currentColor" strokeWidth="0.5" />
+                        <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="0.3" opacity="0.5" />
+                    </svg>
                 </div>
                 <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
                     <div className="inline-block px-4 py-1.5 mb-4 bg-white/10 backdrop-blur-sm rounded-full border border-white/10 text-sm sm:text-base text-[#C9A646] font-medium tracking-wider uppercase">
@@ -118,9 +126,9 @@ export default function Horarios({ horariosMes, year, month }) {
 
             {/* === UNIFIED BACKGROUND WRAPPER === */}
             <div className="relative">
-                {/* Full allahakbar background like Home hero */}
-                <div className="absolute inset-0 bg-[url('/img/allahakbar.png')] bg-cover bg-center animate-ken-burns" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200, 160, 60, 0.35), rgba(170, 130, 40, 0.3))' }} />
+                {/* Full background image */}
+                <div className="absolute inset-0 bg-[url('/img/Horarios.png')] bg-cover bg-center" />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(15, 59, 46, 0.75), rgba(15, 59, 46, 0.4))' }} />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#C9A64612,transparent_60%)] pointer-events-none animate-gold-pulse" />
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent animate-shimmer" />
@@ -145,10 +153,10 @@ export default function Horarios({ horariosMes, year, month }) {
                 <div className={`relative max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between mb-8 sm:mb-10 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <button
                         onClick={() => goToMonth(year, month - 1)}
-                        className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px]"
+                        className="group/btn w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px] active:scale-95"
                         aria-label={t('common', 'previous')}
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <svg className="w-5 h-5 transform group-hover/btn:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
                         </svg>
                     </button>
@@ -159,10 +167,10 @@ export default function Horarios({ horariosMes, year, month }) {
 
                     <button
                         onClick={() => goToMonth(year, month + 1)}
-                        className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px]"
+                        className="group/btn w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-[#C9A646]/30 text-[#0F3B2E] hover:bg-[#C9A646] hover:text-[#0F3B2E] hover:border-[#C9A646] hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl text-xl font-bold min-w-[48px] min-h-[48px] active:scale-95"
                         aria-label={t('common', 'next')}
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <svg className="w-5 h-5 transform group-hover/btn:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d={isRTL ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
                         </svg>
                     </button>
@@ -199,18 +207,18 @@ export default function Horarios({ horariosMes, year, month }) {
                                         onClick={() => hasData && setSelected(ds)}
                                         disabled={!hasData}
                                         className={`
-                                            py-2 sm:py-3 flex flex-col items-center gap-0.5 transition-all duration-200 relative
+                                            py-2 sm:py-3 flex flex-col items-center gap-0.5 transition-all duration-200 relative group/cell
                                             ${!hasData ? 'opacity-15 cursor-default' : 'cursor-pointer hover:bg-[#0F3B2E]/5'}
-                                            ${isSel ? 'bg-[#0F3B2E] rounded-lg' : 'rounded-lg'}
+                                            ${isSel ? 'bg-[#0F3B2E] rounded-lg shadow-md' : 'rounded-lg hover:shadow-[0_0_12px_rgba(201,166,70,0.15)]'}
                                             ${isToday && !isSel ? 'ring-2 ring-[#C9A646]/40 ring-inset' : ''}
                                         `}
                                     >
                                         {isJumuah && (
-                                            <span className="absolute -top-0.5 right-0.5 text-[7px] font-bold text-[#C9A646]">J</span>
+                                            <span className="absolute -top-0.5 right-0.5 text-[8px] font-bold text-[#C9A646] drop-shadow-[0_0_4px_rgba(201,166,70,0.5)]">J</span>
                                         )}
                                         <span className={`
                                             w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-sm sm:text-base font-semibold transition-all
-                                            ${isSel                        ? 'bg-white text-[#0F3B2E] shadow-md' : ''}
+                                            ${isSel                        ? 'bg-white text-[#0F3B2E] shadow-md scale-110' : 'group-hover/cell:scale-105'}
                                             ${isToday && !isSel            ? 'text-[#0F3B2E] font-bold' : ''}
                                             ${isFri && !isSel && !isToday  ? 'text-[#C9A646]' : ''}
                                             ${!isSel && !isToday && !isFri ? 'text-gray-700' : ''}
@@ -267,20 +275,20 @@ export default function Horarios({ horariosMes, year, month }) {
                                     const isJumuah = key === 'dhuhr' && selectedData?.jumuah;
                                     return (
                                     <div key={key} className={`
-                                        flex flex-col items-center justify-center py-6 sm:py-8 gap-2 sm:gap-3
+                                        flex flex-col items-center justify-center py-6 sm:py-8 gap-2 sm:gap-3 relative
                                         border-b sm:border-b-0 border-[#C9A646]/8
                                         ${idx < (isRTL ? 4 : 2) ? 'border-r border-[#C9A646]/8' : ''}
                                         ${idx >= (isRTL ? 4 : 2) && idx < 4 ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
                                         ${idx < (isRTL ? 2 : 4) ? 'sm:border-r sm:border-[#C9A646]/8' : ''}
-                                        ${isJumuah ? 'bg-[#C9A646]/5' : 'hover:bg-[#0F3B2E]/3'}
-                                        transition-colors duration-200 relative
+                                        ${isJumuah ? 'bg-gradient-to-b from-[#C9A646]/10 to-[#C9A646]/3' : 'hover:bg-[#0F3B2E]/3'}
+                                        transition-all duration-200
                                     `}>
                                         {isJumuah && (
-                                            <span className="absolute top-2 text-[9px] font-bold uppercase tracking-wider text-[#C9A646]">
+                                            <span className="absolute top-2 text-[9px] font-bold uppercase tracking-wider text-[#C9A646] drop-shadow-[0_0_4px_rgba(201,166,70,0.3)]">
                                                 Jumu'ah
                                             </span>
                                         )}
-                                        <div className={`${isJumuah ? 'text-[#C9A646]' : 'text-[#C9A646]'}`}>
+                                        <div className={`${isJumuah ? 'text-[#C9A646]' : 'text-[#C9A646]'} transition-transform duration-200 hover:scale-110`}>
                                             <PrayerIcon name={key} />
                                         </div>
                                         <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">
@@ -290,7 +298,7 @@ export default function Horarios({ horariosMes, year, month }) {
                                             {selectedData[key]}
                                         </span>
                                         {isJumuah && selectedData.khutbah_minutos && (
-                                            <span className="text-[10px] text-[#C9A646] font-medium">
+                                            <span className="text-[10px] text-[#C9A646] font-medium bg-[#C9A646]/10 px-2 py-0.5 rounded-full">
                                                 Khutbah: {selectedData.khutbah_minutos} min
                                             </span>
                                         )}

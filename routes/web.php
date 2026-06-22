@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonativoController;
@@ -25,6 +26,10 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::post('/register', [RegisterController::class, 'register'])
     ->middleware('throttle:5,1');
 
+Route::get('/verify-email', [VerificationController::class, 'showForm']);
+Route::post('/verify-email', [VerificationController::class, 'verify'])->middleware('throttle:5,1');
+Route::post('/verify-email/resend', [VerificationController::class, 'resend'])->middleware('throttle:3,1');
+
 Route::get('/', [HorarioController::class, 'home']);
 Route::get('/horarios', [HorarioController::class, 'horarios']);
 
@@ -48,7 +53,7 @@ Route::get('/robots.txt', function () {
 
 Route::get('/lang/{lang}', [PublicController::class, 'switchLang'])->name('lang.switch');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/facturas', [FacturaController::class, 'index']);
     Route::get('/facturas/{factura}/download', [FacturaController::class, 'download']);
     Route::get('/donativos', [DonativoController::class, 'index']);

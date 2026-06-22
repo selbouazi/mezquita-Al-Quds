@@ -10,12 +10,11 @@ use App\Services\TiempoEsperaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use OpenApi\Attributes as OA;
 
 class HorarioController extends Controller
 {
-    /**
-     * Página de inicio con horario de hoy.
-     */
+    #[OA\Get(path: '/', summary: 'Página principal con horario de hoy', tags: ['Público'], responses: [new OA\Response(response: 200, description: 'Home page')])]
     public function home()
     {
         $tiemposEspera = TiempoEsperaService::getTiemposEspera();
@@ -47,9 +46,7 @@ class HorarioController extends Controller
         ]);
     }
 
-    /**
-     * Página de horarios mensual con parámetros de año y mes.
-     */
+    #[OA\Get(path: '/horarios', summary: 'Calendario mensual de horarios', tags: ['Público'], parameters: [new OA\Parameter(name: 'year', in: 'query', schema: new OA\Schema(type: 'integer')), new OA\Parameter(name: 'month', in: 'query', schema: new OA\Schema(type: 'integer'))], responses: [new OA\Response(response: 200, description: 'Calendario de horarios')])]
     public function horarios(Request $request)
     {
         if (!\moduleIsActive('horarios')) {
